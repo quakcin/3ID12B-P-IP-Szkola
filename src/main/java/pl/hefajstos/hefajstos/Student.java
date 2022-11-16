@@ -10,11 +10,11 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "uczen")
 public class Student {
-    String id;
+    Integer id;
     String Imie;
     String Nazwisko;
 
-    Student(String id, String imie, String nazwisko){
+    Student(Integer id, String imie, String nazwisko){
         this.id = id;
         this.Imie = imie;
         this.Nazwisko = nazwisko;
@@ -24,12 +24,12 @@ public class Student {
 
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     @Id
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 }
