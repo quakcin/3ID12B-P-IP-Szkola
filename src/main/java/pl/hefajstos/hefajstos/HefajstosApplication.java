@@ -15,7 +15,6 @@ public class HefajstosApplication implements CommandLineRunner {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-
     public static void main(String[] args) {
         SpringApplication.run(HefajstosApplication.class, args);
     }
@@ -27,7 +26,7 @@ public class HefajstosApplication implements CommandLineRunner {
         List<Student> students = jdbcTemplate.query(sql,
                 BeanPropertyRowMapper.newInstance(Student.class));
 
-//        stud.getUczniowie().forEach(System.out :: println);
+        students.forEach(System.out :: println);
     }
 
 }
