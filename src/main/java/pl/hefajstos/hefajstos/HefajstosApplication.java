@@ -9,11 +9,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages={"pl.*"})
 public class HefajstosApplication implements CommandLineRunner {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
 
     public static void main(String[] args) {
         SpringApplication.run(HefajstosApplication.class, args);
