@@ -15,8 +15,6 @@ public class HefajstosApplication implements CommandLineRunner {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    private Studenci stud;
 
     public static void main(String[] args) {
         SpringApplication.run(HefajstosApplication.class, args);
@@ -24,12 +22,12 @@ public class HefajstosApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        /*String sql = "SELECT * FROM Uczen";
+        String sql = "SELECT * FROM Uczen";
 
         List<Student> students = jdbcTemplate.query(sql,
-                BeanPropertyRowMapper.newInstance(Student.class));*/
+                BeanPropertyRowMapper.newInstance(Student.class));
 
-        stud.getUczniowie().forEach(System.out :: println);
+//        stud.getUczniowie().forEach(System.out :: println);
     }
 
 }
