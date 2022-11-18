@@ -41,7 +41,7 @@ class HefajstosAPI
         server side rest api:
         cmd/TOKEN/arg0/arg1/arg2
          */
-        const rest_request = [cmd, this.token, args].flat().join("/");
+        const rest_request = ["", cmd, this.token, args].flat().join("/");
         console.log(rest_request);
 
         fetch(new Request(rest_request))
