@@ -2,6 +2,7 @@ package pl.hefajstos.autoryzacja;
 
 import lombok.Data;
 
+import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Data
