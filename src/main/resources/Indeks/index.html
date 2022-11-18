@@ -93,23 +93,32 @@
 
         <script src="api/api.js"></script>
         <script>
+
+            const api = new HefajstosAPI();
+
             zaloguj.onclick = (e) =>
             {
                const usr = login.value;
                const pwd = haslo.value;
 
-                (new HefajstosAPI())
-                    .wykonaj((n) =>
-                    {
-                        localStorage.setItem("hefajstos.token", n.uid);
-                        window.location.href = `/panel/${n.typ}/konto`
-                    })
-                    .ewentualnie((e) =>
-                    {
-                        alert("Logowanie nie powiodło się!");
-                    })
-                    .dla('zaloguj', [usr, pwd]);
-            }
+                api.wykonaj((n) =>
+                {
+                    localStorage.setItem("hefajstos.token", n.uid);
+                    window.location.href = `/panel/${n.typ}/konto`
+                })
+                .ewentualnie((e) =>
+                {
+                    alert("Logowanie nie powiodło się!");
+                })
+                .dla('zaloguj', [usr, pwd]);
+            };
+
+            api.wykonaj((n) =>
+            {
+                if (n.typ != 'brak')
+                    window.location.href = `/panel/${n.typ}/konto`;
+            }).dla("ping", []);
+
         </script>
     </body>
 </html>

@@ -17,7 +17,7 @@
                        <b>Uczen</b> Janusz Sztaheta
                     </div>
                     <div>
-                        <a href="#"> Wyloguj </a>
+                        <a href="#" id="wyloginator"> Wyloguj </a>
                     </div>
                 </div>
             </div>
@@ -34,5 +34,21 @@
                 </div>
             </div>
         </div>
+    <script src="/api/api.js"></script>
+    <script>
+        const api = new HefajstosAPI();
+
+        wyloginator.onclick = (e) =>
+        {
+            console.log('wyloginator');
+            api.wykonaj((n) =>
+            {
+                localStorage.setItem('hefajstos.token', 'brak');
+                alert('Nastąpiło wylogowanie!');
+                window.location.href = '/';
+            }).dla("wyloguj");
+        }
+
+    </script>
     </body>
 </html>

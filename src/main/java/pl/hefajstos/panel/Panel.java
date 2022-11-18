@@ -74,7 +74,7 @@ public class Panel
     @ResponseBody
     public String getIndeks (@PathVariable("konto") String konto, @PathVariable("okno") String okno)
     {
-        RodzajKonta rodzajKonta = RodzajKonta.values()[Integer.parseInt(konto)];
+        RodzajKonta rodzajKonta = RodzajKonta.valueOf(konto);
         HashMap<String, Okno> okna = getRodzajeOkien(rodzajKonta);
 
         String obrys = "<h2>error 500</h2>";

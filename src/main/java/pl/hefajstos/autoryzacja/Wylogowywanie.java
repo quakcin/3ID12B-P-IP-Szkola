@@ -25,7 +25,7 @@ public class Wylogowywanie
     {
         try
         {
-            jdbcTemplate.execute(String.format("DELETE FROM Sesja WHERE Token = '%s'", sid));
+            jdbcTemplate.update(String.format("DELETE FROM Sesja WHERE Token = '%s'", sid));
         }
         catch (DataAccessException dae)
         {

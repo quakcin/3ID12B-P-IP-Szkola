@@ -46,7 +46,7 @@ public class Logowanie
                         uid, konta.get(0).getId(), konta.get(0).getTyp()));
 
         return new ResponseEntity<>(
-                String.format("{\"ok\": true, \"uid\":\"%s\", \"typ\":%d}", uid, konta.get(0).getTyp()),
+                String.format("{\"ok\": true, \"uid\":\"%s\", \"typ\":\"%s\"}", uid, RodzajKonta.values()[konta.get(0).getTyp()].toString()),
                 HttpStatus.valueOf(200));
     }
 }
