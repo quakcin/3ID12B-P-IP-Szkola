@@ -6,7 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import pl.hefajstos.autoryzacja.Sesja;
+import pl.hefajstos.autoryzacja.SesjaKontroler;
 
 import java.util.List;
 
@@ -15,6 +18,9 @@ public class UczniowieController
 {
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private SesjaKontroler kontrolerSesji;
 
     @GetMapping("/lista_studentow")
     public ResponseEntity<String> getTestJSONString ()
@@ -36,4 +42,19 @@ public class UczniowieController
         students.forEach(System.out :: println);
         return new ResponseEntity<>(lista, HttpStatus.valueOf(200));
     }
+    @GetMapping("/test_sesja/{sid}")
+    public ResponseEntity<String> getTestSesja (@PathVariable("sid") String sid)
+    {
+        Sesja sesja = kontrolerSesji.getRodzajKonta(sid);
+
+        if (sesja == null)
+        { /* konto nie istnieje */
+            return new ResponseEntity<>("{\"ok\":false}", HttpStatus.valueOf(200));
+        }
+        /* konto istnieje */
+
+        return new ResponseEntity<>(String.format("{\"ok\":true, \"id\":\"%s\", \"rodzaj\":\"%s\"}",
+                sesja.getKlucz(), sesja.getRodzajKonta().toString()), HttpStatus.valueOf(200));
+    }
+
 }

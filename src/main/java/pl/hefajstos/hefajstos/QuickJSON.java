@@ -1,6 +1,6 @@
 package pl.hefajstos.hefajstos;
 
-class QuickJSON
+public class QuickJSON
 {
     private String str;
     public QuickJSON ()
