@@ -79,7 +79,7 @@ public class Panel
                     Paths.get((getClass().getClassLoader()).getResource(
                             String.format("Panel/%s/%s.html", konto, okno)).toURI())));
 
-            obrys = obrys.replaceAll("%kontent", kontent);
+            obrys = obrys.replace("%kontent", kontent);
 
             /*
                 Wyciągnięcie tytułu z pliku zasobów TODO: finish this
@@ -98,12 +98,12 @@ public class Panel
                 }
             }
 
-            obrys = obrys.replaceAll("%tytul", title.toString());
+            obrys = obrys.replace("%tytul", title.toString());
 
         } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
 
-        return obrys.replaceAll("%navbar", getPanelNawigacji(rodzajKonta));
+        return obrys.replace("%navbar", getPanelNawigacji(rodzajKonta));
     }
 }

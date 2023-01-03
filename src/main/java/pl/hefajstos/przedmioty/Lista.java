@@ -12,9 +12,20 @@ public class Lista
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    /*
+        Reprezentacja przedmiotu:
+        {"przedmioty": [
+            {"id", "nazwa", "poziom", "ramka czasowa"},
+            ...
+        ]}
+     */
     @GetMapping("/przedmioty/lista/{sid}")
     public String getListaPrzedmiotow (@PathVariable("sid") String sid)
     {
-        return "{\"ok\": true}";
+        return "{\"przedmioty\": [\n" +
+                "\t{\"id\": 0, \"nazwa\": \"Język Polski\", \"poziom\": 1, \"godziny\": 6},\n" +
+                "\t{\"id\": 1, \"nazwa\": \"Matematyka\", \"poziom\": 2, \"godziny\": 5},\n" +
+                "\t{\"id\": 2, \"nazwa\": \"Informatyka\", \"poziom\": 3, \"godziny\": 2}\n" +
+                "]}\n";
     }
 }
