@@ -30,28 +30,6 @@ public class Panel
         String tytul;
     }
 
-    private HashMap<String, Okno> getRodzajeOkien (RodzajKonta rodzajKonta)
-    {
-        HashMap<String, Okno> okna = new HashMap<>();
-        if (rodzajKonta.equals(RodzajKonta.Uczen))
-        {
-            okna.put("konto", new Okno("Panel/Uczen/konto.html", "Moje Konto"));
-        }
-        if (rodzajKonta.equals(RodzajKonta.Nauczyciel))
-        {
-            okna.put("konto", new Okno("Panel/Nauczyciel/konto.html", "Moje Konto"));
-        }
-        if (rodzajKonta.equals(RodzajKonta.Dyrektor))
-        {
-            okna.put("konto", new Okno("Panel/Dyrektor/konto.html", "Moje Konto"));
-        }
-        if (rodzajKonta.equals(RodzajKonta.Sekretarka))
-        {
-            okna.put("konto", new Okno("Panel/Sekretarka/konto.html", "Moje Konto"));
-        }
-        return okna;
-    }
-
     private String getPanelNawigacji (RodzajKonta rodzajKonta)
     {
         String panel = "";
@@ -75,9 +53,11 @@ public class Panel
     public String getIndeks (@PathVariable("konto") String konto, @PathVariable("okno") String okno)
     {
         RodzajKonta rodzajKonta = RodzajKonta.valueOf(konto);
-        HashMap<String, Okno> okna = getRodzajeOkien(rodzajKonta);
-
         String obrys = "<h2>error 500</h2>";
+
+        /*
+            Ładowanie panelu nawigacji
+         */
         try {
             obrys = String.join("", Files.readAllLines(
                     Paths.get((getClass().getClassLoader()).getResource(
@@ -86,13 +66,34 @@ public class Panel
             throw new RuntimeException(e);
         }
 
+        /*
+            Ładowanie strony dla żądanego podkatalogu zasobów
+         */
+
         try {
-            Okno wybrane = okna.get(okno);
             String kontent = String.join("", Files.readAllLines(
                     Paths.get((getClass().getClassLoader()).getResource(
-                            wybrane.sciezka).toURI())));
+                            String.format("Panel/%s/%s.html", konto, okno)).toURI())));
+
             obrys = obrys.replaceAll("%kontent", kontent);
-            obrys = obrys.replaceAll("%tytul", wybrane.tytul);
+
+            /*
+                Wyciągnięcie tytułu z pliku zasobów
+             */
+
+            String[] lines = kontent.split("\n\r");
+            for (String line : lines)
+            {
+                System.out.println("Line: " + line + "\n");
+                String[] tokens = line.split(" ");
+                if (tokens[0].equals("H-API-TITLE:"))
+                {
+                    System.out.println(String.format("tok: %s\n", tokens[0]));
+                    obrys = obrys.replaceAll("%tytul", tokens[1]);
+                    break;
+                }
+            }
+
         } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
