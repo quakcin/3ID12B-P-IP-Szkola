@@ -1,0 +1,20 @@
+
+<h2>
+    Lista przedmiotów
+</h2>
+
+<script>
+
+    document.body.onload = (e) =>
+    {
+        api.wykonaj((n) =>
+        {
+            console.log("succ", n);
+        })
+        .ewentualnie((e) =>
+        {
+            console.log("fail", e);
+        })
+        .dla('przedmioty/lista', []);
+    }
+</script>

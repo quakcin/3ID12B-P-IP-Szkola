@@ -56,6 +56,10 @@ public class Panel
         String obrys = "<h2>error 500</h2>";
 
         /*
+            TODO: Jeżeli rodzaj konta się nie zgadza -> fallback
+         */
+
+        /*
             Ładowanie panelu nawigacji
          */
         try {
@@ -71,28 +75,30 @@ public class Panel
          */
 
         try {
-            String kontent = String.join("", Files.readAllLines(
+            String kontent = String.join("\n", Files.readAllLines(
                     Paths.get((getClass().getClassLoader()).getResource(
                             String.format("Panel/%s/%s.html", konto, okno)).toURI())));
 
             obrys = obrys.replaceAll("%kontent", kontent);
 
             /*
-                Wyciągnięcie tytułu z pliku zasobów
+                Wyciągnięcie tytułu z pliku zasobów TODO: finish this
              */
-
-            String[] lines = kontent.split("\n\r");
+            StringBuilder title = new StringBuilder(String.format("%s/%s", konto, okno));
+            String[] lines = kontent.split("\n");
             for (String line : lines)
             {
-                System.out.println("Line: " + line + "\n");
                 String[] tokens = line.split(" ");
                 if (tokens[0].equals("H-API-TITLE:"))
                 {
-                    System.out.println(String.format("tok: %s\n", tokens[0]));
-                    obrys = obrys.replaceAll("%tytul", tokens[1]);
+                    title = new StringBuilder();
+                    for (int i = 1; i < tokens.length; i++)
+                        title.append(tokens[i]).append(" ");
                     break;
                 }
             }
+
+            obrys = obrys.replaceAll("%tytul", title.toString());
 
         } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
