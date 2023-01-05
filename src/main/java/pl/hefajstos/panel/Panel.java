@@ -71,6 +71,14 @@ public class Panel
         }
 
         /*
+            Akutalizacja wrapeprów personalnych:
+                %RodzajKonta oraz %Kredytywnosc
+         */
+
+        obrys = obrys.replace("%RodzajKonta", rodzajKonta.name());
+        obrys = obrys.replace("%Kredytywnosc", ""); // TODO: Dodać!
+
+        /*
             Ładowanie strony dla żądanego podkatalogu zasobów
          */
 

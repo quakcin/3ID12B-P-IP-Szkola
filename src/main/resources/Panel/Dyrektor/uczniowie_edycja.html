@@ -1,0 +1,94 @@
+<main>
+    <div class="py-5 text-center">
+        <h2>Zarządzanie uczniami</h2>
+    </div>
+    <div class="row g-5">
+        <div class="col-md-7 col-lg-8">
+            <h4 class="mb-3">Edytuj ucznia</h4>
+            <div class="needs-validation" novalidate>
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <label for="firstName" class="form-label">Imię</label>
+                        <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="lastName" class="form-label">Nazwisko</label>
+                        <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+                    </div>
+
+
+                    <div class="col-12">
+                        <label for="pesel" class="form-label">Pesel</label>
+                        <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"  class="form-control" id="pesel" required>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="firstName" class="form-label">Data urodzenia</label>
+                        <input type="date" class="form-control" id="date" placeholder="" value="" required>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="lastName" class="form-label">Miejsce urodzenia</label>
+                        <input type="text" class="form-control" id="hometown" placeholder="" value="" required>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="class" class="form-label">Klasa</label>
+                        <select class="form-control" id="exampleFormControlSelect1">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+
+                </div>
+                <hr class="my-4">
+                <button class="w-50 btn btn-warning btn-lg" type="submit" onclick="updateUczen()">Edytuj Ucznia</button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    document.body.onload = function (e)
+    {
+        const toks = window.location.href.split('?').at(-1).split('=');
+        if (toks[0] == 'q')
+        {
+            const uid = toks[1];
+            api.wykonaj((s) =>
+                {
+                    console.log(s);
+                    firstName.value = s.imie;
+                    lastName.value = s.nazwisko;
+                    pesel.value = s.pesel;
+                    date.value = s.urodz;
+                    hometown.value = s.miejsc;
+                })
+                .ewentualnie((e) =>
+                {
+                    alert("Serwer w tej chwili nie odpowiada, skontaktuj się z administratorem!");
+                }).dla("uczen/info", [uid]);
+        }
+    }
+
+    const updateUczen = function ()
+    {
+        const toks = window.location.href.split('?').at(-1).split('=');
+        if (toks[0] == 'q')
+        {
+            const uid = toks[1];
+            api.wykonaj((s) =>
+                {
+                    alert("Pomyślnie zakutalizowano dane ucznia!");
+                })
+                .ewentualnie((e) =>
+                {
+                    alert("Serwer w tej chwili nie odpowiada, skontaktuj się z administratorem!");
+                }).dla('uczen/edytuj', [firstName.value, lastName.value, pesel.value, date.value, hometown.value, uid])
+        }
+    }
+</script>

@@ -1,0 +1,101 @@
+<div class="container-lg">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8"><h2>Lista uczniów</h2></div>
+                    <div class="col-sm-4">
+                        <button onclick="window.location.href = '/panel/Dyrektor/uczniowie_dodaj'" type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Imie</th>
+                    <th>Nazwisko</th>
+                    <th>Data urodzenia</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody id="lista_render">
+                <!--
+                <tr>
+                    <td>1</td>
+                    <td>Thomas Hardy</td>
+                    <td>89 Chiaroscuro Rd.</td>
+                    <td>USA</td>
+                    <td>
+                        <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                        <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+                    </td>
+                </tr>
+                -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    const rysujListe = function ()
+    {
+        api.wykonaj((s) =>
+            {
+                let fin = "";
+                for (let [i, e] of s.listaUczniow.entries())
+                {
+                    fin += `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td>${e.imie}</td>
+                            <td>${e.nazwisko}</td>
+                            <td>${e.urodz}</td>
+                            <td>
+                                <a href="#" onclick="window.location.href = '/panel/Dyrektor/uczniowie_edycja?q=${e.uid}'" class="edit" title="Edit" data-toggle="tooltip" style="color:#FFC107;"><i class="material-icons">&#xE254;</i></a>
+                                <a href="#" onclick="usunUcznia('${e.uid}')" class="delete" title="Delete" data-toggle="tooltip" style="color:#E34724;"><i class="material-icons">&#xE872;</i></a>
+                            </td>
+                        </tr>
+                    `;
+                }
+                lista_render.innerHTML = fin;
+
+            })
+            .ewentualnie((e) =>
+            {
+                alert("Serwer w tej chwili nie odpowiada, skontaktuj się z administratorem!");
+            })
+            .dla("uczen/lista", []);
+    }
+
+    document.body.onload = function (e)
+    {
+        rysujListe();
+    }
+
+
+    const usunUcznia = function (id)
+    {
+        const a = parseInt(Math.random() * 10);
+        const b = parseInt(Math.random() * 10);
+        const r = prompt(`${a} + ${b} = `);
+
+        if (parseInt(r) == a+b)
+        {
+            api.wykonaj((s) =>
+                {
+                   alert("Pomyślnie usunięto ucznia!");
+                   rysujListe();
+                })
+                .ewentualnie((e) =>
+                {
+                    alert("Serwer w tej chwili nie odpowiada, skontaktuj się z administratorem!");
+                }).dla("uczen/usun", [id])
+        }
+        else
+        {
+            alert("Anulowano usunwanie ucznia!");
+        }
+    }
+</script>

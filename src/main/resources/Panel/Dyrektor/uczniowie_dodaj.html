@@ -1,0 +1,64 @@
+<main>
+    <div class="py-5 text-center">
+        <h2>Zarządzanie uczniami</h2>
+    </div>
+    <div class="row g-5">
+        <div class="col-md-7 col-lg-8">
+            <h4 class="mb-3">Dodaj ucznia</h4>
+            <div class="needs-validation" novalidate>
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <label for="firstName" class="form-label">Imię</label>
+                        <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="lastName" class="form-label">Nazwisko</label>
+                        <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+                    </div>
+
+
+                    <div class="col-12">
+                        <label for="pesel" class="form-label">Pesel</label>
+                        <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" class="form-control" id="pesel" required>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="firstName" class="form-label">Data urodzenia</label>
+                        <input type="date" class="form-control" id="date" placeholder="" value="" required>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="lastName" class="form-label">Miejsce urodzenia</label>
+                        <input type="text" class="form-control" id="hometown" placeholder="" value="" required>
+                    </div>
+                </div>
+                <hr class="my-4">
+                <button class="w-50 btn btn-primary btn-lg" type="submit" onclick="dodajUcznia()">Dodaj Ucznia</button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    const dodajUcznia = function (e)
+    {
+        // console.log(api);
+        api.wykonaj((s) =>
+            {
+                alert("Dodano użytkownika!");
+            })
+            .ewentualnie((e) =>
+            {
+                alert("Bład serwera " + e);
+            })
+            .dla("uczen/dodaj",
+            [
+                firstName.value,
+                lastName.value,
+                pesel.value,
+                date.value,
+                hometown.value
+            ]);
+    }
+</script>

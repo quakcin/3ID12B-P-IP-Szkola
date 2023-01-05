@@ -13,8 +13,9 @@
                     %tytul
                 </div>
                 <div style="text-align: right">
-                    <div>
-                       <b>Uczen</b> Janusz Sztaheta
+                    <div style="display: flex">
+                       <b>%RodzajKonta</b>
+                        <p id="kred" style="margin-left: 10px;">%Kredytywnosc</p>
                     </div>
                     <div>
                         <a href="#" id="wyloginator"> Wyloguj </a>
@@ -52,3 +53,18 @@
     </script>
     </body>
 </html>
+
+<script>
+    setTimeout(() => {
+        const altApi = new HefajstosAPI();
+            altApi.wykonaj((s) => {
+                console.log(s);
+                kred.innerHTML = s.kred;
+            })
+            .ewentualnie((e) =>
+            {
+                console.log('serwer nie odpowiada')
+            })
+            .dla('kredytywnosc', []);
+    }, 500);
+</script>
