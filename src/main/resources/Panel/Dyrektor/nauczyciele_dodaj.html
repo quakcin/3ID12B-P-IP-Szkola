@@ -1,0 +1,65 @@
+<div class="container">
+    <div class="py-4 text-center">
+        <h2>Zarządzanie listą nauczycieli</h2>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-7 col-lg-8">
+            <h4 class="mb-3">Dodaj nauczyciela</h4>
+            <div class="row g-3">
+
+                <div class="col-sm-6">
+                    <label for="firstName" class="form-label">Imię</label>
+                    <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+                </div>
+
+                <div class="col-sm-6">
+                    <label for="lastName" class="form-label">Nazwisko</label>
+                    <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+                </div>
+
+                <div class="col-sm-6">
+                    <label for="firstName" class="form-label">Data zatrudnienia</label>
+                    <input type="date" class="form-control" id="date" placeholder="" value="" required>
+                </div>
+
+                <div class="col-sm-6">
+                    <label for="lastName" class="form-label">Stopień zawodowy</label>
+                    <select class="form-select" id="level" required>
+                        <option value="" disabled selected>Wybierz</option>
+                        <option value="prof.">Profesor</option>
+                        <option value="dr hab">Doktor habilitowany</option>
+                        <option value="dr">Doktor</option>
+                        <option value="mgr">Magister</option>
+                        <option value="inż.">Inżynier</option>
+                        <option value="lic.">Licencjat</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-6">
+                    <label for="lastName" class="form-label">Przedmioty</label>
+                    <select class="form-select" id="level" required>
+                        <option value="" disabled selected>Wybierz</option>
+                        <option value="">Matematyka</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-6">
+                    <label for="lastName" class="form-label">Wychowawca klasy</label>
+                    <select class="form-select" id="level">
+                        <option value="">Nie</option>
+                        <option value="1a">1a</option>
+                    </select>
+                </div>
+
+                <hr class="mt-5">
+
+                <div class="row mt-5">
+                    <div class="col text-center">
+                        <button class="w-20 btn btn-success btn-lg mr-3" onclick="dodajNauczyciela()">Dodaj</button>
+                        <button class="w-20 btn btn-danger btn-lg">Anuluj</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

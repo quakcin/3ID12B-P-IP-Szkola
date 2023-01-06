@@ -1,0 +1,50 @@
+<div class="container">
+    <div class="py-4 text-center">
+        <h2>Zarządzanie przedmiotami</h2>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-7 col-lg-8">
+            <h4 class="mb-3">Edytuj przedmiot</h4>
+            <div class="row g-3">
+
+                <div class="col-12">
+                    <label for="name" class="form-label">Nazwa przedmiotu</label>
+                    <input type="text" class="form-control" id="name" required>
+                </div>
+
+                <div class="col-sm-6">
+                    <label for="level" class="form-label">Poziom nauczania</label>
+                    <select class="form-select" id="level" required>
+                        <option value="" disabled selected>Wybierz</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-6">
+                    <label for="count" class="form-label">Tygodniowa ilość godzin dla poziomu</label>
+                    <input type="text" class="form-control" id="count" value="" maxlength="3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" required>
+                </div>
+
+                <hr class="mt-5">
+
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="obligatory" checked>
+                    <label class="form-check-label" for="obligatory">Przedmiot obowiązkowy</label>
+                </div>
+                <div class="row mt-5">
+                    <div class="col text-center">
+                        <button class="w-20 btn btn-success btn-lg mr-3" type="submit">Zapisz</button>
+                        <button class="w-20 btn btn-danger btn-lg">Anuluj</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

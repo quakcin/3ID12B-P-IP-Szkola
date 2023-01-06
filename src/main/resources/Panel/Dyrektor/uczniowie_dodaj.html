@@ -1,44 +1,50 @@
-<main>
-    <div class="py-5 text-center">
-        <h2>Zarządzanie uczniami</h2>
+<div class="container">
+    <div class="py-4 text-center">
+        <h2>Zarządzanie listą uczniów</h2>
     </div>
-    <div class="row g-5">
+    <div class="row g-4">
         <div class="col-md-7 col-lg-8">
-            <h4 class="mb-3">Dodaj ucznia</h4>
-            <div class="needs-validation" novalidate>
-                <div class="row g-3">
-                    <div class="col-sm-6">
-                        <label for="firstName" class="form-label">Imię</label>
-                        <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
-                    </div>
+            <h4 class="mb-3">Dodaj do listy uczniów</h4>
+            <div class="row g-3">
 
-                    <div class="col-sm-6">
-                        <label for="lastName" class="form-label">Nazwisko</label>
-                        <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
-                    </div>
+                <div class="col-sm-6">
+                    <label for="firstName" class="form-label">Imię</label>
+                    <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+                </div>
+
+                <div class="col-sm-6">
+                    <label for="lastName" class="form-label">Nazwisko</label>
+                    <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+                </div>
 
 
-                    <div class="col-12">
-                        <label for="pesel" class="form-label">Pesel</label>
-                        <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" class="form-control" id="pesel" required>
-                    </div>
+                <div class="col-12">
+                    <label for="pesel" class="form-label">Pesel</label>
+                    <input type="text" maxlength="11" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" class="form-control" id="pesel" required>
+                </div>
 
-                    <div class="col-sm-6">
-                        <label for="firstName" class="form-label">Data urodzenia</label>
-                        <input type="date" class="form-control" id="date" placeholder="" value="" required>
-                    </div>
+                <div class="col-sm-6">
+                    <label for="firstName" class="form-label">Data urodzenia</label>
+                    <input type="date" class="form-control" id="date" placeholder="" value="" required>
+                </div>
 
-                    <div class="col-sm-6">
-                        <label for="lastName" class="form-label">Miejsce urodzenia</label>
-                        <input type="text" class="form-control" id="hometown" placeholder="" value="" required>
+                <div class="col-sm-6">
+                    <label for="lastName" class="form-label">Miejsce urodzenia</label>
+                    <input type="text" class="form-control" id="hometown" placeholder="" value="" required>
+                </div>
+
+                <hr class="mt-5">
+
+                <div class="row mt-5">
+                    <div class="col text-center">
+                        <button class="w-20 btn btn-success btn-lg mr-3" onclick="dodajUcznia()">Dodaj</button>
+                        <button class="w-20 btn btn-danger btn-lg">Anuluj</button>
                     </div>
                 </div>
-                <hr class="my-4">
-                <button class="w-50 btn btn-primary btn-lg" type="submit" onclick="dodajUcznia()">Dodaj Ucznia</button>
             </div>
         </div>
     </div>
-</main>
+</div>
 
 <script>
     const dodajUcznia = function (e)
