@@ -18,12 +18,12 @@
                 </div>
 
                 <div class="col-sm-6">
-                    <label for="firstName" class="form-label">Data zatrudnienia</label>
+                    <label for="date" class="form-label">Data zatrudnienia</label>
                     <input type="date" class="form-control" id="date" placeholder="" value="" required>
                 </div>
 
                 <div class="col-sm-6">
-                    <label for="lastName" class="form-label">Stopień zawodowy</label>
+                    <label for="level" class="form-label">Stopień zawodowy</label>
                     <select class="form-select" id="level" required>
                         <option value="" disabled selected>Wybierz</option>
                         <option value="prof.">Profesor</option>
@@ -36,8 +36,8 @@
                 </div>
 
                 <div class="col-sm-6">
-                    <label for="lastName" class="form-label">Wychowawca klasy</label>
-                    <select class="form-select" id="level">
+                    <label for="president" class="form-label">Wychowawca klasy</label>
+                    <select class="form-select" id="president">
                         <option value="">Nie</option>
                         <option value="1a">1a</option>
                     </select>
@@ -66,7 +66,7 @@
                 <div class="row mt-5">
                     <div class="col text-center">
                         <button class="w-20 btn btn-success btn-lg mr-3" onclick="dodajNauczyciela()">Dodaj</button>
-                        <button class="w-20 btn btn-danger btn-lg">Anuluj</button>
+                        <button class="w-20 btn btn-danger btn-lg" onclick="window.location.href = '/panel/Dyrektor/nauczyciele'">Anuluj</button>
                     </div>
                 </div>
             </div>

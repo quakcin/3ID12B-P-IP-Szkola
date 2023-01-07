@@ -4,7 +4,7 @@
     </div>
     <div class="row g-4">
         <div class="col-md-7 col-lg-8">
-            <h4 class="mb-3">Edytuj informacje o nauczycielu</h4>
+            <h4 class="mb-3">Dodaj nauczyciela</h4>
             <div class="row g-3">
 
                 <div class="col-sm-6">
@@ -18,12 +18,12 @@
                 </div>
 
                 <div class="col-sm-6">
-                    <label for="firstName" class="form-label">Data zatrudnienia</label>
+                    <label for="date" class="form-label">Data zatrudnienia</label>
                     <input type="date" class="form-control" id="date" placeholder="" value="" required>
                 </div>
 
                 <div class="col-sm-6">
-                    <label for="lastName" class="form-label">Stopień zawodowy</label>
+                    <label for="level" class="form-label">Stopień zawodowy</label>
                     <select class="form-select" id="level" required>
                         <option value="" disabled selected>Wybierz</option>
                         <option value="prof.">Profesor</option>
@@ -36,30 +36,148 @@
                 </div>
 
                 <div class="col-sm-6">
-                    <label for="lastName" class="form-label">Przedmioty</label>
-                    <select class="form-select" id="level" required>
-                        <option value="" disabled selected>Wybierz</option>
-                        <option value="">Matematyka</option>
-                    </select>
-                </div>
-
-                <div class="col-sm-6">
-                    <label for="lastName" class="form-label">Wychowawca klasy</label>
-                    <select class="form-select" id="level">
-                        <option value="">Nie</option>
+                    <label for="president" class="form-label">Wychowawca klasy</label>
+                    <select class="form-select" id="president">
+                        <option value="_">Nie</option>
                         <option value="1a">1a</option>
                     </select>
                 </div>
 
                 <hr class="mt-5">
 
+                <div class="col-sm-6">
+                    <label for="subject" class="form-label">Przedmioty</label>
+                    <select class="form-select" id="subject" required>
+                        <option value="" disabled selected>Wybierz</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-6 pt-3">
+                    <button class="w-20 btn btn-success btn-sm mr-3 mt-4" id="dodaj_przedmiot">Przypisz</button>
+                </div>
+
+                <div class="col-sm-6 mt-4">
+                    <table id="lista_przedmiotow">
+                    </table>
+                </div>
+
+                <hr class="mt-5">
+
                 <div class="row mt-5">
                     <div class="col text-center">
-                        <button class="w-20 btn btn-success btn-lg mr-3" onclick="updateNauczyciel()">Zapisz</button>
-                        <button class="w-20 btn btn-danger btn-lg">Anuluj</button>
+                        <button class="w-20 btn btn-success btn-lg mr-3" onclick="edytujNauczyciela()">Dodaj</button>
+                        <button class="w-20 btn btn-danger btn-lg" onclick="window.location.href = '/panel/Dyrektor/nauczyciele'">Anuluj</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.body.onload = function (e)
+    {
+        api.wykonaj((s) => {
+            for (const [i, e] of s.przedmioty.entries())
+            {
+                subject.innerHTML += `
+                    <option value="${e.id}">${e.nazwa} - Klasa ${e.poziom}</option>
+                `;
+            }
+
+
+            const toks = window.location.href.split('?').at(-1).split('=');
+            if (toks[0] == 'q')
+            {
+                const id = toks[1];
+                api.wykonaj((s) => {
+                    console.log(s);
+                    // przypiecie danych
+                    firstName.value = s.imie;
+                    lastName.value = s.nazw;
+                    level.value = s.stop;
+                    date.value = s.zatr;
+                    president.value = s.wych;
+                    // reverse-engineer nazwy przedmiotów
+                    const nazwy = s.prz.split(",").map((n) => n.trim()); // FIXME: Zabezpieczyć przed podaniem przecinka jako nazwe przedmiotu
+                    console.log(nazwy);
+                    for (let nazwa of nazwy)
+                    {
+                        for (let i = 0; i < subject.options.length; i++)
+                        {
+                            if (subject.options[i].text == nazwa)
+                            {
+                                __lista_przedmiotow.push({
+                                    nazwa: subject.options[i].text,
+                                    id: subject.options[i].value
+                                });
+                            }
+                        }
+                    }
+                    render_lista_przedmiotow();
+
+                }).mozeSieZepsuc().dla("nauczyciel/info", [id]);
+            }
+
+        }).mozeSieZepsuc().dla("przedmioty/lista", []);
+    }
+
+    const __lista_przedmiotow = [];
+
+    const render_lista_przedmiotow = function ()
+    {
+        let buff = "";
+        for (const [i, e] of __lista_przedmiotow.entries())
+            buff += `
+                <tr>
+                    <td style="padding-right:20px;">${e.nazwa}</td>
+                    <td>
+                        <a href="#" onclick="usun_z_listy('${e.id}')" class="delete" title="Delete" data-toggle="tooltip" style="color:#E34724;">
+                        <i class="material-icons">&#xE872;</i>
+                        </a>
+                    </td>
+                </tr>
+            `;
+        lista_przedmiotow.innerHTML = buff;
+    }
+
+    dodaj_przedmiot.onclick = function (e)
+    {
+        if (subject.options[subject.selectedIndex].text == "Wybierz")
+            return;
+        __lista_przedmiotow.push({
+            nazwa: subject.options[subject.selectedIndex].text,
+            id: subject.value
+        });
+        render_lista_przedmiotow();
+    }
+
+    const usun_z_listy = function (id)
+    {
+        for (let i = __lista_przedmiotow.length - 1; i >= 0; i--)
+            if (__lista_przedmiotow[i].id == id)
+                __lista_przedmiotow.splice(i, 1);
+        render_lista_przedmiotow();
+    }
+
+    const edytujNauczyciela = function (e)
+    {
+        const toks = window.location.href.split('?').at(-1).split('=');
+        const id = toks[1];
+
+        api.wykonaj((s) => {
+            alert("Pomyślnie edytowano dane nauczyciela!");
+            window.location.href = '/panel/Dyrektor/nauczyciele';
+
+        }).mozeSieZepsuc().dla("nauczyciel/edytuj", [
+            firstName.value,
+            lastName.value,
+            date.value,
+            level.value,
+            president.value == "" ? "_" : president.value,
+            __lista_przedmiotow.map((n) => n.id).join("_"),
+            id
+        ]);
+    }
+
+</script>

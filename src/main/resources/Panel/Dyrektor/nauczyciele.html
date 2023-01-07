@@ -62,8 +62,18 @@
 
     const usunNauczyciela = function (id)
     {
-        console.log("usunieto nauczycial " + id);
-        api.wykonaj((s) => render_list()).mozeSieZepsuc()
-        .dla("nauczyciel/usun", [id]);
+        const a = parseInt(Math.random() * 10);
+        const b = parseInt(Math.random() * 10);
+        const r = prompt(`${a} + ${b} = `);
+
+        if (parseInt(r) == a+b)
+        {
+            api.wykonaj((s) => render_list()).mozeSieZepsuc()
+                .dla("nauczyciel/usun", [id]);
+        }
+        else
+        {
+            alert("Anulowano usunwanie ucznia!");
+        }
     }
 </script>
