@@ -18,7 +18,6 @@ public class Nauczyciele_view
     String Stopien_zawodowy;
     String Przedmioty;
     String Klasa_Id;
-
     private final String bezPrzedmiotow = " - Klasa , ";
 
     @Override
