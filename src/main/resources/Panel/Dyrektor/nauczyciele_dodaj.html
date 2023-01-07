@@ -53,13 +53,11 @@
                 </div>
 
                 <div class="col-sm-6 pt-3">
-                    <button class="w-20 btn btn-success btn-sm mr-3 mt-4">Przypisz</button>
+                    <button class="w-20 btn btn-success btn-sm mr-3 mt-4" id="dodaj_przedmiot">Przypisz</button>
                 </div>
 
                 <div class="col-sm-6 mt-4">
-                    <table>
-                        <tr><td style="padding-right:20px;">Matematyka<td><td><a href="#" onclick="usunUcznia('${e.uid}')" class="delete" title="Delete" data-toggle="tooltip" style="color:#E34724;"><i class="material-icons">&#xE872;</i></a><td></tr>
-                        <tr><td>Historia<td><td><a href="#" onclick="usunUcznia('${e.uid}')" class="delete" title="Delete" data-toggle="tooltip" style="color:#E34724;"><i class="material-icons">&#xE872;</i></a><td></tr>
+                    <table id="lista_przedmiotow">
                     </table>
                 </div>
 
@@ -87,5 +85,58 @@
                 `;
             }
         }).mozeSieZepsuc().dla("przedmioty/lista", []);
+    }
+
+    const __lista_przedmiotow = [];
+
+    const render_lista_przedmiotow = function ()
+    {
+        let buff = "";
+        for (const [i, e] of __lista_przedmiotow.entries())
+            buff += `
+                <tr>
+                    <td style="padding-right:20px;">${e.nazwa}</td>
+                    <td>
+                        <a href="#" onclick="usun_z_listy('${e.id}')" class="delete" title="Delete" data-toggle="tooltip" style="color:#E34724;">
+                        <i class="material-icons">&#xE872;</i>
+                        </a>
+                    </td>
+                </tr>
+            `;
+        lista_przedmiotow.innerHTML = buff;
+    }
+
+    dodaj_przedmiot.onclick = function (e)
+    {
+        if (subject.options[subject.selectedIndex].text == "Wybierz")
+            return;
+        __lista_przedmiotow.push({
+            nazwa: subject.options[subject.selectedIndex].text,
+            id: subject.value
+        });
+        render_lista_przedmiotow();
+    }
+
+    const usun_z_listy = function (id)
+    {
+        for (let i = __lista_przedmiotow.length - 1; i >= 0; i--)
+            if (__lista_przedmiotow[i].id == id)
+                __lista_przedmiotow.splice(i, 1);
+        render_lista_przedmiotow();
+    }
+
+    const dodajNauczyciela = function (e)
+    {
+        api.wykonaj((s) => {
+            alert("Dodano nowego nauczyciela!");
+            window.location.href = '/panel/Dyrektor/nauczyciele';
+        }).mozeSieZepsuc().dla("nauczyciel/dodaj", [
+            firstName.value,
+            lastName.value,
+            date.value,
+            level.value,
+            president.value == "" ? "_" : president.value,
+            __lista_przedmiotow.map((n) => n.id).join("_")
+        ])
     }
 </script>

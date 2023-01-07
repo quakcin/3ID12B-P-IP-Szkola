@@ -19,7 +19,7 @@ public class Nauczyciele_view
     String Przedmioty;
     String Klasa_Id;
 
-    private final String bezPrzedmiotow = " klasa , ";
+    private final String bezPrzedmiotow = " - Klasa , ";
 
     @Override
     public String toString()
@@ -30,7 +30,7 @@ public class Nauczyciele_view
                 .add("id", getNauczyciel_Id())
                 .add("zatr", getData_zatrudnienia().toString())
                 .add("stop", getStopien_zawodowy())
-                .add("prz", getPrzedmioty().equals(bezPrzedmiotow) ? "" : getPrzedmioty())
+                .add("prz", getPrzedmioty().equals(bezPrzedmiotow) ? "" : getPrzedmioty().substring(0, getPrzedmioty().length() - 2))
                 .add("wych", getKlasa_Id())
                 .ret();
     }
