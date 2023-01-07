@@ -39,7 +39,7 @@
                 </div>
                 <div class="row mt-5">
                     <div class="col text-center">
-                        <button class="w-20 btn btn-success btn-lg mr-3" type="submit">Zapisz</button>
+                        <button class="w-20 btn btn-success btn-lg mr-3" type="submit" id="save_btn">Zapisz</button>
                         <button class="w-20 btn btn-danger btn-lg">Anuluj</button>
                     </div>
                 </div>
@@ -47,3 +47,49 @@
         </div>
     </div>
 </div>
+<script>
+    document.body.onload = function (e)
+    {
+        const toks = window.location.href.split('?').at(-1).split('=');
+        if (toks[0] == 'q')
+        {
+            const uid = toks[1];
+            api.wykonaj((s) =>
+            {
+                console.log(s);
+                pname.value = s.nazwa;
+                level.value = parseInt(s.poziom);
+                count.value = parseInt(s.ilosc);
+                obligatory.checked = s.obw == 'T';
+            })
+            .ewentualnie((e) =>
+            {
+                alert("Serwer w tej chwili nie odpowiada, skontaktuj się z administratorem!");
+            }).dla("przedmioty/info", [uid]);
+        }
+    }
+
+    save_btn.onclick = function (e)
+    {
+        const toks = window.location.href.split('?').at(-1).split('=');
+        if (toks[0] == 'q')
+        {
+            const uid = toks[1];
+            api.wykonaj((s) =>
+            {
+                alert("Pomyślnie zakutalizowano dane przedmiotu!");
+                window.location.href = '/panel/Dyrektor/przedmioty';
+            })
+            .ewentualnie((e) =>
+            {
+                alert("Serwer w tej chwili nie odpowiada, skontaktuj się z administratorem!");
+            }).dla('przedmioty/edytuj', [
+                uid,
+                pname.value,
+                count.value,
+                level.value,
+                obligatory.checked ? 'T' : 'N'
+            ]);
+        }
+    }
+</script>

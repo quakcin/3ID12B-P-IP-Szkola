@@ -9,7 +9,7 @@
 
                 <div class="col-12">
                     <label for="name" class="form-label">Nazwa przedmiotu</label>
-                    <input type="text" class="form-control" id="name" required>
+                    <input type="text" class="form-control" id="pname" required>
                 </div>
 
                 <div class="col-sm-6">
@@ -40,7 +40,7 @@
                 </div>
                 <div class="row mt-5">
                     <div class="col text-center">
-                        <button class="w-20 btn btn-success btn-lg mr-3" type="submit">Dodaj</button>
+                        <button class="w-20 btn btn-success btn-lg mr-3" type="submit" id="dodaj_button">Dodaj</button>
                         <button class="w-20 btn btn-danger btn-lg">Anuluj</button>
                     </div>
                 </div>
@@ -48,3 +48,25 @@
         </div>
     </div>
 </div>
+
+<script>
+    dodaj_button.onclick = function (e)
+    {
+        api.wykonaj((s) =>
+        {
+            alert("Pomyślnie dodano przedmiot!");
+            window.locaiton.href = '/panel/Dyrektor/przedmioty'
+        })
+        .ewentualnie((e) =>
+        {
+            alert("Serwer nie odpowiada, Skontaktuj się z administratorem systemu!");
+            console.log('e', e);
+        })
+        .dla("przedmioty/dodaj", [
+            pname.value,
+            count.value,
+            level.value,
+            obligatory.checked ? 'T' : 'N'
+        ])
+    }
+</script>

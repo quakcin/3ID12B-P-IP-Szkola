@@ -75,3 +75,17 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.body.onload = function (e)
+    {
+        api.wykonaj((s) => {
+            for (const [i, e] of s.przedmioty.entries())
+            {
+                subject.innerHTML += `
+                    <option value="${e.id}">${e.nazwa} - Klasa ${e.poziom}</option>
+                `;
+            }
+        }).mozeSieZepsuc().dla("przedmioty/lista", []);
+    }
+</script>

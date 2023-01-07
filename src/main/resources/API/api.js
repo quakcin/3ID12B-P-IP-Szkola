@@ -56,4 +56,10 @@ class HefajstosAPI
             });
 
     }
+
+    mozeSieZepsuc()
+    {
+        this.blad = () => alert("Serwer teraz nie odpowiada, Skontaktuj się z Administratorem!");
+        return this;
+    }
 }
