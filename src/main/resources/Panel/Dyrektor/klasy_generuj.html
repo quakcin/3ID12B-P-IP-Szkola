@@ -1,0 +1,33 @@
+<div class="container">
+    <div class="py-4 text-center">
+        <h2>Zarządzanie listą klas</h2>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-7 col-lg-8">
+            <h4 class="mb-3">Parametry generowania klas</h4>
+            <div class="row g-3">
+
+                <div class="col-sm-6">
+                    <label for="min" class="form-label">Minimalna ilość uczniów w klasie</label>
+                    <input type="text" class="form-control" id="min" placeholder="" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" required>
+                </div>
+
+                <div class="col-sm-6">
+                    <label for="max" class="form-label">Maksymalna ilość uczniów w klasie</label>
+                    <input type="text" class="form-control" id="max" placeholder="" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" required>
+                </div>
+
+
+                <hr class="mt-5">
+
+
+                <div class="row mt-5">
+                    <div class="col text-center">
+                        <button class="w-20 btn btn-success btn-lg mr-3" onclick="generujKlasy()">Generuj</button>
+                        <button class="w-20 btn btn-danger btn-lg">Anuluj</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

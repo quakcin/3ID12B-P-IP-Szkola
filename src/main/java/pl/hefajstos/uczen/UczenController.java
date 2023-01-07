@@ -21,7 +21,7 @@ public class UczenController
     @GetMapping("/uczen/info/{sid}/{uid}")
     public String getUczen (@PathVariable("sid") String sid, @PathVariable("uid") String uid)
     {
-        String sql = "SELECT Id, Imie, Nazwisko, PESEL, Data_urodzenia, Miejsce_urodzenia FROM Uczen WHERE Id = '" + uid + "'";
+        String sql = "SELECT Id, Imie, Nazwisko, PESEL, Data_urodzenia, Miejsce_urodzenia, Klasa FROM Uczen WHERE Id = '" + uid + "'";
 
         List<Uczen> uczniowie = jdbcTemplate.query(sql,
                 BeanPropertyRowMapper.newInstance(Uczen.class));
@@ -103,7 +103,7 @@ public class UczenController
     @GetMapping("/uczen/lista/{sid}")
     public String getListaPrzedmiotow (@PathVariable("sid") String sid)
     {
-        String sql = "SELECT Id, Imie, Nazwisko, PESEL, Data_urodzenia, Miejsce_urodzenia FROM Uczen";
+        String sql = "SELECT Id, Imie, Nazwisko, PESEL, Data_urodzenia, Miejsce_urodzenia, Klasa FROM Uczen ORDER BY Klasa, Nazwisko, Imie";
 
         List<Uczen> uczniowie = jdbcTemplate.query(sql,
                 BeanPropertyRowMapper.newInstance(Uczen.class));

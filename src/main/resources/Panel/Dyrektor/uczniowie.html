@@ -16,6 +16,7 @@
                     <th>Imie</th>
                     <th>Nazwisko</th>
                     <th>Data urodzenia</th>
+                    <th>Klasa</th>
                     <th>Operacje</th>
                 </tr>
                 </thead>
@@ -40,6 +41,7 @@
                             <td>${e.imie}</td>
                             <td>${e.nazwisko}</td>
                             <td>${e.urodz}</td>
+                            <td>${e.klasa}</td>
                             <td>
                                 <a href="#" onclick="window.location.href = '/panel/Dyrektor/uczniowie_edycja?q=${e.uid}'" class="edit" title="Edit" data-toggle="tooltip" style="color:#FFC107;"><i class="material-icons">&#xE254;</i></a>
                                 <a href="#" onclick="usunUcznia('${e.uid}')" class="delete" title="Delete" data-toggle="tooltip" style="color:#E34724;"><i class="material-icons">&#xE872;</i></a>

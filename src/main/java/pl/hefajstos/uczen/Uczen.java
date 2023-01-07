@@ -17,6 +17,7 @@ public class Uczen
     String PESEL;
     Date Data_urodzenia;
     String Miejsce_urodzenia;
+    String Klasa;
 
     @Override
     public String toString ()
@@ -27,6 +28,7 @@ public class Uczen
                 .add("urodz", getData_urodzenia().toString())
                 .add("miejsc", getMiejsce_urodzenia())
                 .add("pesel", getPESEL())
+                .add("klasa", getKlasa())
                 .add("uid", getId())
                 .ret();
     }
