@@ -38,7 +38,7 @@
                 <div class="row mt-5">
                     <div class="col text-center">
                         <button class="w-20 btn btn-success btn-lg mr-3" onclick="updateUczen()">Zapisz</button>
-                        <button class="w-20 btn btn-danger btn-lg">Anuluj</button>
+                        <button class="w-20 btn btn-danger btn-lg" onclick="window.location.href = '/panel/Dyrektor/uczniowie'">Anuluj</button>
                     </div>
                 </div>
             </div>
@@ -78,6 +78,7 @@
             api.wykonaj((s) =>
                 {
                     alert("Pomyślnie zakutalizowano dane ucznia!");
+                    window.location.href = "/panel/Dyrektor/uczniowie";
                 })
                 .ewentualnie((e) =>
                 {

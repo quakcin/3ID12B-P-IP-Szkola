@@ -19,7 +19,7 @@ public class NauczycieleController
     private JdbcTemplate jdbcTemplate;
 
     @GetMapping("/nauczyciel/lista/{sid}")
-    public String getUczen (@PathVariable("sid") String sid)
+    public String getNauczyciele (@PathVariable("sid") String sid)
     {
         String sql = "SELECT * FROM Nauczyciele_view";
 
@@ -31,5 +31,21 @@ public class NauczycieleController
             q.add(n.toString());
 
         return q.ret();
+    }
+
+
+    @GetMapping("/nauczyciel/usun/{sid}/{id}")
+    public String removeNauczyciel (@PathVariable("sid") String sid, @PathVariable("id") String id)
+    {
+        String sql = String.format("DELETE FROM Nauczyciel WHERE Id = '%s'", id);
+
+        try{
+            jdbcTemplate.execute(sql);
+        }catch(Exception e)
+        {
+            return "{\"ok\": false}";
+        }
+
+        return "{\"ok\": true}";
     }
 }

@@ -9,7 +9,7 @@
                     </div>
                 </div>
             </div>
-            <table class="table table-striped">
+            <table class="table table-striped" >
                 <thead>
                 <tr>
                     <th>#</th>
@@ -26,3 +26,44 @@
         </div>
     </div>
 </div>
+
+<script>
+    const render_list = function ()
+    {
+        api.wykonaj((s) => {
+            let fin = "";
+            console.log(s);
+            for (const [i, e] of s.nauczyciele.entries())
+            {
+                fin += `
+                    <tr>
+                        <td>${i + 1}.</td>
+                        <td>${e.imie}</td>
+                        <td>${e.nazw}</td>
+
+                        <td>${e.prz}</td>
+                        <td>${e.wych == 'null' ? '' : e.wych}</td>
+                        <td>
+                            <a href="#" onclick="window.location.href = '/panel/Dyrektor/nauczyciele_edycja?q=${e.id}'" class="edit" title="Edit" data-toggle="tooltip" style="color:#FFC107;"><i class="material-icons">&#xE254;</i></a>
+                            <a href="#" onclick="usunNauczyciela('${e.id}')" class="delete" title="Delete" data-toggle="tooltip" style="color:#E34724;"><i class="material-icons">&#xE872;</i></a>
+                        </td>
+                    </tr>
+                `;
+            }
+            lista_render.innerHTML = fin;
+        }).mozeSieZepsuc()
+        .dla("nauczyciel/lista");
+    }
+
+    document.body.onload = function (e)
+    {
+        render_list();
+    }
+
+    const usunNauczyciela = function (id)
+    {
+        console.log("usunieto nauczycial " + id);
+        api.wykonaj((s) => render_list()).mozeSieZepsuc()
+        .dla("nauczyciel/usun", [id]);
+    }
+</script>

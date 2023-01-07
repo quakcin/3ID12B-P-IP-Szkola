@@ -17,6 +17,7 @@ public class Nauczyciele_view
     Date Data_zatrudnienia;
     String Stopien_zawodowy;
     String Przedmioty;
+    String Klasa_Id;
 
     private final String bezPrzedmiotow = " klasa , ";
 
@@ -30,6 +31,7 @@ public class Nauczyciele_view
                 .add("zatr", getData_zatrudnienia().toString())
                 .add("stop", getStopien_zawodowy())
                 .add("prz", getPrzedmioty().equals(bezPrzedmiotow) ? "" : getPrzedmioty())
+                .add("wych", getKlasa_Id())
                 .ret();
     }
 }
