@@ -1,51 +1,91 @@
-<!--
-H-API-TITLE: Lista Przedmiotów
--->
-<h2>
-    Lista przedmiotów
-</h2>
-<div id="rend-prz"></div>
+<div class="container-lg">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8"><h2>Lista przedmiotów</h2></div>
+                    <div class="col-sm-4">
+                        <button onclick="window.location.href = '/panel/Dyrektor/przedmioty_dodaj'" type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nazwa</th>
+                    <th>Poziom</th>
+                    <th>Tygodniowa ilość godzin</th>
+                    <th>Obowiązkowy</th>
+                    <th>Operacje</th>
+                </tr>
+                </thead>
+                <tbody id="lista_render">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 <script>
-
-    const rysuj_przedmioty = function (lista)
+    const rysujListe = function ()
     {
-        let buff = `
-                    <table border="1">
+        api.wykonaj((s) =>
+            {
+                console.log(s);
+                let fin = "";
+                for (let [i, e] of s.przedmioty.entries())
+                {
+                    fin += `
                         <tr>
-                            <th>Lp</th>
-                            <th>Nazwa</th>
-                            <th>Poziom</th>
-                            <th>Godz/tyg.</th>
+                            <td>${i + 1}</td>
+                            <td>${e.nazwa}</td>
+                            <td>${e.poziom}</td>
+                            <td>${e.ilosc}</td>
+                            <td>${e.obw}</td>
+                            <td>
+                                <a href="#" onclick="window.location.href = '/panel/Dyrektor/przedmioty_edycja?q=${e.id}'" class="edit" title="Edit" data-toggle="tooltip" style="color:#FFC107;"><i class="material-icons">&#xE254;</i></a>
+                                <a href="#" onclick="usunPrzedmiot('${e.id}')" class="delete" title="Delete" data-toggle="tooltip" style="color:#E34724;"><i class="material-icons">&#xE872;</i></a>
+                            </td>
                         </tr>
                     `;
-        for (const [i, e] of lista.entries())
-        {
-            // console.log(k, v);
-            buff += `
-                <tr data-id="${e.id}">
-                    <td>${i + 1}</td>
-                    <td>${e.nazwa}</td>
-                    <td>${e.poziom}</td>
-                    <td>${e.godziny}</td>
-                </tr>
-            `;
-        }
-        buff += '</table>';
-        document.getElementById("rend-prz").innerHTML = buff;
+                }
+                lista_render.innerHTML = fin;
+            })
+            .ewentualnie((e) =>
+            {
+                alert("Serwer w tej chwili nie odpowiada, skontaktuj się z administratorem!");
+            })
+            .dla("przedmioty/lista", []);
     }
 
-    document.body.onload = (e) =>
+    document.body.onload = function (e)
     {
-        api.wykonaj((n) =>
+        rysujListe();
+    }
+
+
+    const usunPrzedmiot = function (id)
+    {
+        const a = parseInt(Math.random() * 10);
+        const b = parseInt(Math.random() * 10);
+        const r = prompt(`${a} + ${b} = `);
+
+        if (parseInt(r) == a+b)
         {
-            console.log("succ", n);
-            rysuj_przedmioty(n.przedmioty);
-        })
-        .ewentualnie((e) =>
+            api.wykonaj((s) =>
+                {
+                   alert("Pomyślnie usunięto przedmiot!");
+                   rysujListe();
+                })
+                .ewentualnie((e) =>
+                {
+                    alert("Serwer w tej chwili nie odpowiada, skontaktuj się z administratorem!");
+                }).dla("przedmioty/usun", [id])
+        }
+        else
         {
-            console.log("fail", e);
-        })
-        .dla('przedmioty/lista', []);
+            alert("Anulowano usunwanie przedmiotu!");
+        }
     }
 </script>

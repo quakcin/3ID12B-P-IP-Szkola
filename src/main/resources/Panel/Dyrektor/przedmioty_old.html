@@ -1,0 +1,51 @@
+<!--
+H-API-TITLE: Lista Przedmiotów
+-->
+<h2>
+    Lista przedmiotów
+</h2>
+<div id="rend-prz"></div>
+
+<script>
+
+    const rysuj_przedmioty = function (lista)
+    {
+        let buff = `
+                    <table border="1">
+                        <tr>
+                            <th>Lp</th>
+                            <th>Nazwa</th>
+                            <th>Poziom</th>
+                            <th>Godz/tyg.</th>
+                        </tr>
+                    `;
+        for (const [i, e] of lista.entries())
+        {
+            // console.log(k, v);
+            buff += `
+                <tr data-id="${e.id}">
+                    <td>${i + 1}</td>
+                    <td>${e.nazwa}</td>
+                    <td>${e.poziom}</td>
+                    <td>${e.godziny}</td>
+                </tr>
+            `;
+        }
+        buff += '</table>';
+        document.getElementById("rend-prz").innerHTML = buff;
+    }
+
+    document.body.onload = (e) =>
+    {
+        api.wykonaj((n) =>
+        {
+            console.log("succ", n);
+            rysuj_przedmioty(n.przedmioty);
+        })
+        .ewentualnie((e) =>
+        {
+            console.log("fail", e);
+        })
+        .dla('przedmioty/lista', []);
+    }
+</script>

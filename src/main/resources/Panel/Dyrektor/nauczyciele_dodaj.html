@@ -36,19 +36,31 @@
                 </div>
 
                 <div class="col-sm-6">
-                    <label for="lastName" class="form-label">Przedmioty</label>
-                    <select class="form-select" id="level" required>
-                        <option value="" disabled selected>Wybierz</option>
-                        <option value="">Matematyka</option>
-                    </select>
-                </div>
-
-                <div class="col-sm-6">
                     <label for="lastName" class="form-label">Wychowawca klasy</label>
                     <select class="form-select" id="level">
                         <option value="">Nie</option>
                         <option value="1a">1a</option>
                     </select>
+                </div>
+
+                <hr class="mt-5">
+
+                <div class="col-sm-6">
+                    <label for="subject" class="form-label">Przedmioty</label>
+                    <select class="form-select" id="subject" required>
+                        <option value="" disabled selected>Wybierz</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-6 pt-3">
+                    <button class="w-20 btn btn-success btn-sm mr-3 mt-4">Przypisz</button>
+                </div>
+
+                <div class="col-sm-6 mt-4">
+                    <table>
+                        <tr><td style="padding-right:20px;">Matematyka<td><td><a href="#" onclick="usunUcznia('${e.uid}')" class="delete" title="Delete" data-toggle="tooltip" style="color:#E34724;"><i class="material-icons">&#xE872;</i></a><td></tr>
+                        <tr><td>Historia<td><td><a href="#" onclick="usunUcznia('${e.uid}')" class="delete" title="Delete" data-toggle="tooltip" style="color:#E34724;"><i class="material-icons">&#xE872;</i></a><td></tr>
+                    </table>
                 </div>
 
                 <hr class="mt-5">
