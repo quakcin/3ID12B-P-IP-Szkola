@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import pl.hefajstos.Nauczyciele.Nauczyciele_view;
+import pl.hefajstos.hefajstos.QuickJSONArray;
 import pl.hefajstos.uczen.Uczen;
 
 import java.time.Year;
@@ -19,6 +20,33 @@ public class KlasyController
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+
+    @GetMapping("/klasy/uczniowie/{sid}/{klasa}")
+    public String getListaKlasy (@PathVariable("sid") String sid, @PathVariable("klasa") String klasa)
+    {
+        String sql = String.format("SELECT * FROM Uczen WHERE Klasa = '%s' ORDER BY Nazwisko, Imie", klasa);
+
+        List<Uczen> uczniowie = jdbcTemplate.query(sql,
+                BeanPropertyRowMapper.newInstance(Uczen.class));
+
+        QuickJSONArray q = new QuickJSONArray("lista");
+        for (Uczen u : uczniowie)
+            q.add(u.toString());
+
+        return q.ret();
+    }
+
+    @GetMapping("/klasy/lista/{sid}")
+    public String getListaKlas (@PathVariable("sid") String sid)
+    {
+        String sql = "SELECT * FROM Klasy_view";
+        List<Klasy_view> klasy = jdbcTemplate.query(sql,
+                BeanPropertyRowMapper.newInstance(Klasy_view.class));
+        QuickJSONArray q = new QuickJSONArray("klasy");
+        for (Klasy_view k : klasy)
+            q.add(k.toString());
+        return q.ret();
+    }
 
     @GetMapping("/klasy/generuj/agresywnie/{sid}/{min}/{max}")
     public String getNauczyciele (@PathVariable("sid") String sid, @PathVariable("min") String min, @PathVariable("max") String max)

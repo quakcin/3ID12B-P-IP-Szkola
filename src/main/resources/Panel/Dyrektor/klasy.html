@@ -25,3 +25,37 @@
         </div>
     </div>
 </div>
+<script>
+    const render_lista_klas = function ()
+    {
+        api.wykonaj((s) => {
+            let buff = "";
+            for (const [i, e] of s.klasy.entries())
+            {
+                buff += `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td>${e.nazwa}</td>
+                        <td>${e.liczb}</td>
+                        <td>${e.wych}</td>
+                        <td>
+                            <a href="#" onclick="podgladKlasy('${e.nazwa}')" class="delete" title="Delete" data-toggle="tooltip" style="color:#009cad;"><i class="material-icons">arrow_forward</i></a>
+                        </td>
+                    </tr>
+                `;
+                lista_render.innerHTML = buff;
+            }
+        }).mozeSieZepsuc()
+        .dla("klasy/lista", []);
+    }
+
+    document.body.onload = function ()
+    {
+        render_lista_klas();
+    }
+
+    const podgladKlasy = function (klasa)
+    {
+        window.location.href = `/panel/Dyrektor/klasy_podglad?q=${klasa}`;
+    }
+</script>
