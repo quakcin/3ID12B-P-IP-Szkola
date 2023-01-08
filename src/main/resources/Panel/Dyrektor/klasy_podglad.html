@@ -1,0 +1,84 @@
+<div class="container-lg">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8"><h2>Szczegóły klasy <span id="nazwaKlasy"></span></h2></div>
+                </div>
+            </div>
+            <table class="table table-striped" >
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Imie</th>
+                    <th>Nazwisko</th>
+                    <th>Data urodzenia</th>
+                    <th>Operacje</th>
+                </tr>
+                </thead>
+                <tbody id="lista_render">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+
+    const rysujListe = function ()
+    {
+        const toks = window.location.href.split('?').at(-1).split('=');
+        if (toks[0] == 'q')
+        {
+            const klasa = toks[1];
+            api.wykonaj((s) => {
+                let buff = "";
+                for (const [i, e] of s.lista.entries())
+                {
+                    buff += `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td>${e.imie}</td>
+                            <td>${e.nazwisko}</td>
+                            <td>${e.urodz}</td>
+                             <td>
+                                <a href="#" onclick="window.location.href = '/panel/Dyrektor/uczniowie_edycja?q=${e.uid}'" class="edit" title="Edit" data-toggle="tooltip" style="color:#FFC107;"><i class="material-icons">&#xE254;</i></a>
+                                <a href="#" onclick="usunUcznia('${e.uid}')" class="delete" title="Delete" data-toggle="tooltip" style="color:#E34724;"><i class="material-icons">&#xE872;</i></a>
+                            </td>
+                        </tr>
+                    `;
+                }
+                lista_render.innerHTML = buff;
+                console.log(s);
+            }).mozeSieZepsuc().dla("klasy/uczniowie", [klasa]);
+        }
+    }
+    document.body.onload = function (e)
+    {
+        rysujListe();
+    }
+
+    const usunUcznia = function (id)
+    {
+        const a = parseInt(Math.random() * 10);
+        const b = parseInt(Math.random() * 10);
+        const r = prompt(`${a} + ${b} = `);
+
+        if (parseInt(r) == a+b)
+        {
+            api.wykonaj((s) =>
+            {
+                alert("Pomyślnie usunięto ucznia!");
+                rysujListe();
+            })
+                .ewentualnie((e) =>
+                {
+                    alert("Serwer w tej chwili nie odpowiada, skontaktuj się z administratorem!");
+                }).dla("uczen/usun", [id])
+        }
+        else
+        {
+            alert("Anulowano usunwanie ucznia!");
+        }
+    }
+
+</script>
