@@ -24,13 +24,25 @@
                 </div>
 
                 <div class="col-sm-6">
-                    <label for="firstName" class="form-label">Data urodzenia</label>
+                    <label for="date" class="form-label">Data urodzenia</label>
                     <input type="date" class="form-control" id="date" placeholder="" value="" required>
                 </div>
 
                 <div class="col-sm-6">
-                    <label for="lastName" class="form-label">Miejsce urodzenia</label>
-                    <input type="text" class="form-control" id="hometown" placeholder="" value="" required>
+                    <label for="hometown" class="form-label">Miejsce urodzenia</label>
+                    <input type="text" class="form-control" id="hometown" placeholder="" value="">
+                </div>
+
+                <div class="col-sm-6">
+                    <label for="workgroup" class="form-label">Klasa</label>
+                    <select class="form-select" id="workgroup">
+                        <option value="0">Brak</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-6">
+                    <label for="journalid" class="form-label">Numer w dzienniku</label>
+                    <input type="text" class="form-control" id="journalid" maxlength="3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" placeholder="" value="">
                 </div>
 
                 <hr class="mt-5">
