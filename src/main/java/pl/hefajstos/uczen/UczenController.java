@@ -21,7 +21,7 @@ public class UczenController
     @GetMapping("/uczen/info/{sid}/{uid}")
     public String getUczen (@PathVariable("sid") String sid, @PathVariable("uid") String uid)
     {
-        String sql = "SELECT Id, Imie, Nazwisko, PESEL, Data_urodzenia, Miejsce_urodzenia, Klasa FROM Uczen WHERE Id = '" + uid + "'";
+        String sql = "SELECT Id, Imie, Nazwisko, PESEL, Data_urodzenia, Miejsce_urodzenia, Klasa, Numer FROM Uczen WHERE Id = '" + uid + "'";
 
         List<Uczen> uczniowie = jdbcTemplate.query(sql,
                 BeanPropertyRowMapper.newInstance(Uczen.class));
@@ -45,7 +45,7 @@ public class UczenController
     {
         String uid = UUID.randomUUID().toString();
         String sql = String.format(
-                "INSERT INTO Uczen VALUES ('%s', '%s', '%s', '%s', TO_DATE('%s', 'yyyy-mm-dd'), '%s')",
+                "INSERT INTO Uczen VALUES ('%s', DEFAULT, '%s', '%s', '%s', TO_DATE('%s', 'yyyy-mm-dd'), '%s', DEFAULT)",
             uid, imie, nazw, pesel, uro, miej
         );
 
@@ -60,21 +60,23 @@ public class UczenController
         return (new QuickJSON()).add("uid", uid).ret();
     }
 
-    @GetMapping("/uczen/edytuj/{sid}/{imie}/{nazw}/{pesel}/{uro}/{miej}/{uid}")
+    @GetMapping("/uczen/edytuj/{sid}/{imie}/{nazw}/{pesel}/{uro}/{miej}/{klasa}/{numer}/{uid}")
     public String updateUczen
-            (
-                    @PathVariable("sid") String sid,
-                    @PathVariable("imie") String imie,
-                    @PathVariable("nazw") String nazw,
-                    @PathVariable("pesel") String pesel,
-                    @PathVariable("uro") String uro,
-                    @PathVariable("miej") String miej,
-                    @PathVariable("uid") String uid
-            )
+    (
+            @PathVariable("sid") String sid,
+            @PathVariable("imie") String imie,
+            @PathVariable("nazw") String nazw,
+            @PathVariable("pesel") String pesel,
+            @PathVariable("uro") String uro,
+            @PathVariable("miej") String miej,
+            @PathVariable("klasa") String klasa,
+            @PathVariable("numer") String numer,
+            @PathVariable("uid") String uid
+    )
     {
         String sql = String.format(
-                "UPDATE Uczen SET Imie = '%s', Nazwisko = '%s', Pesel = '%s', Data_urodzenia = TO_DATE('%s', 'yyyy-mm-dd'), Miejsce_urodzenia = '%s' WHERE Id = '%s'",
-                imie, nazw, pesel, uro, miej, uid
+                "UPDATE Uczen SET Imie = '%s', Nazwisko = '%s', Pesel = '%s', Data_urodzenia = TO_DATE('%s', 'yyyy-mm-dd'), Miejsce_urodzenia = '%s', Klasa = '%s', Numer = %s WHERE Id = '%s'",
+                imie, nazw, pesel, uro, miej, klasa, numer, uid
         );
         jdbcTemplate.execute(sql);
         System.out.println(sql);
@@ -103,7 +105,7 @@ public class UczenController
     @GetMapping("/uczen/lista/{sid}")
     public String getListaPrzedmiotow (@PathVariable("sid") String sid)
     {
-        String sql = "SELECT Id, Imie, Nazwisko, PESEL, Data_urodzenia, Miejsce_urodzenia, Klasa FROM Uczen ORDER BY Klasa, Nazwisko, Imie";
+        String sql = "SELECT Id, Imie, Nazwisko, PESEL, Data_urodzenia, Miejsce_urodzenia, Klasa, Numer FROM Uczen ORDER BY Klasa, Numer, Nazwisko, Imie";
 
         List<Uczen> uczniowie = jdbcTemplate.query(sql,
                 BeanPropertyRowMapper.newInstance(Uczen.class));

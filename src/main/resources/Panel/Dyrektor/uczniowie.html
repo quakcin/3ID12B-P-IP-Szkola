@@ -37,11 +37,12 @@
                 {
                     fin += `
                         <tr>
-                            <td>${i + 1}</td>
-                            <td>${e.imie}</td>
-                            <td>${e.nazwisko}</td>
-                            <td>${e.urodz}</td>
+                            <td>${i + 1}. </td>
                             <td>${e.klasa}</td>
+                            <td>${e.numer}</td>
+                            <td>${e.nazwisko}</td>
+                            <td>${e.imie}</td>
+                            <td>${e.urodz}</td>
                             <td>
                                 <a href="#" onclick="window.location.href = '/panel/Dyrektor/uczniowie_edycja?q=${e.uid}'" class="edit" title="Edit" data-toggle="tooltip" style="color:#FFC107;"><i class="material-icons">&#xE254;</i></a>
                                 <a href="#" onclick="usunUcznia('${e.uid}')" class="delete" title="Delete" data-toggle="tooltip" style="color:#E34724;"><i class="material-icons">&#xE872;</i></a>

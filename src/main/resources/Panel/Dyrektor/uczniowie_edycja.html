@@ -53,20 +53,31 @@
         if (toks[0] == 'q')
         {
             const uid = toks[1];
-            api.wykonaj((s) =>
-                {
-                    console.log(s);
-                    firstName.value = s.imie;
-                    lastName.value = s.nazwisko;
-                    pesel.value = s.pesel;
-                    date.value = s.urodz;
-                    hometown.value = s.miejsc;
-                })
-                .ewentualnie((e) =>
-                {
-                    alert("Serwer w tej chwili nie odpowiada, skontaktuj się z administratorem!");
-                }).dla("uczen/info", [uid]);
+            api.wykonaj((s) => {
+                console.log('klasy', s);
+                for (const [i, e] of s.klasy.entries())
+                    workgroup.innerHTML += `
+                            <option value="${e.nazwa}">${e.nazwa}</option>
+                        `
+                    api.wykonaj((s) =>
+                    {
+                        console.log('infouczen', s);
+                        firstName.value = s.imie;
+                        lastName.value = s.nazwisko;
+                        pesel.value = s.pesel;
+                        date.value = s.urodz;
+                        hometown.value = s.miejsc;
+                        workgroup.value = s.klasa;
+                        journalid.value = s.numer;
+
+                    })
+                    .ewentualnie((e) =>
+                    {
+                        alert("Serwer w tej chwili nie odpowiada, skontaktuj się z administratorem!");
+                    }).dla("uczen/info", [uid]);
+            }).mozeSieZepsuc().dla("klasy/lista", []);
         }
+
     }
 
     const updateUczen = function ()
@@ -83,7 +94,16 @@
                 .ewentualnie((e) =>
                 {
                     alert("Serwer w tej chwili nie odpowiada, skontaktuj się z administratorem!");
-                }).dla('uczen/edytuj', [firstName.value, lastName.value, pesel.value, date.value, hometown.value, uid])
+                }).dla('uczen/edytuj', [
+                    firstName.value,
+                    lastName.value,
+                    pesel.value,
+                    date.value,
+                    hometown.value,
+                    workgroup.value,
+                    journalid.value == '' ? 'NULL' : journalid.value,
+                    uid
+                ])
         }
     }
 </script>
