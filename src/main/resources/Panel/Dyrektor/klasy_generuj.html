@@ -8,13 +8,13 @@
             <div class="row g-3">
 
                 <div class="col-sm-6">
-                    <label for="min" class="form-label">Minimalna ilość uczniów w klasie</label>
-                    <input type="text" class="form-control" id="min" placeholder="" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" required>
+                    <label for="fmin" class="form-label">Minimalna ilość uczniów w klasie</label>
+                    <input type="text" class="form-control" id="fmin" placeholder="" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" required>
                 </div>
 
                 <div class="col-sm-6">
-                    <label for="max" class="form-label">Maksymalna ilość uczniów w klasie</label>
-                    <input type="text" class="form-control" id="max" placeholder="" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" required>
+                    <label for="fmax" class="form-label">Maksymalna ilość uczniów w klasie</label>
+                    <input type="text" class="form-control" id="fmax" placeholder="" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" required>
                 </div>
 
 
@@ -31,3 +31,14 @@
         </div>
     </div>
 </div>
+
+<script>
+    const generujKlasy = function ()
+    {
+        api.wykonaj((s) => {
+            console.log(s);
+        }).mozeSieZepsuc().dla("klasy/generuj/agresywnie", [
+            fmin.value, fmax.value
+        ])
+    }
+</script>

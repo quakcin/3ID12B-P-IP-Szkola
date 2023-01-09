@@ -182,7 +182,7 @@ public class KlasyController
                         break;
                     Uczen uczen = rocznik[i].get(uczen_idx);
 
-                    String usql = String.format("UPDATE Uczen SET Klasa = '%s' WHERE Id = '%s'", klasa, uczen.getId());
+                    String usql = String.format("UPDATE Uczen SET Klasa = '%s', Numer = %s WHERE Id = '%s'", klasa, "" + (k + 1), uczen.getId());
                     jdbcTemplate.execute(usql);
                 }
                 uczenOffset += uczniowieNaKlase;
