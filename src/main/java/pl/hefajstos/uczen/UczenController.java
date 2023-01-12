@@ -1,6 +1,7 @@
 package pl.hefajstos.uczen;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.hefajstos.hefajstos.QuickJSON;
 import pl.hefajstos.hefajstos.QuickJSONArray;
 
+import javax.xml.crypto.Data;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,104 +21,123 @@ public class UczenController
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @GetMapping("/uczen/info/{sid}/{uid}")
-    public String getUczen (@PathVariable("sid") String sid, @PathVariable("uid") String uid)
+
+    public static Uczen getUczenById (JdbcTemplate jdbcTemplate, String uid) /* FIXME: Nie działa i już */
     {
-        String sql = "SELECT Id, Imie, Nazwisko, PESEL, Data_urodzenia, Miejsce_urodzenia, Klasa, Numer FROM Uczen WHERE Id = '" + uid + "'";
-
-        List<Uczen> uczniowie = jdbcTemplate.query(sql,
-                BeanPropertyRowMapper.newInstance(Uczen.class));
-
+//        String sql = "SELECT * FROM UCZEN WHERE ID = ?";
+//        try
+//        {
+//            return jdbcTemplate.queryForObject(
+//                    sql, BeanPropertyRowMapper.newInstance(Uczen.class), uid);
+//        }
+//        catch (DataAccessException e)
+//        {
+//            System.out.println(e.toString());
+//            return null;
+//        }
+        /* HOTFIX: Trzeba ulepszyc, narazie to wystarczy */
+        List<Uczen> uczniowie = UczenController.getListaUczniow(jdbcTemplate);
         for (Uczen u : uczniowie)
-            return u.toString();
-
-        return "";
+            if (u.getId().equals(uid)) /* TODO: Remove trim() */
+                return u;
+        return null;
     }
 
-    @GetMapping("/uczen/dodaj/{sid}/{imie}/{nazw}/{pesel}/{uro}/{miej}")
-    public String setUczen
-    (
-            @PathVariable("sid") String sid,
-            @PathVariable("imie") String imie,
-            @PathVariable("nazw") String nazw,
-            @PathVariable("pesel") String pesel,
-            @PathVariable("uro") String uro,
-            @PathVariable("miej") String miej
-    )
+    public static List<Uczen> getListaUczniow (JdbcTemplate jdbcTemplate)
     {
-        String uid = UUID.randomUUID().toString();
-        String sql = String.format(
-                "INSERT INTO Uczen VALUES ('%s', DEFAULT, '%s', '%s', '%s', TO_DATE('%s', 'yyyy-mm-dd'), '%s', DEFAULT)",
-            uid, imie, nazw, pesel, uro, miej
-        );
-
-        jdbcTemplate.execute(sql);
-
-        String sql2 = String.format(
-            "INSERT INTO Konto VALUES ('%s', '%s', 0, '%s')",
-            imie + nazw, pesel, uid
-        );
-
-        jdbcTemplate.execute(sql2);
-        return (new QuickJSON()).add("uid", uid).ret();
+        String sql = "SELECT * FROM Uczen ORDER BY Klasa, Numer, Nazwisko, Imie";
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Uczen.class));
     }
 
-    @GetMapping("/uczen/edytuj/{sid}/{imie}/{nazw}/{pesel}/{uro}/{miej}/{klasa}/{numer}/{uid}")
-    public String updateUczen
-    (
-            @PathVariable("sid") String sid,
-            @PathVariable("imie") String imie,
-            @PathVariable("nazw") String nazw,
-            @PathVariable("pesel") String pesel,
-            @PathVariable("uro") String uro,
-            @PathVariable("miej") String miej,
-            @PathVariable("klasa") String klasa,
-            @PathVariable("numer") String numer,
-            @PathVariable("uid") String uid
-    )
+    public static UUID dodajUczniaDoBazy (JdbcTemplate jdbcTemplate, Uczen nowyUczen)
     {
-        String sql = String.format(
-                "UPDATE Uczen SET Imie = '%s', Nazwisko = '%s', Pesel = '%s', Data_urodzenia = TO_DATE('%s', 'yyyy-mm-dd'), Miejsce_urodzenia = '%s', Klasa = '%s', Numer = %s WHERE Id = '%s'",
-                imie, nazw, pesel, uro, miej, klasa, numer, uid
-        );
-        jdbcTemplate.execute(sql);
-        System.out.println(sql);
+        UUID noweId = UUID.randomUUID();
+        assert(nowyUczen.getId() == null);
 
-        return (new QuickJSON()).add("ok", "true").ret();
-    }
+        String sql = "INSERT INTO Uczen VALUES (?, DEFAULT, ?, ?, ?, ?, ?, DEFAULT)";
 
-    /*
-        @GetMapping("/uczen/dodaj/{sid}")
-        public String getListaPrzedmiotow (@PathVariable("sid") String sid)
+        try
         {
-            return "";
+            jdbcTemplate.update
+            (
+                sql, new Object []
+                {
+                    noweId.toString(),
+                    nowyUczen.getImie(),
+                    nowyUczen.getNazwisko(),
+                    nowyUczen.getPesel(),
+                    nowyUczen.getDataUrodzenia(),
+                    nowyUczen.getMiejsceUrodzenia(),
+                }
+            );
         }
-     */
+        catch (DataAccessException e)
+        {
+            System.out.println("[UczenController::dodajUczniaDoBazy(1)]: " + e.toString());
+            return null;
+        }
 
-    @GetMapping("/uczen/usun/{sid}/{uid}")
-    public String removeUczen (@PathVariable("sid") String sid, @PathVariable("uid") String uid)
-    {
-        String sql = String.format("DELETE FROM Uczen WHERE Id = '%s'", uid);
-        jdbcTemplate.execute(sql);
-        String sql2 = String.format("DELETE FROM Konto WHERE Id = '%s'", uid);
-        jdbcTemplate.execute(sql2);
-        return "{\"ok\": true}";
+        try
+        {
+            jdbcTemplate.update
+            (
+                "INSERT INTO Konto VALUES (?, ?, 0, ?)",
+                new Object []
+                {
+                    nowyUczen.getImie() + nowyUczen.getNazwisko(),
+                    nowyUczen.getPesel(),
+                    noweId.toString()
+                }
+            );
+        }
+        catch (DataAccessException e)
+        {
+            System.out.println("[UczenController::dodajUczniaDoBazy(2)]: " + e.toString());
+        }
+
+        return noweId;
     }
 
-    @GetMapping("/uczen/lista/{sid}")
-    public String getListaPrzedmiotow (@PathVariable("sid") String sid)
+    public static void zapiszUczniaWBazie (JdbcTemplate jdbcTemplate, Uczen nowyUczen)
     {
-        String sql = "SELECT Id, Imie, Nazwisko, PESEL, Data_urodzenia, Miejsce_urodzenia, Klasa, Numer FROM Uczen ORDER BY Klasa, Numer, Nazwisko, Imie";
+        String sql = "UPDATE Uczen SET Imie = ?, Nazwisko = ?, Pesel = ?, DataUrodzenia = ?, MiejsceUrodzenia = ?, Klasa = ?, Numer = ? WHERE Id = ?";
 
-        List<Uczen> uczniowie = jdbcTemplate.query(sql,
-                BeanPropertyRowMapper.newInstance(Uczen.class));
+        try
+        {
+            jdbcTemplate.update
+            (
+                sql, new Object []
+                {
+                    nowyUczen.getImie(),
+                    nowyUczen.getNazwisko(),
+                    nowyUczen.getPesel(),
+                    nowyUczen.getDataUrodzenia(),
+                    nowyUczen.getMiejsceUrodzenia(),
+                    nowyUczen.getKlasa(),
+                    nowyUczen.getNumer(),
+                    nowyUczen.getId(),
+                }
+            );
+        }
+        catch (DataAccessException e)
+        {
+            System.out.println("[UczenController::zapiszUczniaWBazie()]: " + e.toString());
+        }
+    }
 
-        QuickJSONArray rets = new QuickJSONArray("listaUczniow");
-
-        for (Uczen u : uczniowie)
-            rets.add(u.toString());
-
-        return rets.ret();
+    public static boolean usunUcznia (JdbcTemplate jdbcTemplate, String id)
+    {
+        try
+        {
+            jdbcTemplate.update ("DELETE FROM Uczen WHERE Id = ?", new Object [] { id });
+            jdbcTemplate.update ("DELETE FROM Konto WHERE Id = ?", new Object [] { id });
+        }
+        catch (DataAccessException e)
+        {
+            System.out.println("[UczenController::usunUcznia()]: " + e.toString());
+            return false;
+        }
+        return true;
     }
 
 }
