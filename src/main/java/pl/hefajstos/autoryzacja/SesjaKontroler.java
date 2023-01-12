@@ -28,7 +28,6 @@ public class SesjaKontroler
      */
     public static Sesja getSesjaByToken (JdbcTemplate jdbcTemplate, String sid)
     {
-        System.out.println("FUNCTION CALLED() \n\n\n\n\n");
         Sesja nowaSesja = new Sesja();
 
         String sql = "SELECT KONTO.NICKNAME, KONTO.HASLO, KONTO.TYP, KONTO.ID " +

@@ -1,13 +1,16 @@
 package pl.hefajstos.uczen;
 
 import lombok.Data;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import pl.hefajstos.hefajstos.Jsonable;
 import pl.hefajstos.hefajstos.QuickJSON;
 
 import javax.persistence.*;
 import java.sql.Date;
 
 @Data
-public class Uczen
+public class Uczen implements Jsonable
 {
     String id;
     String imie;
@@ -18,8 +21,7 @@ public class Uczen
     String klasa;
     Integer numer;
 
-    @Override
-    public String toString ()
+    public String toJson ()
     {
         return (new QuickJSON())
             .add("imie", getImie())

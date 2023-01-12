@@ -39,7 +39,7 @@ public class KlasyController
     @GetMapping("/klasy/lista/{sid}")
     public String getListaKlas (@PathVariable("sid") String sid)
     {
-        String sql = "SELECT * FROM Klasy_view";
+        String sql = "SELECT * FROM KlasyView";
         List<KlasyView> klasy = jdbcTemplate.query(sql,
                 BeanPropertyRowMapper.newInstance(KlasyView.class));
         QuickJSONArray q = new QuickJSONArray("klasy");
