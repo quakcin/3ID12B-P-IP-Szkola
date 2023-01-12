@@ -6,7 +6,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import pl.hefajstos.hefajstos.QuickJSON;
 import pl.hefajstos.hefajstos.QuickJSONArray;
 
 import java.util.List;
@@ -24,11 +23,11 @@ public class NauczycieleController
     {
         String sql = "SELECT * FROM Nauczyciele_view";
 
-        List<Nauczyciele_view> nauczyciele = jdbcTemplate.query(sql,
-                BeanPropertyRowMapper.newInstance(Nauczyciele_view.class));
+        List<NauczycieleView> nauczyciele = jdbcTemplate.query(sql,
+                BeanPropertyRowMapper.newInstance(NauczycieleView.class));
 
         QuickJSONArray q = new QuickJSONArray("nauczyciele");
-        for (Nauczyciele_view n : nauczyciele)
+        for (NauczycieleView n : nauczyciele)
             q.add(n.toString());
 
         return q.ret();
@@ -41,10 +40,10 @@ public class NauczycieleController
     {
         String sql = String.format("SELECT * FROM Nauczyciele_view WHERE Nauczyciel_Id = '%s'", id);
 
-        List<Nauczyciele_view> nauczyciele = jdbcTemplate.query(sql,
-                BeanPropertyRowMapper.newInstance(Nauczyciele_view.class));
+        List<NauczycieleView> nauczyciele = jdbcTemplate.query(sql,
+                BeanPropertyRowMapper.newInstance(NauczycieleView.class));
 
-        for (Nauczyciele_view n : nauczyciele)
+        for (NauczycieleView n : nauczyciele)
             return n.toString();
 
         return "{\"ok\": true}";

@@ -1,8 +1,6 @@
 package pl.hefajstos.przedmioty;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.hefajstos.hefajstos.QuickJSON;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 public class PrzedmiotyController

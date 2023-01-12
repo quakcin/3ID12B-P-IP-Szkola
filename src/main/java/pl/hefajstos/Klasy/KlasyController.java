@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import pl.hefajstos.Nauczyciele.Nauczyciele_view;
+import pl.hefajstos.Nauczyciele.NauczycieleView;
 import pl.hefajstos.hefajstos.QuickJSONArray;
 import pl.hefajstos.uczen.Uczen;
 
@@ -40,10 +40,10 @@ public class KlasyController
     public String getListaKlas (@PathVariable("sid") String sid)
     {
         String sql = "SELECT * FROM Klasy_view";
-        List<Klasy_view> klasy = jdbcTemplate.query(sql,
-                BeanPropertyRowMapper.newInstance(Klasy_view.class));
+        List<KlasyView> klasy = jdbcTemplate.query(sql,
+                BeanPropertyRowMapper.newInstance(KlasyView.class));
         QuickJSONArray q = new QuickJSONArray("klasy");
-        for (Klasy_view k : klasy)
+        for (KlasyView k : klasy)
             q.add(k.toString());
         return q.ret();
     }
@@ -55,8 +55,8 @@ public class KlasyController
         Integer cMax = Integer.valueOf(max);
 
         String sql = "SELECT * FROM Nauczyciele_view";
-        List<Nauczyciele_view> nauczyciele = jdbcTemplate.query(sql,
-                BeanPropertyRowMapper.newInstance(Nauczyciele_view.class));
+        List<NauczycieleView> nauczyciele = jdbcTemplate.query(sql,
+                BeanPropertyRowMapper.newInstance(NauczycieleView.class));
 
         sql = "SELECT * FROM Uczen";
         List<Uczen> uczniowie = jdbcTemplate.query(sql,
@@ -84,7 +84,7 @@ public class KlasyController
         Integer obecnyRok = Year.now().getValue();
         for (Uczen u : uczniowie)
         {
-            Integer poziom = obecnyRok - u.getData_urodzenia().toLocalDate().getYear() - 7;
+            Integer poziom = obecnyRok - u.getDataUrodzenia().toLocalDate().getYear() - 7;
             if (poziom < 0)
                 poziom = 0;
             if (poziom > 7)
@@ -155,7 +155,7 @@ public class KlasyController
                 sql = String.format("INSERT INTO Klasa VALUES ('%s', %s)", klasa, i + 1);
                 jdbcTemplate.execute(sql);
 
-                sql = String.format("UPDATE Nauczyciel SET Klasa_Id = '%s' WHERE Id = '%s'", klasa, nauczyciele.get(nauczyciel_idx++).getNauczyciel_Id());
+                sql = String.format("UPDATE Nauczyciel SET Klasa_Id = '%s' WHERE Id = '%s'", klasa, nauczyciele.get(nauczyciel_idx++).getNauczycielId());
                 jdbcTemplate.execute(sql);
             }
         }

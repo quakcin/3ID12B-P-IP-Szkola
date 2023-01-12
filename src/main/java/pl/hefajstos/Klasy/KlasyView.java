@@ -4,18 +4,18 @@ import lombok.Data;
 import pl.hefajstos.hefajstos.QuickJSON;
 
 @Data
-public class Klasy_view
+public class KlasyView
 {
-    String Nazwa;
-    Integer Liczba_uczniow;
-    String Wychowawca;
+    String nazwa;
+    Integer liczbaUczniow;
+    String wychowawca;
 
     @Override
     public String toString ()
     {
         return (new QuickJSON())
                 .add("nazwa", getNazwa())
-                .add("liczb", getLiczba_uczniow().toString())
+                .add("liczb", getLiczbaUczniow().toString())
                 .add("wych", getWychowawca())
                 .ret();
     }

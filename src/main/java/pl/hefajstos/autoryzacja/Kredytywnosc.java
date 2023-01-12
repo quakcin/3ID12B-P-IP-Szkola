@@ -19,21 +19,21 @@ public class Kredytywnosc
 
     @Autowired
     private SesjaKontroler sesjaKontroler;
-
-    @GetMapping("/kredytywnosc/{sid}")
-    public String getPing (@PathVariable("sid") String sid)
-    {
-        Sesja sesja = sesjaKontroler.getRodzajKonta(sid);
-
-        if (sesja.getRodzajKonta().equals(RodzajKonta.Uczen))
-        {
-            String sql ="SELECT Imie, Nazwisko FROM Uczen WHERE Id = '" + sesja.getKlucz() + "'";
-            List<Uczen> uczniowie = jdbcTemplate.query(sql,
-                    BeanPropertyRowMapper.newInstance(Uczen.class));
-            for (Uczen u : uczniowie)
-                return (new QuickJSON()).add("kred", u.getImie() + " " + u.getNazwisko()).ret();
-        }
-
-        return (new QuickJSON()).add("kred","").add("act", sesja.getRodzajKonta().name()).ret();
-    }
+//
+//    @GetMapping("/kredytywnosc/{sid}")
+//    public String getPing (@PathVariable("sid") String sid)
+//    {
+//        Sesja sesja = sesjaKontroler.getRodzajKonta(sid);
+//
+//        if (sesja.getRodzajKonta().equals(RodzajKonta.Uczen))
+//        {
+//            String sql ="SELECT Imie, Nazwisko FROM Uczen WHERE Id = '" + sesja.getKlucz() + "'";
+//            List<Uczen> uczniowie = jdbcTemplate.query(sql,
+//                    BeanPropertyRowMapper.newInstance(Uczen.class));
+//            for (Uczen u : uczniowie)
+//                return (new QuickJSON()).add("kred", u.getImie() + " " + u.getNazwisko()).ret();
+//        }
+//
+//        return (new QuickJSON()).add("kred","").add("act", sesja.getRodzajKonta().name()).ret();
+//    }
 }

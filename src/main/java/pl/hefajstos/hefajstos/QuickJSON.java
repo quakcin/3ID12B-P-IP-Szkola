@@ -13,6 +13,12 @@ public class QuickJSON
         return this;
     }
 
+    public QuickJSON addRaw (String name, String value)
+    {
+        str += ((str.equals("")) ? "" : ",") + "\"" + name + "\":" + value;
+        return this;
+    }
+
     public String ret ()
     {
         return "{" + str + "}";
