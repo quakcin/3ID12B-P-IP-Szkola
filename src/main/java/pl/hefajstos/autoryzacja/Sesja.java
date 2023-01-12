@@ -56,6 +56,10 @@ public class Sesja implements Jsonable
         }
     }
 
+    public Sesja (JdbcTemplate jdbcTemplate, String sid)
+    {
+    }
+
     public String toJson()
     {
         if (getAktywna())
@@ -70,5 +74,15 @@ public class Sesja implements Jsonable
         return (new QuickJSON())
             .addRaw("ok", "false")
             .ret();
+    }
+
+    public void wyloguj (JdbcTemplate jdbcTemplate)
+    {
+        jdbcTemplate.update
+        (
+                "DELETE FROM SESJA WHERE TOKEN = ?",
+                new Object [] {getToken()}
+        );
+        setAktywna(false);
     }
 }
