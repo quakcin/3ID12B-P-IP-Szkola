@@ -1,4 +1,4 @@
-package pl.hefajstos.Nauczyciele;
+package pl.hefajstos.nauczyciele;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,7 +23,7 @@ public class NauczycieleMapping
     @GetMapping("/nauczyciel/info/{sid}/{id}")
     public String mappingNauczycielInfo (@PathVariable("sid") String sid, @PathVariable("id") String id)
     {
-        NauczycieleView n = NauczycieleController.getNauczycielById(jdbcTemplate, id);
+        Nauczyciel n = NauczycieleController.getNauczycielById(jdbcTemplate, id);
         return n != null
             ? n.toJson()
             : QuickJSON.RESP_BAD;
@@ -32,10 +32,10 @@ public class NauczycieleMapping
     @GetMapping("/nauczyciel/lista/{sid}")
     public String mappingNauczycielLista (@PathVariable("sid") String sid)
     {
-        List<NauczycieleView> nauczyciele = NauczycieleController.getListaNauczycieli(jdbcTemplate);
+        List<Nauczyciel> nauczyciele = NauczycieleController.getListaNauczycieli(jdbcTemplate);
         QuickJSONArray rets = new QuickJSONArray("nauczyciele");
 
-        for (NauczycieleView n : nauczyciele)
+        for (Nauczyciel n : nauczyciele)
             rets.add(n.toJson());
 
         return rets.ret();
@@ -62,7 +62,7 @@ public class NauczycieleMapping
             @PathVariable("prz") String prz
     )
     {
-        NauczycieleView nowyNauczyciel = new NauczycieleView();
+        Nauczyciel nowyNauczyciel = new Nauczyciel();
         nowyNauczyciel.setNauczycielId(null);
         nowyNauczyciel.setImie(imie);
         nowyNauczyciel.setNazwisko(nazw);
@@ -90,7 +90,7 @@ public class NauczycieleMapping
         @PathVariable("id") String id
     )
     {
-        NauczycieleView nowyNauczyciel = new NauczycieleView();
+        Nauczyciel nowyNauczyciel = new Nauczyciel();
         nowyNauczyciel.setImie(imie);
         nowyNauczyciel.setNazwisko(nazw);
         nowyNauczyciel.setDataZatrudnienia(zatr);

@@ -1,11 +1,8 @@
-package pl.hefajstos.Nauczyciele;
+package pl.hefajstos.nauczyciele;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.RestController;
-import pl.hefajstos.przedmioty.Przedmiot;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,19 +17,19 @@ public class NauczycieleController
     public static List<NauczycieleView> getListaNauczycieli (JdbcTemplate jdbcTemplate)
     {
         String sql = "SELECT * FROM NauczycieleView";
-        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(NauczycieleView.class));
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Nauczyciel.class));
     }
 
-    public static NauczycieleView getNauczycielById (JdbcTemplate jdbcTemplate, String nid)
+    public static Nauczyciel getNauczycielById (JdbcTemplate jdbcTemplate, String nid)
     {
-        List<NauczycieleView> nauczyciele = NauczycieleController.getListaNauczycieli(jdbcTemplate);
-        for (NauczycieleView n : nauczyciele)
+        List<Nauczyciel> nauczyciele = NauczycieleController.getListaNauczycieli(jdbcTemplate);
+        for (Nauczyciel n : nauczyciele)
             if (n.getNauczycielId().equals(nid))
                 return n;
         return null;
     }
 
-    public static UUID dodajNauczycielaDoBazy (JdbcTemplate jdbcTemplate, NauczycieleView nowyNauczyciel, String zakodowanaListaPrzedmiotow)
+    public static UUID dodajNauczycielaDoBazy (JdbcTemplate jdbcTemplate, Nauczyciel nowyNauczyciel, String zakodowanaListaPrzedmiotow)
     {
         UUID noweId = UUID.randomUUID();
         assert(nowyNauczyciel.getNauczycielId() == null);
@@ -116,7 +113,7 @@ public class NauczycieleController
         return true;
     }
 
-    public static boolean aktualizujNauczycielaWBazie (JdbcTemplate jdbcTemplate, NauczycieleView nowyNauczyciel, String zakodowanaListaPrzedmiotow)
+    public static boolean aktualizujNauczycielaWBazie (JdbcTemplate jdbcTemplate, Nauczyciel nowyNauczyciel, String zakodowanaListaPrzedmiotow)
     {
         /*
             Zmiana w tabeli nauczyciel

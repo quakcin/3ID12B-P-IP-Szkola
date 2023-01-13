@@ -12,6 +12,14 @@ public class QuickJSONArray
         this.fieldName = fieldName;
         str = "";
     }
+
+    public static String fromList (String fieldName, List<? extends Jsonable> jsonables)
+    {
+        QuickJSONArray q = new QuickJSONArray(fieldName);
+        for (Jsonable j : jsonables)
+            q.add(j.toJson());
+        return q.ret();
+    }
     public QuickJSONArray add (String value)
     {
         str += ((str.equals("")) ? "" : ",") + value;
