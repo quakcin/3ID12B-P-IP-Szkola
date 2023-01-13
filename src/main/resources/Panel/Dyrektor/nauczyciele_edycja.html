@@ -96,7 +96,14 @@
                     lastName.value = s.nazw;
                     level.value = s.stop;
                     date.value = s.zatr;
-                    president.value = s.wych;
+
+                    if (s.wych !== 'Bez')
+                    {
+                        president.innerHTML += `<option value="${s.wych}">${s.wych}</option>`;
+                    }
+                    setTimeout((v = s.wych) => {
+                        president.value = v;
+                    }, 500);
                     // reverse-engineer nazwy przedmiotów
                     const nazwy = s.prz.split(",").map((n) => n.trim()); // FIXME: Zabezpieczyć przed podaniem przecinka jako nazwe przedmiotu
                     console.log(nazwy);
@@ -114,6 +121,15 @@
                         }
                     }
                     render_lista_przedmiotow();
+
+                    api.wykonaj((s) => {
+                        for (const [i, e] of s.klasy.entries())
+                        {
+                            president.innerHTML += `
+                                <option value="${e.nazwa}">${e.nazwa}</option>
+                            `;
+                        }
+                    }).mozeSieZepsuc().dla("klasy/lista_bez_wychowawcow", []);
 
                 }).mozeSieZepsuc().dla("nauczyciel/info", [id]);
             }
@@ -164,6 +180,12 @@
         const toks = window.location.href.split('?').at(-1).split('=');
         const id = toks[1];
 
+        if (__lista_przedmiotow.length <= 0)
+        {
+            alert("Nie można dodać nauczyciela bez przedmiotów");
+            return;
+        }
+
         api.wykonaj((s) => {
             alert("Pomyślnie edytowano dane nauczyciela!");
             window.location.href = '/panel/Dyrektor/nauczyciele';
@@ -173,7 +195,7 @@
             lastName.value,
             date.value,
             level.value,
-            president.value == "" ? "_" : president.value,
+            president.value,
             __lista_przedmiotow.map((n) => n.id).join("_"),
             id
         ]);

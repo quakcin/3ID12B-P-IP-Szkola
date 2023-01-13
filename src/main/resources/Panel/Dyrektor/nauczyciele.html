@@ -42,7 +42,7 @@
                         <td>${e.nazw}</td>
 
                         <td>${e.prz}</td>
-                        <td>${e.wych == 'null' ? '' : e.wych}</td>
+                        <td>${e.wych == ' ' ? 'Bez' : e.wych}</td>
                         <td>
                             <a href="#" onclick="window.location.href = '/panel/Dyrektor/nauczyciele_edycja?q=${e.id}'" class="edit" title="Edit" data-toggle="tooltip" style="color:#FFC107;"><i class="material-icons">&#xE254;</i></a>
                             <a href="#" onclick="usunNauczyciela('${e.id}')" class="delete" title="Delete" data-toggle="tooltip" style="color:#E34724;"><i class="material-icons">&#xE872;</i></a>

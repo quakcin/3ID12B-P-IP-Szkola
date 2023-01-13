@@ -38,12 +38,28 @@
 </div>
 
 <script>
+
+    agress.onchange = ((e) =>
+    {
+        const toggleOption = !e.target.checked;
+        fmin.disabled = toggleOption;
+        fmax.disabled = toggleOption;
+        console.log(e);
+    });
+
     const generujKlasy = function ()
     {
+        const rodzaj = agress.checked
+            ? "agresywnie"
+            : "pasywnie";
+
+        const wywolania = {
+            agresywnie: [fmin.value, fmax.value],
+            pasywnie: []
+        }
+
         api.wykonaj((s) => {
             console.log(s);
-        }).mozeSieZepsuc().dla("klasy/generuj/agresywnie", [
-            fmin.value, fmax.value
-        ])
+        }).mozeSieZepsuc().dla(`klasy/generuj/${rodzaj}`, wywolania[rodzaj])
     }
 </script>

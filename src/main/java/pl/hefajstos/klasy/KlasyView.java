@@ -10,6 +10,7 @@ public class KlasyView implements Jsonable
     String nazwa;
     Integer liczbaUczniow;
     String wychowawca;
+    Integer poziom;
 
     public String toJson ()
     {
@@ -17,6 +18,7 @@ public class KlasyView implements Jsonable
                 .add("nazwa", getNazwa())
                 .add("liczb", getLiczbaUczniow().toString())
                 .add("wych", getWychowawca())
+                .addRaw("poziom", getPoziom().toString())
                 .ret();
     }
 }

@@ -21,4 +21,11 @@ public class GeneratorMapping
         RaportAgresywny r = Agresywny.generuj(jdbcTemplate, parametry);
         return r.toJson();
     }
+
+    @GetMapping("/klasy/generuj/pasywnie/{sid}")
+    public String mappingKlasyPasywnie (@PathVariable String sid)
+    {
+        RaportPasywny r = Pasywny.generuj(jdbcTemplate, null);
+        return r.toJson();
+    }
 }

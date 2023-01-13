@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.hefajstos.nauczyciele.Nauczyciel;
 import pl.hefajstos.hefajstos.QuickJSONArray;
 import pl.hefajstos.uczen.Uczen;
+import pl.hefajstos.uczen.UczenController;
 
 import java.time.Year;
 import java.util.ArrayList;
@@ -41,8 +42,32 @@ public class KlasyController
     public static List<KlasyView> getListaKlas (JdbcTemplate jdbcTemplate)
     {
         return jdbcTemplate.query(
-                "SELECT * FROM KlasyView",
+                "SELECT * FROM KlasyView WHERE NAZWA != '0'",
                 BeanPropertyRowMapper.newInstance(KlasyView.class)
         );
+    }
+
+    public static void przypiszUczniaDoKlasy (JdbcTemplate jdbcTemplate, KlasyView klasa, Uczen uczen)
+    {
+        /* znalezienie numeru dla ucznia */
+        Integer maxNumerWDzienniku = 0;
+        List<Uczen> uczniowieWKlasie = KlasyController.getListaUczniowByKlasa(jdbcTemplate, klasa.getNazwa());
+        for (Uczen u : uczniowieWKlasie)
+            if (u.getNumer() > maxNumerWDzienniku)
+                maxNumerWDzienniku = u.getNumer();
+
+        uczen.setNumer(maxNumerWDzienniku + 1);
+        uczen.setKlasa(klasa.getNazwa());
+        UczenController.zapiszUczniaWBazie(jdbcTemplate, uczen);
+    }
+
+    public static List<KlasyView> getListaBezWychowawcow (JdbcTemplate jdbcTemplate)
+    {
+        List<KlasyView> klasy = getListaKlas(jdbcTemplate);
+        ArrayList<KlasyView> bezWychowawcow = new ArrayList<>();
+        for (KlasyView k : klasy)
+            if (k.getWychowawca().equals(" "))
+                bezWychowawcow.add(k);
+        return bezWychowawcow;
     }
 }

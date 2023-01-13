@@ -10,6 +10,11 @@ import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Generuje klasy od podstaw, jeżeli jakoweś już istnieją
+ * to usuwa je. Może przebić się przez ograniczenia
+ * jeżeli system tego wymaga.
+ */
 public class Agresywny extends Generator
 {
     public static RaportAgresywny generuj (JdbcTemplate jdbcTemplate, Parametry parametry)
@@ -26,7 +31,7 @@ public class Agresywny extends Generator
          */
 
         jdbcTemplate.execute("UPDATE Uczen SET Klasa = '0'");
-        jdbcTemplate.execute("UPDATE Nauczyciel SET KlasaId = '_'");
+        jdbcTemplate.execute("UPDATE Nauczyciel SET KlasaId = 'Bez'");
         jdbcTemplate.execute("DELETE FROM Klasa WHERE Nazwa != '0'");
 
         /*

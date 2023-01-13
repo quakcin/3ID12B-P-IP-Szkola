@@ -1,5 +1,6 @@
 package pl.hefajstos.nauczyciele;
 
+import com.sun.xml.bind.v2.model.annotation.Quick;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,13 +33,8 @@ public class NauczycieleMapping
     @GetMapping("/nauczyciel/lista/{sid}")
     public String mappingNauczycielLista (@PathVariable("sid") String sid)
     {
-        List<Nauczyciel> nauczyciele = NauczycieleController.getListaNauczycieli(jdbcTemplate);
-        QuickJSONArray rets = new QuickJSONArray("nauczyciele");
-
-        for (Nauczyciel n : nauczyciele)
-            rets.add(n.toJson());
-
-        return rets.ret();
+        return QuickJSONArray.fromList("nauczyciele",
+                NauczycieleController.getListaNauczycieli(jdbcTemplate));
     }
 
     @GetMapping("/nauczyciel/usun/{sid}/{id}")
