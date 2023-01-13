@@ -2,6 +2,9 @@ package pl.hefajstos.hefajstos;
 
 public class QuickJSON
 {
+    public static final String RESP_OK = "{\"ok\": true}";
+    public static final String RESP_BAD = "{\"ok\": false}";
+
     private String str;
     public QuickJSON ()
     {

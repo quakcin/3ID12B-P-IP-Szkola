@@ -152,12 +152,12 @@ public class NauczycieleController
 
         try
         {
-            jdbcTemplate.execute(sql);
+            jdbcTemplate.update(sql, nowyNauczyciel.getNauczycielId());
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            System.out.println(e.toString());
-            return "{\"ok\": false}";
+            System.out.println("[NauczycieleController::aktualizujNauczycielaWBazie(2)]: " + e.toString());
+            return false;
         }
 
         /*
