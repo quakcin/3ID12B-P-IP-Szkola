@@ -1,7 +1,6 @@
 package pl.hefajstos.klasy.generator;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.servlet.tags.Param;
 import pl.hefajstos.nauczyciele.Nauczyciel;
 import pl.hefajstos.nauczyciele.NauczycieleController;
 import pl.hefajstos.uczen.Uczen;
@@ -13,7 +12,7 @@ import java.util.List;
 
 public class Agresywny extends Generator
 {
-    public static Raport generuj (JdbcTemplate jdbcTemplate, Parametry parametry)
+    public static RaportAgresywny generuj (JdbcTemplate jdbcTemplate, Parametry parametry)
     {
         List<Nauczyciel> nauczyciele = NauczycieleController.getListaNauczycieli(jdbcTemplate);
         List<Uczen> uczniowie = UczenController.getListaUczniow(jdbcTemplate);
@@ -154,7 +153,7 @@ public class Agresywny extends Generator
             }
         }
 
-        Raport r = new Raport(jdbcTemplate);
+        RaportAgresywny r = new RaportAgresywny(jdbcTemplate);
         r.setSpelnioneOgraniczenia(spelnioneOgraniczenia);
         return r;
     }

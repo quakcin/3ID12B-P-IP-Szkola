@@ -37,6 +37,13 @@ public class KlasyMapping
                 .fromList("klasy", KlasyController.getListaKlas(jdbcTemplate));
     }
 
+    @GetMapping("/klasy/lista_bez_wychowawcow/{sid}")
+    public String mappingKlasyBezWychowawcowLista (@PathVariable("sid") String sid)
+    {
+        return QuickJSONArray
+                .fromList("klasy", KlasyController.getListaBezWychowawcow(jdbcTemplate));
+    }
+
 
 
 

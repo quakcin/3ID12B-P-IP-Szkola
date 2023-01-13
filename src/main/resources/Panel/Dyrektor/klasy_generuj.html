@@ -9,16 +9,21 @@
 
                 <div class="col-sm-6">
                     <label for="fmin" class="form-label">Minimalna ilość uczniów w klasie</label>
-                    <input type="text" class="form-control" id="fmin" placeholder="" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" required>
+                    <input type="text" class="form-control" id="fmin" placeholder="" value="" onInput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" disabled>
                 </div>
 
                 <div class="col-sm-6">
                     <label for="fmax" class="form-label">Maksymalna ilość uczniów w klasie</label>
-                    <input type="text" class="form-control" id="fmax" placeholder="" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" required>
+                    <input type="text" class="form-control" id="fmax" placeholder="" value="" onInput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" disabled>
                 </div>
 
 
                 <hr class="mt-5">
+
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="agress">
+                    <label class="form-check-label" for="agress">Generowanie agresywne</label>
+                </div>
 
 
                 <div class="row mt-5">

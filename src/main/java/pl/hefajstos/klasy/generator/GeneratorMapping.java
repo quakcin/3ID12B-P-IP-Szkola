@@ -18,7 +18,7 @@ public class GeneratorMapping
         Parametry parametry = new Parametry();
         parametry.setMaxUczniowWKlasie(max);
         parametry.setMinUczniowWKlasie(min);
-        Raport r = Agresywny.generuj(jdbcTemplate, parametry);
+        RaportAgresywny r = Agresywny.generuj(jdbcTemplate, parametry);
         return r.toJson();
     }
 }

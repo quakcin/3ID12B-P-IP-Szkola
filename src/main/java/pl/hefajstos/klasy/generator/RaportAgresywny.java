@@ -10,13 +10,13 @@ import pl.hefajstos.klasy.KlasyView;
 
 import java.util.List;
 @Data
-public class Raport implements Jsonable
+public class RaportAgresywny extends Raport
 {
     private Integer iloscUtworzonychKlas;
     private List<KlasyView> listaUtworzonychKlas;
     private Boolean spelnioneOgraniczenia;
 
-    public Raport (JdbcTemplate jdbcTemplate)
+    public RaportAgresywny(JdbcTemplate jdbcTemplate)
     { /* Raport generowany z bierzącego stanu bazy */
         List<KlasyView> listaKlas = KlasyController.getListaKlas(jdbcTemplate);
         setIloscUtworzonychKlas(listaKlas.size());
