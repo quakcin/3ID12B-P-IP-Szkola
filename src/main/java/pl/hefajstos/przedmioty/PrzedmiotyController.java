@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import pl.hefajstos.hefajstos.QuickJSON;
+import pl.hefajstos.uczen.Uczen;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class PrzedmiotyController
@@ -62,29 +64,30 @@ public class PrzedmiotyController
     }
 
 
-    @GetMapping("/przedmioty/edytuj/{sid}/{id}/{nazwa}/{ilosc}/{poziom}/{obw}")
-    public String editPrzedmiot
-    (
-            @PathVariable("sid") String sid,
-            @PathVariable("id") String id,
-            @PathVariable("nazwa") String nazwa,
-            @PathVariable("ilosc") String ilosc,
-            @PathVariable("poziom") String poziom,
-            @PathVariable("obw") String obw
-    )
+    // pass
+
+    public static boolean zapiszPrzedmiotWBazie (JdbcTemplate jdbcTemplate, Przedmiot nowyPrzedmiot )
     {
-        String sql = String.format("UPDATE Przedmiot SET Nazwa = '%s', Poziom = %s, Ilosc = %s, Obowiazkowy = '%s' WHERE Id = %s",
-                nazwa, poziom, ilosc, obw, id);
+        String sql = "UPDATE Przedmiot SET Nazwa = ?, Poziom = ?, Ilosc = ?, Obowiazkowy = ? WHERE Id = ?";
+
         try
         {
-            jdbcTemplate.execute(sql);
+            jdbcTemplate.update
+            (
+                sql,
+                nowyPrzedmiot.getNazwa(),
+                nowyPrzedmiot.getPoziom(),
+                nowyPrzedmiot.getIlosc(),
+                nowyPrzedmiot.getObowiazkowy(),
+                nowyPrzedmiot.getId()
+            );
         }
-        catch (Exception e)
+        catch (DataAccessException e)
         {
-            return "{\"ok\":false}";
+            System.out.println("[PrzedmiotController::zapiszPrzedmiotWBazie()]: " + e.toString());
+            return false;
         }
-
-        return "{\"ok\":true}";
+        return true;
     }
 
     @GetMapping("/przedmioty/dodaj/{sid}/{nazwa}/{ilosc}/{poziom}/{obw}")
@@ -97,18 +100,23 @@ public class PrzedmiotyController
             @PathVariable("obw") String obw
     )
     {
-        String sql = String.format("INSERT INTO Przedmiot VALUES (DEFAULT, '%s', %s, %s, '%s')",
-            nazwa, poziom, ilosc, obw);
+        String sql = "INSERT INTO Przedmiot VALUES (DEFAULT, ?, ?, ?, ?)";
         try
         {
-            jdbcTemplate.execute(sql);
+            jdbcTemplate.update
+            (
+                sql,
+                nowyPrzedmiot.getNazwa(),
+                nowyPrzedmiot.getPoziom(),
+                nowyPrzedmiot.getIlosc(),
+                nowyPrzedmiot.getObowiazkowy());
         }
-        catch (Exception e)
+        catch (DataAccessException e)
         {
-            return "{\"ok\":false}";
+            System.out.println("[PrzedmiotController::dodajPrzedmiotDoBazy(1)]: " + e.toString());
+            return false;
         }
-
-        return "{\"ok\":true}";
+        return true;
     }
 
     @GetMapping("/przedmioty/lista/{sid}")
