@@ -1,12 +1,13 @@
 package pl.hefajstos.Nauczyciele;
 
 import lombok.Data;
+import pl.hefajstos.hefajstos.Jsonable;
 import pl.hefajstos.hefajstos.QuickJSON;
 
 import java.sql.Date;
 
 @Data
-public class NauczycieleView
+public class NauczycieleView implements Jsonable
 {
     String nauczycielId;
     String imie;
@@ -16,10 +17,8 @@ public class NauczycieleView
     String przedmioty;
     String klasaId;
     private final String bezPrzedmiotow = " - Klasa , ";
-
     @Override
-    public String toString()
-    {
+    public String toJson() {
         return (new QuickJSON())
                 .add("imie", getImie())
                 .add("nazw", getNazwisko())
