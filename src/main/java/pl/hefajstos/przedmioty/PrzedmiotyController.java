@@ -1,6 +1,7 @@
 package pl.hefajstos.przedmioty;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,51 +19,36 @@ public class PrzedmiotyController
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-
-    @GetMapping("/przedmioty/usun/{sid}/{id}")
-    public String removePrzedmiot
-    (
-            @PathVariable("sid") String sid,
-            @PathVariable("id") String id
-    )
+    public static Przedmiot getPrzedmiotById (JdbcTemplate jdbcTemplate, Integer id)
     {
-        String sql = String.format("DELETE FROM Przedmiot WHERE Id = %s", id);
+        List<Przedmiot> przedmioty = getListaPrzedmiotow(jdbcTemplate);
+        for (Przedmiot p : przedmioty)
+            if (p.getId().equals(id))
+                return p;
+        return null;
+    }
+
+    public static List<Przedmiot> getListaPrzedmiotow (JdbcTemplate jdbcTemplate)
+    {
+        String sql = "SELECT * FROM Przedmiot";
+        return jdbcTemplate.query(sql,
+                BeanPropertyRowMapper.newInstance(Przedmiot.class));
+    }
+
+    public static boolean usunPrzedmiotById (JdbcTemplate jdbcTemplate, Integer id)
+    {
         try
         {
-            jdbcTemplate.execute(sql);
+            String sql = "DELETE FROM Przedmiot WHERE Id = ?";
+            jdbcTemplate.update(sql, id);
         }
-        catch (Exception e)
+        catch (DataAccessException e)
         {
-            return "{\"ok\":false}";
+            System.out.println("[PrzedmiotController::usunPrzedmiotById]: " + e.toString());
+            return false;
         }
-
-        return "{\"ok\":true}";
+        return true;
     }
-
-    @GetMapping("/przedmioty/info/{sid}/{id}")
-    public String infoPrzedmioty
-    (
-            @PathVariable("sid") String sid,
-            @PathVariable("id") String id
-    )
-    {
-        String sql = String.format("SELECT * FROM Przedmiot WHERE Id = %s", id);
-
-        List<Przedmiot> przedmioty = jdbcTemplate.query(sql,
-                BeanPropertyRowMapper.newInstance(Przedmiot.class));
-
-        for (Przedmiot p : przedmioty)
-            return (new QuickJSON())
-                    .add("id", "" + p.getId())
-                    .add("nazwa", p.getNazwa())
-                    .add("poziom", "" + p.getPoziom())
-                    .add("ilosc", "" + p.getIlosc())
-                    .add("obw", p.getObowiazkowy())
-                    .ret();
-
-        return "{\"ok\":false}";
-    }
-
 
     // pass
 
@@ -90,15 +76,7 @@ public class PrzedmiotyController
         return true;
     }
 
-    @GetMapping("/przedmioty/dodaj/{sid}/{nazwa}/{ilosc}/{poziom}/{obw}")
-    public String addPrzedmiot
-    (
-            @PathVariable("sid") String sid,
-            @PathVariable("nazwa") String nazwa,
-            @PathVariable("ilosc") String ilosc,
-            @PathVariable("poziom") String poziom,
-            @PathVariable("obw") String obw
-    )
+    public static boolean dodajPrzedmiotDoBazy (JdbcTemplate jdbcTemplate, Przedmiot nowyPrzedmiot)
     {
         String sql = "INSERT INTO Przedmiot VALUES (DEFAULT, ?, ?, ?, ?)";
         try
@@ -117,28 +95,5 @@ public class PrzedmiotyController
             return false;
         }
         return true;
-    }
-
-    @GetMapping("/przedmioty/lista/{sid}")
-    public String getTestJSONString (@PathVariable("sid") String sid)
-    {
-        String sql = "SELECT * FROM Przedmiot";
-
-        List<Przedmiot> przedmioty = jdbcTemplate.query(sql,
-                BeanPropertyRowMapper.newInstance(Przedmiot.class));
-
-        String lista = "{\"przedmioty\": [";
-        for (Przedmiot p : przedmioty) {
-            lista += (new QuickJSON())
-                    .add("id", "" + p.getId())
-                    .add("nazwa", p.getNazwa())
-                    .add("poziom", "" + p.getPoziom())
-                    .add("ilosc", "" + p.getIlosc())
-                    .add("obw", p.getObowiazkowy())
-                    .ret() + ((przedmioty.indexOf(p) + 1 < przedmioty.toArray().length) ? ", " : "");
-        }
-        lista += "]}";
-        przedmioty.forEach(System.out :: println);
-        return lista;
     }
 }
