@@ -1,12 +1,9 @@
 package pl.hefajstos.uczen;
 
 import lombok.Data;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import pl.hefajstos.hefajstos.Jsonable;
 import pl.hefajstos.hefajstos.QuickJSON;
 
-import javax.persistence.*;
 import java.sql.Date;
 
 @Data

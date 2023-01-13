@@ -7,14 +7,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.List;
 import java.util.UUID;
 
-@RestController
 public class NauczycieleController
 {
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    public static List<NauczycieleView> getListaNauczycieli (JdbcTemplate jdbcTemplate)
+    public static List<Nauczyciel> getListaNauczycieli (JdbcTemplate jdbcTemplate)
     {
         String sql = "SELECT * FROM NauczycieleView";
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Nauczyciel.class));
@@ -57,16 +52,12 @@ public class NauczycieleController
             jdbcTemplate.update
             (
             "INSERT INTO Nauczyciel VALUES (?, ?, ?, ?, ?, ?)",
-                new Object []
-                {
                     noweId.toString(),
                     nowyNauczyciel.getImie(),
                     nowyNauczyciel.getNazwisko(),
                     nowyNauczyciel.getDataZatrudnienia(),
                     nowyNauczyciel.getStopienZawodowy(),
-                    nowyNauczyciel.getKlasaId()
-                }
-            );
+                    nowyNauczyciel.getKlasaId());
         }
         catch (DataAccessException e)
         {

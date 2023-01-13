@@ -1,24 +1,13 @@
 package pl.hefajstos.przedmioty;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
-import pl.hefajstos.hefajstos.QuickJSON;
-import pl.hefajstos.uczen.Uczen;
 
 import java.util.List;
-import java.util.UUID;
 
-@RestController
 public class PrzedmiotyController
 {
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
     public static Przedmiot getPrzedmiotById (JdbcTemplate jdbcTemplate, Integer id)
     {
         List<Przedmiot> przedmioty = getListaPrzedmiotow(jdbcTemplate);

@@ -4,23 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import pl.hefajstos.hefajstos.QuickJSON;
-import pl.hefajstos.hefajstos.QuickJSONArray;
 
-import javax.xml.crypto.Data;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.UUID;
 
 @RestController
 public class UczenController
 {
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
 
     public static Uczen getUczenById (JdbcTemplate jdbcTemplate, String uid) /* FIXME: Nie działa i już */
     {
