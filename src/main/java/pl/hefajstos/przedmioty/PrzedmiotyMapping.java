@@ -54,17 +54,15 @@ public class PrzedmiotyMapping
         nowyPrzedmiot.setPoziom(poziom);
         nowyPrzedmiot.setObowiazkowy(obw);
 
-        return (new QuickJSON())
-                .add("ok", PrzedmiotyController.dodajPrzedmiotDoBazy(jdbcTemplate, nowyPrzedmiot) ? "true" : "false")
-                .ret();
+        return PrzedmiotyController.dodajPrzedmiotDoBazy(jdbcTemplate, nowyPrzedmiot)
+                ? QuickJSON.RESP_OK
+                : QuickJSON.RESP_BAD;
     }
 
     @GetMapping("/przedmioty/usun/{sid}/{id}")
     public String mappingPrzedmiotUsun (@PathVariable("sid") String sid, @PathVariable("id") Integer id)
     {
-        return (new QuickJSON())
-                .add("ok", PrzedmiotyController.usunPrzedmiotById(jdbcTemplate, id) ? "true" : "false")
-                .ret();
+        return PrzedmiotyController.usunPrzedmiotById(jdbcTemplate, id) ? QuickJSON.RESP_OK : QuickJSON.RESP_BAD;
     }
 
     @GetMapping("/przedmioty/edytuj/{sid}/{id}/{nazwa}/{ilosc}/{poziom}/{obw}")
