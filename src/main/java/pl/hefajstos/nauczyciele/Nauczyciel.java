@@ -27,6 +27,7 @@ public class Nauczyciel implements Jsonable
                 .add("stop", getStopienZawodowy())
                 .add("prz", getPrzedmioty().equals(bezPrzedmiotow) ? "" : getPrzedmioty().substring(0, getPrzedmioty().length() - 2))
                 .add("wych", getKlasaId())
+                .addRaw("ok", "true")
                 .ret();
     }
 }

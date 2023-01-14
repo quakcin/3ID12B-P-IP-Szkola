@@ -18,10 +18,10 @@ public class Przedmiot implements Jsonable
 
     public String toJson () {
         return (new QuickJSON())
-                .add("id", "" + getId())
+                .addRaw("id", "" + getId())
                 .add("nazwa", getNazwa())
-                .add("poziom", "" + getPoziom())
-                .add("ilosc", "" + getIlosc())
+                .addRaw("poziom", "" + getPoziom())
+                .addRaw("ilosc", "" + getIlosc())
                 .add("obw", getObowiazkowy())
                 .ret();
     }

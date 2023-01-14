@@ -25,9 +25,7 @@ public class UczenMapping
         Uczen u = UczenController.getUczenById(jdbcTemplate, uid);
         return u != null
                 ? u.toJson()
-                : (new QuickJSON())
-                    .addRaw("ok", "false")
-                    .ret();
+                : QuickJSON.RESP_BAD;
     }
 
     @GetMapping("/uczen/lista/{sid}")
@@ -63,9 +61,7 @@ public class UczenMapping
         nowyUczen.setMiejsceUrodzenia(miej);
         UUID id = UczenController.dodajUczniaDoBazy(jdbcTemplate, nowyUczen);
         return id == null
-            ? (new QuickJSON())
-                .addRaw("ok", "false")
-                .ret()
+            ? QuickJSON.RESP_BAD
             : (new QuickJSON()).addRaw("ok", "true")
                 .add("uid", id.toString())
                 .ret();
@@ -102,9 +98,8 @@ public class UczenMapping
     @GetMapping("/uczen/usun/{sid}/{uid}")
     public String mappingUczenUsun (@PathVariable("sid") String sid, @PathVariable("uid") String uid)
     {
-        return (new QuickJSON())
-                .add("", UczenController.usunUcznia(jdbcTemplate, uid) ? "true" : "false")
-                .ret();
+        return UczenController.usunUcznia(jdbcTemplate, uid)
+                ? QuickJSON.RESP_OK : QuickJSON.RESP_BAD;
     }
 
 }

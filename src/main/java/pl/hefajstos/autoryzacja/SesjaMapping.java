@@ -1,6 +1,5 @@
 package pl.hefajstos.autoryzacja;
 
-import com.sun.xml.bind.v2.model.annotation.Quick;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,13 +20,13 @@ public class SesjaMapping
         @PathVariable("usr") String usr,
         @PathVariable("pwd") String pwd)
     {
-        return SesjaKontroler.zaloguj(jdbcTemplate, usr, pwd).toJson();
+        return SesjaController.zaloguj(jdbcTemplate, usr, pwd).toJson();
     }
 
     @GetMapping("/kredytywnosc/{sid}")
     public String mappingKredytywnosc ( @PathVariable("sid") String sid )
     {
-        Sesja s = SesjaKontroler.getSesjaByToken(jdbcTemplate, sid);
+        Sesja s = SesjaController.getSesjaByToken(jdbcTemplate, sid);
         return (new QuickJSON())
                 .addRaw("ok", "true")
                 .add("act", s.getRodzajKonta().toString())
@@ -38,7 +37,7 @@ public class SesjaMapping
     @GetMapping("/wyloguj/{sid}")
     public String mappingWyloguj ( @PathVariable("sid") String sid )
     {
-        Sesja s = SesjaKontroler.getSesjaByToken(jdbcTemplate, sid);
+        Sesja s = SesjaController.getSesjaByToken(jdbcTemplate, sid);
         s.wyloguj(jdbcTemplate);
         return (new QuickJSON())
                 .addRaw("ok", "true")
