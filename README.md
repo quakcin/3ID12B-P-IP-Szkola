@@ -4,7 +4,7 @@ Projekt z inżynierii programowania - System zarządzania placówką oświatową
 | Wymaganie                     | Stat.              |
 |-------------------------------|--------------------|
 | Klasy odpowiedzialne za model | :white_check_mark: |
-| Testy jednostkowe             |                    |
+| Testy jednostkowe             | :white_check_mark: |
 | Interfejs graficzny           | :white_check_mark: |
 | Połączenie z bazą danych      | :white_check_mark: |
 | Wzorce projektowe             |                    |
