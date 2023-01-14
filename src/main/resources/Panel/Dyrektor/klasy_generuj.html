@@ -32,8 +32,8 @@
 
                 <div class="row mt-5">
                     <div class="col text-center">
-                        <button class="w-20 btn btn-success btn-lg mr-3" onclick="generujKlasy()">Generuj</button>
-                        <button class="w-20 btn btn-danger btn-lg" onclick="window.location.href = '/panel/Dyrektor/klasy'">Anuluj</button>
+                        <button class="w-20 btn btn-success btn-lg mr-3" id="btnGeneruj" onclick="generujKlasy()">Generuj</button>
+                        <button class="w-20 btn btn-danger btn-lg" id="btnAnuluj" onclick="window.location.href = '/panel/Dyrektor/klasy'">Anuluj</button>
                     </div>
                 </div>
             </div>
@@ -126,6 +126,13 @@
 </div>
 <script>
 
+    setInterval(() => {
+        if (agress.checked == true)
+        {
+            btnGeneruj.disabled = (fmin.value === "" || fmax.value === "");
+        }
+    }, 250);
+
     agress.onchange = ((e) =>
     {
         const toggleOption = !e.target.checked;
@@ -138,15 +145,69 @@
     {
         const rodzaj = agress.checked
             ? "agresywnie"
-            : "pasywnie";
+            : "pasywnie"
 
         const wywolania = {
             agresywnie: [fmin.value, fmax.value],
             pasywnie: []
         }
 
+        btnGeneruj.disabled = true
+        btnAnuluj.disabled = true
+
         api.wykonaj((s) => {
+            if (rodzaj == "agresywnie")
+            {
+                raportPasywny.style = "display: none";
+                raportAgresywny.style = "display: block;"
+
+                for (const [i ,e] of s.utworzono.klasy.entries())
+                {
+                    lista_agres.innerHTML += `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td>${e.nazwa}</td>
+                            <td>${e.liczb}</td>
+                            <td>${e.wych}</td>
+                        </tr>
+                    `;
+                }
+            }
+            else
+            { /* pasywnie */
+
+                raportPasywny.style = "display: block";
+                raportAgresywny.style = "display: none;"
+                for (const [i, e] of s.poprawnieDodani.uczniowie.entries())
+                {
+                    lista_poprawnych.innerHTML += `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td>${e.klasa}</td>
+                            <td>${e.numer}</td>
+                            <td>${e.imie}</td>
+                            <td>${e.nazwisko}</td>
+                        </tr>
+                    `;
+                }
+
+                for (const [i, e] of s.blednieDodani.uczniowie.entries())
+                {
+                    lista_niepoprawnych.innerHTML += `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td>${e.imie}</td>
+                            <td>${e.nazwisko}</td>
+                            <td>${e.urodz}</td>
+                            <td><a href="#" onclick="window.location.href = '/panel/Dyrektor/uczniowie_edycja?q=${e.uid}'" class="edit" title="Edit" data-toggle="tooltip" style="color:#FFC107;"><i class="material-icons">&#xE254;</i></a></td>
+                        </tr>
+                    `;
+                }
+
+            }
             console.log(s);
+            btnGeneruj.disabled = false
+            btnAnuluj.disabled = false
         }).mozeSieZepsuc().dla(`klasy/generuj/${rodzaj}`, wywolania[rodzaj])
     }
 </script>

@@ -97,6 +97,9 @@ public class Panel
             for (String line : lines)
             {
                 String[] tokens = line.split(" ");
+                if (tokens.length <= 0)
+                    continue;
+
                 if (tokens[0].equals("H-API-TITLE:"))
                 {
                     title = new StringBuilder();
