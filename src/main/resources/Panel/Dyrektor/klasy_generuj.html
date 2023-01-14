@@ -3,18 +3,22 @@
         <h2>Zarządzanie listą klas</h2>
     </div>
     <div class="row g-4">
-        <div class="col-md-7 col-lg-8">
+        <div class="col">
             <h4 class="mb-3">Parametry generowania klas</h4>
             <div class="row g-3">
 
                 <div class="col-sm-6">
-                    <label for="fmin" class="form-label">Minimalna ilość uczniów w klasie</label>
-                    <input type="text" class="form-control" id="fmin" placeholder="" value="" onInput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" disabled>
+                    <div class="col-sm-8">
+                        <label for="fmin" class="form-label">Minimalna ilość uczniów w klasie</label>
+                        <input type="text" class="form-control" id="fmin" placeholder="" value="" onInput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" disabled>
+                    </div>
                 </div>
 
                 <div class="col-sm-6">
-                    <label for="fmax" class="form-label">Maksymalna ilość uczniów w klasie</label>
-                    <input type="text" class="form-control" id="fmax" placeholder="" value="" onInput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" disabled>
+                    <div class="col-sm-8">
+                        <label for="fmax" class="form-label">Maksymalna ilość uczniów w klasie</label>
+                        <input type="text" class="form-control" id="fmax" placeholder="" value="" onInput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" disabled>
+                    </div>
                 </div>
 
 
@@ -33,10 +37,93 @@
                     </div>
                 </div>
             </div>
+
+            <div id="raportPasywny" style="display: none">
+                <hr class="mt-5 mb-4">
+                <div class="row g-3">
+
+                    <div class="col-sm-6">
+                        <div class="table-responsive">
+                            <div class="table-wrapper">
+                                <div class="table-title">
+                                    <div class="row mb-2">
+                                        <div class="col-sm-8"><h5>Poprawnie dodani uczniowie</h5></div>
+                                    </div>
+                                </div>
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Klasa</th>
+                                        <th>Nr Dz.</th>
+                                        <th>Imie</th>
+                                        <th>Nazwisko</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="lista_poprawnych">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="table-responsive">
+                            <div class="table-wrapper">
+                                <div class="table-title">
+                                    <div class="row mb-2">
+                                        <div class="col-sm-8"><h5>Niedodani uczniowie</h5></div>
+                                    </div>
+                                </div>
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Imie</th>
+                                        <th>Nazwisko</th>
+                                        <th>Data urodzenia</th>
+                                        <th>Operacje</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="lista_niepoprawnych">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="raportAgresywny" style="display:none">
+                <hr class="mt-5 mb-4">
+                <div class="row g-3">
+                    <div class="col-sm-12">
+                        <div class="table-responsive">
+                            <div class="table-wrapper">
+                                <div class="table-title">
+                                    <div class="row mb-2">
+                                        <div class="col-sm-12"><h5>Raport generatora</h5></div>
+                                    </div>
+                                </div>
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Nazwa</th>
+                                        <th>Ilość uczniów</th>
+                                        <th>Wychowawca</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="lista_agres">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
 <script>
 
     agress.onchange = ((e) =>
