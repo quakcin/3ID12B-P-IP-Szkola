@@ -13,6 +13,8 @@ import java.util.UUID;
 @SpringBootApplication(scanBasePackages={"pl.*"})
 public class HefajstosApplication implements CommandLineRunner {
 
+    public static final String __haslo_administracyjne = "97b095f4-943b-11ed-a1eb-0242ac120002";
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
