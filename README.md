@@ -11,4 +11,4 @@ Projekt z inżynierii programowania - System zarządzania placówką oświatową
 | Testy wzorców                 |                    |
 | Architektura Klient-Serwer    | :white_check_mark: |
 
-3ID12B - Bandura - Ślusatczyk 🔥
+3ID12B - Bandura - Ślusarczyk 🔥
