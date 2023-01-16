@@ -85,4 +85,11 @@ public class PrzedmiotyController
         }
         return true;
     }
+
+    /* TODO: Dodać mapping ewentualnie dla REST API */
+    public static List<Przedmiot> getListaPrzedmiotowByPoziom (JdbcTemplate jdbcTemplate, Integer poziom)
+    {
+        String sql = "SELECT * FROM PRZEDMIOT WHERE POZIOM = ?";
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Przedmiot.class), poziom);
+    }
 }

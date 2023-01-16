@@ -1,5 +1,6 @@
 package pl.hefajstos.nauczyciele;
 
+import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -170,5 +171,11 @@ public class NauczycieleController
         }
 
         return true;
+    }
+
+    public static List<Nauczyciel> getNauczycieleByPrzedmiot (JdbcTemplate jdbcTemplate, Integer id)
+    {
+        String sql = "SELECT * FROM NAUCZYCIELUCZY WHERE PRZEDMIOTID = ?";
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Nauczyciel.class), id);
     }
 }
