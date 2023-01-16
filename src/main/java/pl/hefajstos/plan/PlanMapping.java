@@ -16,8 +16,7 @@ public class PlanMapping
     @GetMapping("/plan/generuj/{sid}")
     public String mappingPlanGeneruj (@PathVariable("sid") String sid)
     {
-        PlanController.generujPlanLekcji(jdbcTemplate);
-        return "";
+        return PlanController.generujPlanLekcji(jdbcTemplate);
     }
 
     @GetMapping("/plan/klasa/{sid}/{id}")

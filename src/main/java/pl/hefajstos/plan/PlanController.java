@@ -1,8 +1,11 @@
 package pl.hefajstos.plan;
 
+import com.sun.xml.bind.v2.model.annotation.Quick;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import pl.hefajstos.hefajstos.QuickJSON;
+import pl.hefajstos.hefajstos.QuickJSONArray;
 import pl.hefajstos.klasy.KlasyController;
 import pl.hefajstos.klasy.KlasyView;
 import pl.hefajstos.nauczyciele.Nauczyciel;
@@ -51,7 +54,7 @@ public class PlanController
         }
     }
 
-    public static void generujPlanLekcji (JdbcTemplate jdbcTemplate)
+    public static String generujPlanLekcji (JdbcTemplate jdbcTemplate)
     { /* TODO: Ulepszyć / Zoptymalizować */
         /*
         Algorytm:
@@ -66,11 +69,15 @@ public class PlanController
         /* usuniecie starego planu */
         deletePlan(jdbcTemplate);
 
+        /* json report */
+        QuickJSONArray rep = new QuickJSONArray("raport");
+
         /* generacja */
         List<KlasyView> klasy = KlasyController.getListaKlas(jdbcTemplate);
 
         for (KlasyView k : klasy)
         {
+            QuickJSONArray repKlasa = new QuickJSONArray("przedmioty");
             int dzienTygodnia = 0;
             int minutyOdPulnocy = 60 * 9; // 1h ahead
 
@@ -82,10 +89,16 @@ public class PlanController
             {
                /* znajdź nauczyciela który może uczyć przedmiotu p */
                 List<Nauczyciel> nauczyciele = NauczycieleController.getNauczycieleByPrzedmiot(jdbcTemplate, p.getId());
+                Collections.shuffle(nauczyciele);
                 assert(nauczyciele.size() > 0);
 
                 /* wybierz losowego, TODO: Ulepszyć / Zoptymalizować */
-                Nauczyciel wybranyNauczyciel = nauczyciele.get(ThreadLocalRandom.current().nextInt(0, nauczyciele.size() - 1));
+                Nauczyciel wybranyNauczyciel = nauczyciele.get(0);
+                repKlasa.add(new QuickJSON()
+                        .add("nazwa", p.getNazwa())
+                        .add("nauczyciel", wybranyNauczyciel.getImie() + " " + wybranyNauczyciel.getNazwisko())
+                        .ret()
+                );
 
                 /* dodaj kolejno przedmioty */
                 for (int i = 0; i < p.getIlosc(); i++)
@@ -100,7 +113,8 @@ public class PlanController
                 }
 
             }
+            rep.add(new QuickJSON().add("klasa", k.getNazwa()).addRaw("przedmioty", repKlasa.ret()).ret());
         }
-
+        return rep.ret();
     }
 }
