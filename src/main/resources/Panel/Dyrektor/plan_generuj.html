@@ -1,0 +1,80 @@
+<div class="container">
+    <div class="py-4 text-center">
+        <h2>Zarządzanie planem lekcji</h2>
+    </div>
+    <div class="row g-4 mt-2">
+        <div class="col-md-7 col-lg-8">
+            <div class="row g-3">
+                <div class="col-sm-4">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="perm">
+                        <label class="form-check-label" for="perm">Potwierdź operacje</label>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <button class="w-20 btn btn-success btn-sm mr-3" onclick="generuj()">Generuj plan lekcji</button>
+                </div>
+                <div id="raportPlan" style="display: none;">
+                    <hr class="mt-5 mb-5">
+                    <div class="col-sm-12">
+                        <div class="table-responsive">
+                            <div class="table-wrapper">
+                                <div class="table-title">
+                                    <div class="row mb-2">
+                                        <div class="col-sm-8"><h5>Raport generacji</h5></div>
+                                    </div>
+                                </div>
+                                <div id = "listaKlas">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const generuj = function ()
+    {
+        api.wykonaj((s) => {
+            let buff = "";
+            for (const [i, e] of s.raport.entries())
+            {
+                buff += `
+                    <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th style="width: 10%">${e.klasa}</th>
+                        <th style="width: 45%">Przedmiot</th>
+                        <th style="width: 45%">Nauczyciel</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                `;
+                for (const [j, p] of e.przedmioty.przedmioty.entries())
+                {
+                    buff += `
+                        <tr>
+                            <td></td>
+                            <td>
+                                ${p.nazwa}
+                            </td>
+                            <td>
+                                ${p.nauczyciel}
+                            </td>
+                        </tr>
+                    `;
+                }
+                buff += `
+                    </tbody>
+                </table>
+                <hr class="mt-5 mb-5">
+                `;
+            }
+            listaKlas.innerHTML = buff;
+            raportPlan.style = "display: block";
+        }).mozeSieZepsuc().dla("plan/generuj", []);
+    }
+</script>
