@@ -6,11 +6,17 @@ INSERT INTO Nauczyciel VALUES ('Njeden', 'Paweł','Paduch', DEFAULT, 'dr', DEFAU
 INSERT INTO Nauczyciel VALUES ('Ndwa', 'Adam','Krechowicz', DEFAULT, 'dr', DEFAULT); 
 INSERT INTO sesja VALUES ('TOKEN213769',CURRENT_TIMESTAMP, 'Djeden', 3);
 INSERT INTO sesja VALUES ('TOKEN21376958',TO_TIMESTAMP('2022-11-18 10:25:31', 'YYYY-MM-DD HH24:MI:SS'), 'Ujeden', 0);
+INSERT INTO Przedmiot VALUES (DEFAULT, 'Edukacja Wczesnoszkolna', 1, 16, DEFAULT);
+INSERT INTO Przedmiot VALUES (DEFAULT, 'Edukacja Wczesnoszkolna', 2, 16, DEFAULT);
+INSERT INTO Przedmiot VALUES (DEFAULT, 'Edukacja Wczesnoszkolna', 3, 17, DEFAULT);
 INSERT INTO Przedmiot VALUES (DEFAULT, 'Język polski', 4, 5, DEFAULT);
 INSERT INTO Przedmiot VALUES (DEFAULT, 'Język polski', 5, 4, DEFAULT);
 INSERT INTO Przedmiot VALUES (DEFAULT, 'Język polski', 6, 5, DEFAULT);
 INSERT INTO Przedmiot VALUES (DEFAULT, 'Język polski', 7, 5, DEFAULT);
 INSERT INTO Przedmiot VALUES (DEFAULT, 'Język polski', 8, 5, DEFAULT);
+INSERT INTO Przedmiot VALUES (DEFAULT, 'Język angielski', 1, 1, DEFAULT);
+INSERT INTO Przedmiot VALUES (DEFAULT, 'Język angielski', 2, 1, DEFAULT);
+INSERT INTO Przedmiot VALUES (DEFAULT, 'Język angielski', 3, 1, DEFAULT);
 INSERT INTO Przedmiot VALUES (DEFAULT, 'Język angielski', 4, 3, DEFAULT);
 INSERT INTO Przedmiot VALUES (DEFAULT, 'Język angielski', 5, 3, DEFAULT);
 INSERT INTO Przedmiot VALUES (DEFAULT, 'Język angielski', 6, 3, DEFAULT);
