@@ -2,7 +2,7 @@ package pl.hefajstos.klasy.generator;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import pl.hefajstos.klasy.KlasyController;
-import pl.hefajstos.klasy.KlasyView;
+import pl.hefajstos.klasy.Klasa;
 import pl.hefajstos.uczen.UczenController;
 import pl.hefajstos.uczen.Uczen;
 
@@ -37,13 +37,13 @@ public class Pasywny extends Generator
 
     public static boolean przypiszDoKlasy (JdbcTemplate jdbcTemplate, Uczen u)
     {
-        List<KlasyView> klasy = KlasyController.getListaKlas(jdbcTemplate);
+        List<Klasa> klasy = KlasyController.getListaKlas(jdbcTemplate);
         Integer obecnyRok = Year.now().getValue();
         int rocznikowoKlasa = obecnyRok - u.getDataUrodzenia().getYear() - 7 - 1899;
 //        System.out.println(u.toString() + " powinien byc w klasie " + rocznikowoKlasa);
 
-        KlasyView najlepszyWybor = null;
-        for (KlasyView k : klasy)
+        Klasa najlepszyWybor = null;
+        for (Klasa k : klasy)
             if (k.getPoziom().equals(rocznikowoKlasa))
             { /* klasa pasuje do rocznika */
 //                System.out.println("DOPASOWANIE: " + k.getNazwa() + " ucz: " + k.getLiczbaUczniow());

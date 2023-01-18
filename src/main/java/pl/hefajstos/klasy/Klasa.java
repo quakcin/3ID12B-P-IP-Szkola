@@ -5,7 +5,7 @@ import pl.hefajstos.hefajstos.Jsonable;
 import pl.hefajstos.hefajstos.QuickJSON;
 
 @Data
-public class KlasyView implements Jsonable
+public class Klasa implements Jsonable
 {
     String nazwa;
     Integer liczbaUczniow;
