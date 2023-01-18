@@ -1,13 +1,12 @@
 package pl.hefajstos.plan;
 
-import com.sun.xml.bind.v2.model.annotation.Quick;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import pl.hefajstos.hefajstos.QuickJSON;
 import pl.hefajstos.hefajstos.QuickJSONArray;
 import pl.hefajstos.klasy.KlasyController;
-import pl.hefajstos.klasy.KlasyView;
+import pl.hefajstos.klasy.Klasa;
 import pl.hefajstos.nauczyciele.Nauczyciel;
 import pl.hefajstos.nauczyciele.NauczycieleController;
 import pl.hefajstos.przedmioty.Przedmiot;
@@ -15,11 +14,8 @@ import pl.hefajstos.przedmioty.PrzedmiotyController;
 import pl.hefajstos.uczen.Uczen;
 import pl.hefajstos.uczen.UczenController;
 
-import java.sql.Date;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class PlanController
 {
@@ -73,9 +69,9 @@ public class PlanController
         QuickJSONArray rep = new QuickJSONArray("raport");
 
         /* generacja */
-        List<KlasyView> klasy = KlasyController.getListaKlas(jdbcTemplate);
+        List<Klasa> klasy = KlasyController.getListaKlas(jdbcTemplate);
 
-        for (KlasyView k : klasy)
+        for (Klasa k : klasy)
         {
             QuickJSONArray repKlasa = new QuickJSONArray("przedmioty");
             int dzienTygodnia = 0;

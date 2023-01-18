@@ -3,15 +3,10 @@ package pl.hefajstos.klasy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import pl.hefajstos.nauczyciele.Nauczyciel;
-import pl.hefajstos.hefajstos.QuickJSONArray;
 import pl.hefajstos.uczen.Uczen;
 import pl.hefajstos.uczen.UczenController;
 
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,24 +25,24 @@ public class KlasyController
         );
     }
 
-    public static KlasyView getKlasaByName (JdbcTemplate jdbcTemplate, String nazwa)
+    public static Klasa getKlasaByName (JdbcTemplate jdbcTemplate, String nazwa)
     {
-        List<KlasyView> listaKlas = KlasyController.getListaKlas(jdbcTemplate);
-        for (KlasyView k : listaKlas)
+        List<Klasa> listaKlas = KlasyController.getListaKlas(jdbcTemplate);
+        for (Klasa k : listaKlas)
             if (k.getNazwa().equals(nazwa))
                 return k;
         return null;
     }
 
-    public static List<KlasyView> getListaKlas (JdbcTemplate jdbcTemplate)
+    public static List<Klasa> getListaKlas (JdbcTemplate jdbcTemplate)
     {
         return jdbcTemplate.query(
                 "SELECT * FROM KlasyView WHERE NAZWA != '0'",
-                BeanPropertyRowMapper.newInstance(KlasyView.class)
+                BeanPropertyRowMapper.newInstance(Klasa.class)
         );
     }
 
-    public static void przypiszUczniaDoKlasy (JdbcTemplate jdbcTemplate, KlasyView klasa, Uczen uczen)
+    public static void przypiszUczniaDoKlasy (JdbcTemplate jdbcTemplate, Klasa klasa, Uczen uczen)
     {
         /* znalezienie numeru dla ucznia */
         Integer maxNumerWDzienniku = 0;
@@ -61,11 +56,11 @@ public class KlasyController
         UczenController.zapiszUczniaWBazie(jdbcTemplate, uczen);
     }
 
-    public static List<KlasyView> getListaBezWychowawcow (JdbcTemplate jdbcTemplate)
+    public static List<Klasa> getListaBezWychowawcow (JdbcTemplate jdbcTemplate)
     {
-        List<KlasyView> klasy = getListaKlas(jdbcTemplate);
-        ArrayList<KlasyView> bezWychowawcow = new ArrayList<>();
-        for (KlasyView k : klasy)
+        List<Klasa> klasy = getListaKlas(jdbcTemplate);
+        ArrayList<Klasa> bezWychowawcow = new ArrayList<>();
+        for (Klasa k : klasy)
             if (k.getWychowawca().equals(" "))
                 bezWychowawcow.add(k);
         return bezWychowawcow;

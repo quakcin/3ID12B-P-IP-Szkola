@@ -18,22 +18,14 @@ public class HefajstosApplication implements CommandLineRunner {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         SpringApplication.run(HefajstosApplication.class, args);
     }
 
     @Override
-    public void run(String... args) throws Exception {
-        /*
-        String sql = "SELECT * FROM Uczen";
-
-        List<Student> students = jdbcTemplate.query(sql,
-                BeanPropertyRowMapper.newInstance(Student.class));
-
-        students.forEach(System.out :: println);
-         */
-
+    public void run(String... args) throws Exception
+    {
         System.out.println("" + UUID.randomUUID() + "length is: " + (UUID.randomUUID().toString().length()));
     }
 
