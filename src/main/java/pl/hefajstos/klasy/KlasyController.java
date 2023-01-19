@@ -20,7 +20,7 @@ public class KlasyController
     {
         return jdbcTemplate.query
         (
-            "SELECT * FROM Uczen WHERE Klasa = ? ORDER BY Nazwisko, Imie",
+            "SELECT * FROM Uczen WHERE Klasa = ? ORDER BY Numer, Nazwisko, Imie",
             BeanPropertyRowMapper.newInstance(Uczen.class), klasa
         );
     }
