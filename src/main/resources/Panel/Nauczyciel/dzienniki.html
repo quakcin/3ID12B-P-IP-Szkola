@@ -1,0 +1,46 @@
+<div class="container">
+    <div class="row g-4">
+        <div class="col-md-7 col-lg-8">
+            <h4 class="mb-3">Dzienniki lekcji</h4>
+            <div class="row g-3">
+                <div class="col-sm-8">
+                    <label for="lekcje" class="form-label">Wybierz lekcję</label>
+                    <select class="form-select" id="lekcje" required>
+                        <option value="" disabled selected>Wybierz</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-4 mt-4">
+                    <button class="w-20 btn btn-success btn-sm mr-3 mt-4" id="wybierz_button">Wybierz</button>
+                </div>
+                <hr class="mt-3">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* pobierz listę lekcji prowadzoncyh przez nauczyciela
+       w parach z klasami
+     */
+
+    document.body.onload = function (e)
+    {
+        api.wykonaj((s) => {
+            for (const [i, e] of s.lekcje .entries())
+            {
+                lekcje.innerHTML += `
+
+                        <option value="?p=${encodeURI(e.prz)}&k=${e.klasa}&i=${e.przid}">${e.prz} ${e.klasa}</option>
+                `;
+            }
+        }).mozeSieZepsuc().dla("nauczyciel/lekcje", []);
+    }
+
+    wybierz_button.onclick = function (e)
+    {
+        const path = `/panel/Nauczyciel/dziennik${lekcje.value}`;
+        window.location.href = path;
+    }
+
+</script>

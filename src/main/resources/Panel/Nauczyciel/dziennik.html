@@ -1,0 +1,29 @@
+
+
+<script>
+
+    let _wargs = null;
+
+    document.body.onload = function (e)
+    {
+        const toks = []
+        const wargs = window.location.href
+            .split("?")
+            .at(-1)
+            .split("&")
+            .map((n) => n.split("="))
+
+        wargs.map((n) => {
+            toks[n[0]] = n[1];
+        })
+        _wargs = wargs;
+        console.log('wargs', _wargs);
+
+        api.wykonaj((s) => {
+            console.log(s);
+            /* TODO: renderuj, + usun imie i nazw */
+        }).mozeSieZepsuc().dla("oceny/lista", [toks['k'], toks['i']])
+    }
+
+
+</script>
