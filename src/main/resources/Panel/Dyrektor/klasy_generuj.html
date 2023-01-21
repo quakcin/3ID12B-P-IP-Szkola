@@ -158,12 +158,13 @@
         api.wykonaj((s) => {
             if (rodzaj == "agresywnie")
             {
+                let buff = "";
                 raportPasywny.style = "display: none";
                 raportAgresywny.style = "display: block;"
 
                 for (const [i ,e] of s.utworzono.klasy.entries())
                 {
-                    lista_agres.innerHTML += `
+                    buff += `
                         <tr>
                             <td>${i + 1}</td>
                             <td>${e.nazwa}</td>
@@ -172,7 +173,8 @@
                         </tr>
                     `;
                 }
-            }
+                lista_agres.innerHTML = buff;
+        }
             else
             { /* pasywnie */
 

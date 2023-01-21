@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import pl.hefajstos.autoryzacja.Sesja;
+import pl.hefajstos.autoryzacja.SesjaController;
 import pl.hefajstos.hefajstos.QuickJSON;
 import pl.hefajstos.hefajstos.QuickJSONArray;
 
@@ -96,5 +98,12 @@ public class NauczycieleMapping
 
         return NauczycieleController.aktualizujNauczycielaWBazie(jdbcTemplate, nowyNauczyciel, prz)
                 ? QuickJSON.RESP_OK : QuickJSON.RESP_BAD;
+    }
+
+    @GetMapping("/nauczyciel/lekcje/{sid}")
+    public String mappingNauczycielLekcje (@PathVariable("sid") String sid)
+    {
+        List<LekcjaNauczyciela> lekcjaNauczyciele = NauczycieleController.getLekcjeNauczycielaBySession(jdbcTemplate, sid);
+        return QuickJSONArray.fromList("lekcje", lekcjaNauczyciele);
     }
 }

@@ -4,6 +4,8 @@ import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import pl.hefajstos.autoryzacja.Sesja;
+import pl.hefajstos.autoryzacja.SesjaController;
 
 import java.util.List;
 import java.util.UUID;
@@ -178,4 +180,12 @@ public class NauczycieleController
         String sql = "SELECT * FROM NAUCZYCIELUCZY WHERE PRZEDMIOTID = ?";
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Nauczyciel.class), id);
     }
+
+    public static List<LekcjaNauczyciela> getLekcjeNauczycielaBySession (JdbcTemplate jdbcTemplate, String sid)
+    {
+        Sesja s = SesjaController.getSesjaByToken(jdbcTemplate, sid);
+        String sql = "SELECT * FROM NauczycielLekcje WHERE nauczycielid = ?";
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(LekcjaNauczyciela.class), s.getKlucz());
+    }
+
 }
