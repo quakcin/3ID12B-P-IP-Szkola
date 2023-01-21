@@ -1,12 +1,14 @@
 package pl.hefajstos.autoryzacja;
 
 import lombok.Data;
+import pl.hefajstos.hefajstos.Jsonable;
+import pl.hefajstos.hefajstos.QuickJSON;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Data
-public class KontoBaza
+public class KontoBaza implements Jsonable
 {
     String nickname;
     String haslo;
@@ -23,5 +25,17 @@ public class KontoBaza
             case 3 -> RodzajKonta.Dyrektor;
             default -> RodzajKonta.Inne;
         };
+    }
+
+
+    @Override
+    public String toJson()
+    {
+        return (new QuickJSON())
+            .add("nickname", getNickname())
+            .add("haslo", getHaslo())
+            .addRaw("typ", typ.toString())
+            .add("id", getId())
+            .ret();
     }
 }

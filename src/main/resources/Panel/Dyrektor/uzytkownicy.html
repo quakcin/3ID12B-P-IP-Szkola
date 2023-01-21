@@ -1,24 +1,58 @@
 <div class="container-lg">
-    <div class="table-responsive">
-        <div class="table-wrapper">
-            <div class="table-title">
-                <div class="row">
-                    <div class="col-sm-8"><h2>Lista użytkowników</h2></div>
+    <div class="col-8">
+        <div class="table-responsive">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-8"><h2>Lista użytkowników</h2></div>
+                    </div>
                 </div>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Login</th>
+                        <th>Operacje</th>
+                    </tr>
+                    </thead>
+                    <tbody id="lista_render">
+                    </tbody>
+                </table>
             </div>
-            <table class="table table-striped" >
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Login</th>
-                    <th>Imię</th>
-                    <th>Nazwisko</th>
-                    <th>Operacje</th>
-                </tr>
-                </thead>
-                <tbody id="lista_render">
-                </tbody>
-            </table>
         </div>
     </div>
 </div>
+
+<script>
+    const getListaUzytkownikow = function ()
+    {
+        api.wykonaj((s) => {
+            let buff = "";
+            for (const [i, e] of s.konta.entries())
+            {
+                buff += `
+                    <tr>
+                        <td>${(i + 1)}</td>
+                        <td>${e.nickname}</td>
+                        <td><a onclick="resetuj_haslo('${e.id}')" class="edit" title="Reset" data-toggle="tooltip" style="color:#ffc107;"><i class="material-icons">lock_outline</i></a></td>
+                    </tr>
+                `;
+            }
+
+            lista_render.innerHTML = buff;
+        }).mozeSieZepsuc().dla("konto/lista", []);
+    }
+
+    document.body.onload = function(e)
+    {
+        getListaUzytkownikow();
+    }
+
+    const resetuj_haslo = function (id)
+    {
+        const nowe_haslo = crypto.randomUUID().substr(0, 4);
+        api.wykonaj((s) => {
+            alert("Nowe hasło: " + nowe_haslo);
+        }).mozeSieZepsuc().dla("konto/zmien_haslo", [id, nowe_haslo]);
+    }
+</script>

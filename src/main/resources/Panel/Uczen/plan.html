@@ -1,0 +1,107 @@
+<div class="container">
+    <div class="row g-4">
+        <div class="col">
+            <div class="row g-3">
+                <div class="table-responsive">
+                    <div class="table-wrapper">
+                        <div class="table-title">
+                            <div class="row mb-4">
+                                <div class="col-sm-8"><h2>Plan lekcji</h2></div>
+                            </div>
+                        </div>
+                        <table style = "table-layout: fixed;"class="table table-bordered" >
+                            <thead>
+                            <tr>
+                                <th>Godziny</th>
+                                <th>Poniedziałek</th>
+                                <th>Wtorek</th>
+                                <th>Środa</th>
+                                <th>Czwartek</th>
+                                <th>Piątek</th>
+                            </tr>
+                            </thead>
+                            <tbody id="plan_render">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <hr class="mt-5">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const konwNaGodz = function (minOdPolnocy)
+    {
+        const m = parseInt(minOdPolnocy % 60);
+        return `${parseInt(minOdPolnocy / 60)}:${m < 10 ? '0' + m : m}`;
+    }
+    const wyswietl = function (klasa)
+    {
+        const szkielet = [];
+        for (let i = 0; i < 5; i++)
+        {
+            szkielet.push([]);
+            for (let j = 0; j < 24; j++)
+                szkielet[i].push([]);
+        }
+
+        api.wykonaj((s) => {
+            const _spacing = 50;
+
+            let maxIndex = 0;
+            let minIndex = 24 * _spacing;
+
+            for (const [i, e] of s.plan.entries())
+            {
+                // szkielet[e.dzien][e.godzina / 50]
+                const hrIndex = parseInt(e.godzina / _spacing);
+                maxIndex = Math.max(hrIndex, maxIndex);
+                minIndex=  Math.min(hrIndex, minIndex);
+                szkielet[e.dzien][hrIndex].push(e);
+            }
+
+            /* renderowanie od minIndex.. maxIndex */
+            let buff = "";
+            for (let j = minIndex; j <= maxIndex; j++)
+            { /* godzinami */
+                buff += "<tr>";
+                buff += `<td>${konwNaGodz(j * _spacing)} - ${konwNaGodz(j * _spacing + 45)}</td>`;
+
+                for (let i = 0; i < 5; i++)
+                { /* dniami */
+                    console.log(szkielet[i][j], i, j);
+                    buff += "<td><table class='table table-bordered'>";
+                    for (let o of szkielet[i][j])
+                    {
+                        buff += `
+                            <tr>
+                                <td>
+                                    <p class="h5">${o.przedmiot}</p>
+                                    <p class="h6">${o.nauczyciel}</p>
+                                </td>
+                            </tr>
+                        `;
+                    }
+                    buff += "</table></td>";
+                }
+                buff += "</tr>";
+            }
+
+            plan_render.innerHTML = buff;
+
+        }).mozeSieZepsuc().dla(`plan/klasa`, [klasa]);
+
+    }
+
+    document.body.onload = function (e)
+    {
+        api.wykonaj((u) => {
+            api.wykonaj((s) => {
+                wyswietl(s.klasa);
+            }).mozeSieZepsuc().dla("uczen/info", [u.id]);
+        }).mozeSieZepsuc().dla("konto/id", []);
+    }
+</script>

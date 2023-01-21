@@ -1,0 +1,145 @@
+<div class="container">
+    <div class="row g-4">
+        <div class="col">
+            <div class="row g-3">
+                <div class="table-responsive">
+                    <div class="table-wrapper">
+                        <div class="table-title">
+                            <div class="row mb-4">
+                                <div class="col-sm-8"><h2>Plan lekcji</h2></div>
+                            </div>
+                        </div>
+                        <table style = "table-layout: fixed;"class="table table-bordered" >
+                            <thead>
+                            <tr>
+                                <th>Godziny</th>
+                                <th>Poniedziałek</th>
+                                <th>Wtorek</th>
+                                <th>Środa</th>
+                                <th>Czwartek</th>
+                                <th>Piątek</th>
+                            </tr>
+                            </thead>
+                            <tbody id="plan_render">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <hr class="mt-5">
+                <div class="col-sm-2">
+                    <label for="level" class="form-label">Plan klasy</label>
+                    <select class="form-select" id="level" required>
+                        <option value="1A">1A</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-6 mt-5">
+                    <button class="w-20 btn btn-success btn-sm ml-3 mt-1" onclick="wyswietl('klasa')">Wyświetl</button>
+                </div>
+
+                <hr class="mt-5">
+                <div class="col-sm-2">
+                    <label for="level" class="form-label">Plan nauczyciela</label>
+                    <select class="form-select" id="naucz">
+                    </select>
+                </div>
+
+                <div class="col-sm-6 mt-5">
+                    <button class="w-20 btn btn-success btn-sm ml-3 mt-1" onclick="wyswietl('nauczyciel')" id="tch_disp">Wyświetl</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const konwNaGodz = function (minOdPolnocy)
+    {
+        const m = parseInt(minOdPolnocy % 60);
+        return `${parseInt(minOdPolnocy / 60)}:${m < 10 ? '0' + m : m}`;
+    }
+    const wyswietl = function (rodzaj)
+    {
+        const szkielet = [];
+        for (let i = 0; i < 5; i++)
+        {
+            szkielet.push([]);
+            for (let j = 0; j < 24; j++)
+                szkielet[i].push([]);
+        }
+
+        api.wykonaj((s) => {
+            const _spacing = 50;
+
+            let maxIndex = 0;
+            let minIndex = 24 * _spacing;
+
+            for (const [i, e] of s.plan.entries())
+            {
+                // szkielet[e.dzien][e.godzina / 50]
+                const hrIndex = parseInt(e.godzina / _spacing);
+                maxIndex = Math.max(hrIndex, maxIndex);
+                minIndex=  Math.min(hrIndex, minIndex);
+                szkielet[e.dzien][hrIndex].push(e);
+            }
+
+            /* renderowanie od minIndex.. maxIndex */
+            let buff = "";
+            for (let j = minIndex; j <= maxIndex; j++)
+            { /* godzinami */
+                buff += "<tr>";
+                buff += `<td>${konwNaGodz(j * _spacing)} - ${konwNaGodz(j * _spacing + 45)}</td>`;
+
+                for (let i = 0; i < 5; i++)
+                { /* dniami */
+                    console.log(szkielet[i][j], i, j);
+                    buff += "<td><table class='table table-bordered'>";
+                    for (let o of szkielet[i][j])
+                    {
+                        buff += `
+                            <tr>
+                                <td>
+                                    <p class="h5">${o.przedmiot} <b>${o.klasa}</b></p>
+                                    <p class="h6">${o.nauczyciel}</p>
+                                </td>
+                            </tr>
+                        `;
+                    }
+                    buff += "</table></td>";
+                }
+                buff += "</tr>";
+            }
+
+            plan_render.innerHTML = buff;
+
+        }).mozeSieZepsuc().dla(`plan/${rodzaj}`, [rodzaj == 'klasa' ? level.value : naucz.value]);
+
+    }
+
+    document.body.onload = function (e)
+    {
+        api.wykonaj((s) => {
+            console.log(s);
+            for (const [i, e] of s.klasy.entries())
+                level.innerHTML += `
+                    <option value="${e.nazwa}">${e.nazwa}</option>
+                `;
+
+            api.wykonaj((s) => {
+                for (const [i, e] of s.nauczyciele.entries())
+                    naucz.innerHTML += `
+                        <option value="${e.id}">${e.imie} ${e.nazw}</option>
+                    `;
+                api.wykonaj((s) => {
+                    /* wyrenderuj plan nauczyciela */
+
+                    naucz.value = s.id;
+                    tch_disp.click();
+
+                }).mozeSieZepsuc().dla("konto/id", []);
+            }).mozeSieZepsuc().dla("nauczyciel/lista", []);
+
+        }).mozeSieZepsuc().dla("klasy/lista", []);
+    }
+</script>
