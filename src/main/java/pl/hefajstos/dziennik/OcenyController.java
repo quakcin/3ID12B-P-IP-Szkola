@@ -27,12 +27,26 @@ public class OcenyController
     }
     public static List<UczenWDzienniku> getOcenyByKlasaAndPrzedmiotId (JdbcTemplate jdbcTemplate, String klasa, String przedmiotId)
     {
-        String sql = "SELECT * FROM OCENYKLASY WHERE PRZEDMIOTID=? AND KLASA=?";
-        return jdbcTemplate.query
-        (
-            sql,
-            BeanPropertyRowMapper.newInstance(Ocena.class), przedmiotId, klasa
-        );
+        /* dla kazdego ucznia w klasie
+           pobierz liste ocen
+         */
+        ArrayList<UczenWDzienniku> uczniowie = new ArrayList<>();
+
+        List<Uczen> uczniowieWKlasie = KlasyController.getListaUczniowByKlasa(jdbcTemplate, klasa);
+        
+        for (Uczen u : uczniowieWKlasie)
+        {
+            /* Dodaj do kontenera i pobierz
+                jego / jej liste ocen
+             */
+            UczenWDzienniku uczenWDzienniku = new UczenWDzienniku();
+            uczenWDzienniku.setUczen(u);
+            List<Ocena> ocenUcznia = getOcenyByUczenIdForPrzedmiotId(jdbcTemplate, u.getId(), przedmiotId);
+            uczenWDzienniku.setOceny(ocenUcznia);
+            uczniowie.add(uczenWDzienniku);
+        }
+        
+        return uczniowie;
     }
 
     public static boolean addOcenaByUczenIdInPrzedmiotId (JdbcTemplate jdbcTemplate, String sid, String uczenId, String przedmiotId, String ocena, String waga, String komentarz, String kategoria)

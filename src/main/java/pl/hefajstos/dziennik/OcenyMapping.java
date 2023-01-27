@@ -37,4 +37,18 @@ public class OcenyMapping {
                 OcenyController.getOcenyByKlasaAndPrzedmiotId(jdbcTemplate, klasa, pid)
         );
     }
+
+    @GetMapping("/oceny/usun/{sid}/{oid}")
+    public String mappingOcenyUsunOcene
+        (
+            @PathVariable("sid") String sid,
+            @PathVariable("oid") String oid
+        )
+    {
+        return QuickJSONArray.fromList
+            (
+                "oceny", null
+                //OcenyController.getOcenyByKlasaAndPrzedmiotId(jdbcTemplate, )
+            );
+    }
 }

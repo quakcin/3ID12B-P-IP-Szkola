@@ -9,28 +9,28 @@
 
         <div class="col-sm-7">
           <label for="student" class="form-label">Uczeń</label>
-          <input type="text" class="form-control" id="student" placeholder="" value="Bandura Maciej" disabled>
+          <input type="text" class="form-control" id="student" disabled>
         </div>
 
         <div class="col-sm-5">
           <label for="level" class="form-label">Klasa</label>
-          <input type="text" class="form-control" id="level" placeholder="" value="5A" disabled>
+          <input type="text" class="form-control" id="level" disabled>
         </div>
 
 
         <div class="col-sm-7">
           <label for="rate_day" class="form-label">Data wystawienia</label>
-          <input type="date" class="form-control" id="rate_day" placeholder="" value="">
+          <input type="date" class="form-control" id="rate_day" >
         </div>
 
         <div class="col-sm-5">
           <label for="subject" class="form-label">Przedmiot</label>
-          <input type="text" class="form-control" id="subject" placeholder="" value="Informatyka" disabled>
+          <input type="text" class="form-control" id="subject" disabled>
         </div>
 
         <div class="col-sm-3">
-          <label for="mark" class="form-label">Ocena</label>
-          <select class="form-select" id="mark">
+          <label for="grade" class="form-label">Ocena</label>
+          <select class="form-select" id="grade">
             <option value="" disabled selected>Wybierz</option>
             <option value="1">1</option>
             <option value="1+">1+</option>
@@ -52,8 +52,8 @@
         </div>
 
         <div class="col-sm-3">
-          <label for="weight" class="form-label">Waga</label>
-          <select class="form-select" id="weight">
+          <label for="wage" class="form-label">Waga</label>
+          <select class="form-select" id="wage">
             <option value="" disabled selected>Wybierz</option>
             <option value="1">1</option>
             <option value="2">2</option>
@@ -69,16 +69,16 @@
             <option value="" disabled selected>Wybierz</option>
             <option value="Sprawdzian">Sprawdzian</option>
             <option value="Kartkówka">Kartkówka</option>
-            <option value="Praca domowa">Praca domowa</option>
+            <option value="PracaDomowa">Praca domowa</option>
             <option value="Aktywność">Aktywność</option>
-            <option value="Praca na lekcji">Praca na lekcji</option>
+            <option value="PracaNaLekcji">Praca na lekcji</option>
             <option value="Inne">Inne</option>
           </select>
         </div>
 
         <div class="col-12">
           <label for="comment" class="form-label">Komentarz</label>
-          <input type="text" maxlength="11" class="form-control" id="comment" required>
+          <input type="text" maxlength="64" class="form-control" id="comment" value="   ">
         </div>
 
         <hr class="mt-5">
