@@ -93,3 +93,39 @@
     </div>
   </div>
 </div>
+
+<script>
+  let __TOKENS = [];
+
+  document.body.onload = function (e)
+  {
+    const toks = []
+    const wargs = window.location.href.replaceAll("#", "")
+            .split("?")
+            .at(-1)
+            .split("&")
+            .map((n) => n.split("="))
+
+    wargs.map((n) => {
+      toks[n[0]] = n[1];
+    })
+
+    __TOKENS = toks; /* expose */
+
+    api.wykonaj((s) => {
+      console.log(s);
+      student.value = `${s.nazwisko} ${s.imie}`;
+      level.value = `${s.klasa}`;
+      subject.value = unescape(toks['nazwa']);
+      rate_day.valueAsDate = new Date();
+    }).mozeSieZepsuc().dla("uczen/info", [toks['uczenId']]);
+  }
+
+  const dodajOcene = function ()
+  {
+    api.wykonaj((s) => {
+      // alert("Dodano ocenę!");
+      window.location.href = `/panel/Nauczyciel/dziennik?k=${__TOKENS['klasa']}&i=${__TOKENS['przedmiotId']}&p=${__TOKENS['nazwa']}`;
+    }).mozeSieZepsuc().dla("oceny/dodaj", [__TOKENS['przedmiotId'], __TOKENS['uczenId'], grade.value, wage.value, comment.value, category.value]);
+  }
+</script>

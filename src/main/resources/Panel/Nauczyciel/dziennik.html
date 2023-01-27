@@ -31,34 +31,6 @@
                 </tr>
                 </thead>
                 <tbody id="lista_render">
-                <tr>
-                    <td>1</td>
-                    <td>Bandura Maciej</td>
-                    <td><a href="#" onclick="window.location.href = ''" class="edit" title="Dodaj ocenę" data-toggle="tooltip" style="color:#004aac;"><i class="material-icons">add_circle_outline</i></a></td>
-                    <td><a href="#" class="ocena bg-danger">5+</a><a href="#" class="ocena bg-warning">4-</a><a href="#" class="ocena bg-info">3</a><a href="#" class="ocena bg-success">2</a><a href="#" class="ocena bg-secondary">5</a></td>
-                    <td>4.21</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Ślusarczyk Marcin</td>
-                    <td><a href="#" onclick="window.location.href = ''" class="edit" title="Dodaj ocenę" data-toggle="tooltip" style="color:#004aac;"><i class="material-icons">add_circle_outline</i></a></td>
-                    <td><a href="#" class="ocena bg-danger">1+</a><a href="#" class="ocena bg-light">5-</a><a href="#" class="ocena bg-primary">6</a><a href="#" class="ocena bg-success">5</a><a href="#" class="ocena bg-secondary">5</a></td>
-                    <td>4.21</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Tosnowiec Filip</td>
-                    <td><a href="#" onclick="window.location.href = ''" class="edit" title="Dodaj ocenę" data-toggle="tooltip" style="color:#004aac;"><i class="material-icons">add_circle_outline</i></a></td>
-                    <td><a href="#" class="ocena bg-danger">5</a><a href="#" class="ocena bg-light">4</a><a href="#" class="ocena bg-primary">3</a></td>
-                    <td>4.21</td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>Śmiglarski Szymon</td>
-                    <td><a href="#" onclick="window.location.href = ''" class="edit" title="Dodaj ocenę" data-toggle="tooltip" style="color:#004aac;"><i class="material-icons">add_circle_outline</i></a></td>
-                    <td><a href="#" class="ocena bg-success">5</a><a href="#" class="ocena bg-secondary">5</a><a href="#" class="ocena bg-danger">1+</a><a href="#" class="ocena bg-light">5-</a><a href="#" class="ocena bg-primary">6</a><a href="#" class="ocena bg-success">5</a><a href="#" class="ocena bg-secondary">5</a></td>
-                    <td>4.21</td>
-                </tr>
                 </tbody>
             </table>
         </div>
@@ -69,10 +41,32 @@
 
     let _wargs = null;
 
+    const konwertujSymbolNaNumer = function (ocenaSymbol)
+    {
+        if (ocenaSymbol.at(-1) == '+')
+        {
+            return parseFloat(ocenaSymbol.at(0)) + 0.5;
+        }
+        else if (ocenaSymbol.at(-1) == '-')
+        {
+            return parseFloat(ocenaSymbol.at(0)) - 0.25;
+        }
+        return parseFloat(ocenaSymbol);
+    }
+
+    const __KATEGORIE = {
+        Sprawdzian: 'bg-danger',
+        Kartkówka: 'bg-warning',
+        PracaDomowa: 'bg-success',
+        PracaNaLekcji: 'bg-info',
+        Aktywność: 'bg-primary',
+        Inna: 'bg-light'
+    }
+
     document.body.onload = function (e)
     {
         const toks = []
-        const wargs = window.location.href
+        const wargs = window.location.href.replaceAll("#", "")
             .split("?")
             .at(-1)
             .split("&")
@@ -83,10 +77,44 @@
         })
         _wargs = wargs;
         console.log('wargs', _wargs);
+        przedmiot.innerHTML = `${unescape(toks['p'])}`;
+        klasa.innerHTML = `${toks['k']}`;
 
         api.wykonaj((s) => {
+            let buff = "";
+            for (const [i, uczn] of s.lista.entries())
+            {
+                const uczen = uczn.uczn;
+                const oceny = uczn.oceny.oceny;
+                buff += "<tr>";
+                buff += `
+                    <td>${uczen.numer}</td>
+                    <td>${uczen.imie} ${uczen.nazwisko}</td>
+                `;
+                buff += `
+                    <td><a href="/panel/Nauczyciel/ocena_dodaj?uczenId=${uczen.uid}&przedmiotId=${toks['i']}&nazwa=${toks['p']}&klasa=${toks['k']}" class="edit" title="Dodaj ocenę" data-toggle="tooltip" style="color:#004aac;"><i class="material-icons">add_circle_outline</i></a></td>
+                `;
+                buff += "<td>";
+                let acum = 0;
+                let wagi = 0;
+                for (const [j, ocena] of oceny.entries())
+                {
+                    buff += `
+                        <a href="#" class="ocena ${__KATEGORIE[ocena.kategoria]}">${ocena.stopien}</a>
+                    `;
+                    acum += konwertujSymbolNaNumer(ocena.stopien) * parseInt(ocena.waga);
+                    wagi += parseInt(ocena.waga);
+                }
+                acum = acum / wagi;
+                buff += "</td>";
+                /* średnia: */
+                buff += `
+                    <td>${wagi == 0 ? '' : acum.toFixed(2)}</td>
+                `;
+                buff += "</tr>";
+            }
+            lista_render.innerHTML = buff;
             console.log(s);
-            /* TODO: renderuj, + usun imie i nazw */
         }).mozeSieZepsuc().dla("oceny/lista", [toks['k'], toks['i']])
     }
 
