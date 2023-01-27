@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.hefajstos.hefajstos.QuickJSON;
 import pl.hefajstos.hefajstos.QuickJSONArray;
 import pl.hefajstos.klasy.KlasyController;
+import pl.hefajstos.nauczyciele.NauczycieleController;
+
+import java.sql.Date;
 
 @RestController
 public class OcenyMapping {
@@ -45,10 +48,8 @@ public class OcenyMapping {
             @PathVariable("oid") String oid
         )
     {
-        return QuickJSONArray.fromList
-            (
-                "oceny", null
-                //OcenyController.getOcenyByKlasaAndPrzedmiotId(jdbcTemplate, )
-            );
+        return OcenyController.usunOcene(jdbcTemplate, oid)
+            ? QuickJSON.RESP_OK
+            : QuickJSON.RESP_BAD;
     }
 }

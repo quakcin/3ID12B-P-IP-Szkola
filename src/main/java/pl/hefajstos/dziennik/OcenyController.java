@@ -7,6 +7,7 @@ import pl.hefajstos.autoryzacja.KontoBaza;
 import pl.hefajstos.autoryzacja.Sesja;
 import pl.hefajstos.autoryzacja.SesjaController;
 import pl.hefajstos.klasy.KlasyController;
+import pl.hefajstos.nauczyciele.Nauczyciel;
 import pl.hefajstos.przedmioty.Przedmiot;
 import pl.hefajstos.uczen.Uczen;
 
@@ -20,7 +21,7 @@ public class OcenyController
     {
         return jdbcTemplate.query
             (
-                "SELECT * FROM OCENA WHERE PRZEDMIOTID = ? AND UCZENID = ?",
+                "SELECT * FROM OCENA WHERE PRZEDMIOTID = ? AND UCZENID = ? ORDER BY DATA",
                 BeanPropertyRowMapper.newInstance(Ocena.class),
                 przedmiotId, uczenId
             );
@@ -68,5 +69,55 @@ public class OcenyController
         return true;
     }
 
+    public static boolean aktualizujOceneWBazie (JdbcTemplate jdbcTemplate, Ocena nowaOcena, String sid)
+    {
+        String sql = "UPDATE Ocena SET STOPIEN = ?, WAGA = ?, KATEGORIA = ?, KOMENTARZ = ?, " +
+                    "UCZENID = ?, PRZEDMIOTID = ?, NAUCZYCIELID = ?, DATA = ? WHERE Id = ?";
+        Sesja s = SesjaController.getSesjaByToken(jdbcTemplate, sid);
+
+        try
+        {
+            jdbcTemplate.update
+            (
+                sql,
+                nowaOcena.getStopien(), nowaOcena.getWaga(), nowaOcena.getKategoria(),
+                nowaOcena.getKomentarz(), nowaOcena.getUczenId(), nowaOcena.getPrzedmiotId(),
+                s.getKlucz(), nowaOcena.getData(), nowaOcena.getId()
+            );
+        }
+        catch (DataAccessException e)
+        {
+            System.out.println("[OcenyController::aktualizujOceneWBazie(1)]: " + e.toString());
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean usunOcene (JdbcTemplate jdbcTemplate, String id)
+    {
+        try
+        {
+            jdbcTemplate.update ("DELETE FROM Ocena WHERE Id = ?", new Object [] { id });
+        }
+        catch (DataAccessException e)
+        {
+            System.out.println("[OcenyController::usunOcene()]: " + e.toString());
+            return false;
+        }
+        return true;
+    }
+
+    public static Ocena getOcenaById (JdbcTemplate jdbcTemplate, String ocenaId)
+    {
+        List<Ocena> oceny = jdbcTemplate.query
+        (
+            "SELECT * FROM OCENA WHERE ID = ?",
+            BeanPropertyRowMapper.newInstance(Ocena.class),
+            ocenaId
+        );
+        for (Ocena o : oceny)
+            return o;
+        return null;
+    }
 
 }

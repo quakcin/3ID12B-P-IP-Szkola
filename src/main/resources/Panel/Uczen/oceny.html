@@ -1,0 +1,104 @@
+<style>
+    .ocena{
+        width:25px;
+        height: 25px;
+        float: left;
+        margin-right: 1vh;
+        padding:4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none!important;
+        color: black;
+    }
+</style>
+<div class="container-lg">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8"><h3><span id="przedmiot"></span></h3></div>
+                </div>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th class="col-3">Przedmiot</th>
+                    <th class="col-8">Oceny bieżące</th>
+                    <th class="col-1">Średnia</th>
+                </tr>
+                </thead>
+                <tbody id="lista_render">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+
+    const konwertujSymbolNaNumer = function (ocenaSymbol)
+    {
+        if (ocenaSymbol.at(-1) == '+')
+        {
+            return parseFloat(ocenaSymbol.at(0)) + 0.5;
+        }
+        else if (ocenaSymbol.at(-1) == '-')
+        {
+            return parseFloat(ocenaSymbol.at(0)) - 0.25;
+        }
+        return parseFloat(ocenaSymbol);
+    }
+
+    const __KATEGORIE = {
+        Sprawdzian: 'bg-danger',
+        Kartkówka: 'bg-warning',
+        PracaDomowa: 'bg-success',
+        PracaNaLekcji: 'bg-info',
+        Aktywność: 'bg-primary',
+        Inna: 'bg-light'
+    }
+
+    document.body.onload = function (e)
+    {
+        api.wykonaj((p) => {
+            /* pobierz liste przedmiotów */
+            api.wykonaj((s) => {
+                /* pobierz liste ocen ucznia */
+                console.log(s, p);
+                let buff = "";
+                for (const [i, przedmiot] of p.przedmioty.entries())
+                {
+                    buff += "<tr>";
+                    buff += `
+                        <td>${przedmiot.nazwa}</td>
+                        <td>
+                    `
+                    let srednia = 0;
+                    let waga = 0;
+
+                    for (const [j, ocena] of s.oceny.entries())
+                    {
+                        if (ocena.przedmiot != przedmiot.id)
+                            continue;
+                        buff += `<a href="#" class="ocena ${__KATEGORIE[ocena.kategoria]}">${ocena.stopien}</a>`;
+
+                        if (ocena.stopien != '0')
+                        {
+                            const _waga = parseInt(ocena.waga);
+                            srednia += konwertujSymbolNaNumer(ocena.stopien) * _waga;
+                            waga += _waga;
+                        }
+                    }
+                    srednia = srednia / waga;
+                    buff += `
+                        </td>
+                        <td>${waga == 0 ? '' : srednia.toFixed(2)}</td>
+                    `;
+                    buff += "</tr>";
+                }
+                lista_render.innerHTML = buff;
+
+            }).mozeSieZepsuc().dla("oceny/ucznia")
+        }).mozeSieZepsuc().dla("przedmioty/ucznia");
+    }
+</script>
