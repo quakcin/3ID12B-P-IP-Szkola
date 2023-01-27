@@ -91,3 +91,56 @@
         </div>
     </div>
 </div>
+<script>
+
+    let __TOKENS = null;
+
+    document.body.onload = function (e)
+    {
+        const toks = []
+        const wargs = window.location.href.replaceAll("#", "")
+            .split("?")
+            .at(-1)
+            .split("&")
+            .map((n) => n.split("="))
+
+        wargs.map((n) => {
+            toks[n[0]] = n[1];
+        })
+
+        __TOKENS = toks; /* expose */
+
+        api.wykonaj((s) => {
+            console.log(s);
+
+            rate_day.value = s.data;
+            grade.value = s.stopien;
+            wage.value = s.waga;
+            category.value = s.kategoria;
+            comment.value = s.komentarz;
+            __TOKENS['uczenId'] = s.uczen;
+
+            api.wykonaj((u) => {
+                console.log(u);
+                student.value = `${u.nazwisko} ${u.imie}`;
+                level.value = `${u.klasa}`;
+                subject.value = unescape(toks['nazwa']);
+                // rate_day.valueAsDate = new Date();
+            }).mozeSieZepsuc().dla ("uczen/info", [s.uczen]);
+        }).mozeSieZepsuc().dla("oceny/info", [toks["ocenaId"]]);
+    }
+
+    const edytujOcene = function ()
+    {
+        api.wykonaj((s) => {
+           window.location.href = `/panel/Nauczyciel/dziennik?k=${__TOKENS['klasa']}&i=${__TOKENS['przedmiotId']}&p=${__TOKENS['nazwa']}`;
+        }).mozeSieZepsuc().dla("oceny/edytuj", [__TOKENS['przedmiotId'], __TOKENS['uczenId'], grade.value, wage.value, comment.value, category.value, __TOKENS['ocenaId'], rate_day.value]);
+    }
+
+    const usunOcene = function ()
+    {
+        api.wykonaj((s) => {
+           window.location.href = `/panel/Nauczyciel/dziennik?k=${__TOKENS['klasa']}&i=${__TOKENS['przedmiotId']}&p=${__TOKENS['nazwa']}`;
+        }).mozeSieZepsuc().dla("oceny/usun", [__TOKENS['ocenaId']]);
+    }
+</script>

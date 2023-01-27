@@ -26,6 +26,17 @@ public class OcenyController
                 przedmiotId, uczenId
             );
     }
+
+    public static List<Ocena> getOcenyByUczenId (JdbcTemplate jdbcTemplate, String uczenId)
+    {
+        return jdbcTemplate.query
+        (
+            "SELECT * FROM OCENA WHERE UCZENID = ? ORDER BY DATA",
+            BeanPropertyRowMapper.newInstance(Ocena.class),
+            uczenId
+        );
+    }
+
     public static List<UczenWDzienniku> getOcenyByKlasaAndPrzedmiotId (JdbcTemplate jdbcTemplate, String klasa, String przedmiotId)
     {
         /* dla kazdego ucznia w klasie

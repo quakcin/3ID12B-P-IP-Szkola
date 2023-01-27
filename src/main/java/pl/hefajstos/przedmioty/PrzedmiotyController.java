@@ -92,4 +92,10 @@ public class PrzedmiotyController
         String sql = "SELECT * FROM PRZEDMIOT WHERE POZIOM = ?";
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Przedmiot.class), poziom);
     }
+
+    public static List<Przedmiot> getListaPrzedmiotowByUczenId (JdbcTemplate jdbcTemplate, String uczenId)
+    {
+        String sql = "SELECT DISTINCT Przedmiot.Nazwa, Przedmiot.Id, Przedmiot.Obowiazkowy, Przedmiot.Ilosc, Przedmiot.Poziom FROM Lekcja INNER JOIN Przedmiot ON Przedmiot.Id = Lekcja.PrzedmiotId INNER JOIN Uczen ON Uczen.Klasa = Lekcja.KlasaId WHERE Uczen.Id = ?";
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Przedmiot.class), uczenId);
+    }
 }
