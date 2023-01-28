@@ -4,6 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.RestController;
+import pl.hefajstos.nauczyciele.NauczycieleController;
+
+import static pl.hefajstos.autoryzacja.RodzajKonta.*;
+import pl.hefajstos.nauczyciele.Nauczyciel;
+import pl.hefajstos.uczen.UczenController;
+import pl.hefajstos.uczen.Uczen;
 
 @RestController
 public class SesjaController
@@ -20,6 +26,27 @@ public class SesjaController
     public static Sesja zaloguj (JdbcTemplate jdbcTemplate, String nazwaUzytkownika, String haslo)
     {
         return new Sesja(jdbcTemplate, nazwaUzytkownika, haslo);
+    }
+
+    public static String getKredytywnoscBySesjaId (JdbcTemplate jdbcTemplate, String sid)
+    {
+        Sesja s = SesjaController.getSesjaByToken(jdbcTemplate, sid);
+        switch (s.getRodzajKonta())
+        {
+            case Dyrektor:
+                return "Adam Krechowicz";
+
+            case Nauczyciel:
+                Nauczyciel n = NauczycieleController.getNauczycielById(jdbcTemplate, s.getKlucz());
+                return n.getImie() + " " + n.getNazwisko();
+
+            case Uczen:
+                Uczen u = UczenController.getUczenById(jdbcTemplate, s.getKlucz());
+                return u.getImie() + " " + u.getNazwisko() + " " + u.getKlasa();
+
+            default:
+                return "Błąd";
+        }
     }
 
     /**

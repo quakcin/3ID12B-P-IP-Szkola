@@ -1,0 +1,73 @@
+<div class="container">
+    <div class="row g-4">
+        <div class="col-md-7 col-lg-8">
+            <h4 class="mb-3">Dzienniki lekcji</h4>
+            <div class="row g-3">
+                <div class="col-sm-8">
+                    <label for="klasa" class="form-label">Wybierz klasę</label>
+                    <select class="form-select" id="klasa">
+                        <option value="" disabled selected>Wybierz</option>
+                    </select>
+                </div>
+                <div class="col-sm-8">
+                    <label for="przedm" class="form-label">Wybierz przedmiot</label>
+                    <select class="form-select" id="przedm" disabled>
+                        <option value="" disabled selected>Wybierz</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-4 mt-4">
+                    <button class="w-20 btn btn-success btn-sm ml-3 mt-4" id="wybierz_button" disabled>Wybierz</button>
+                </div>
+                <hr class="mt-3">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* pobierz listę lekcji prowadzoncyh przez nauczyciela
+       w parach z klasami
+     */
+
+    document.body.onload = function (e)
+    {
+        // api.wykonaj((s) => {
+        //     for (const [i, e] of s.lekcje .entries())
+        //     {
+        //         lekcje.innerHTML += `
+        //
+        //                 <option value="?p=${encodeURI(e.prz)}&k=${e.klasa}&i=${e.przid}">${e.prz} ${e.klasa}</option>
+        //         `;
+        //     }
+        // }).mozeSieZepsuc().dla("nauczyciel/lekcje", []);
+
+        klasa.onchange = function (e)
+        {
+            api.wykonaj((s) => {
+                console.log(s);
+                przedm.innerHTML = "";
+                for (const [i, p] of s.przedmioty.entries())
+                {
+                    przedm.innerHTML += `<option value="${p.id}">${p.nazwa}</option>`;
+                }
+                przedm.disabled = false;
+                wybierz_button.disabled = false;
+            }).mozeSieZepsuc().dla("przedmioty/klasy", [klasa.value]);
+        }
+
+        api.wykonaj((s) => {
+            for (const [i, k] of s.klasy.entries())
+            {
+                klasa.innerHTML += `<option value="${k.nazwa}">${k.nazwa}</option>`;
+            }
+        }).mozeSieZepsuc().dla("klasy/lista", []);
+    }
+
+    wybierz_button.onclick = function (e)
+    {
+        const path = `/panel/Dyrektor/oceny?p=${przedm.options[przedm.selectedIndex].text}&i=${przedm.value}&k=${klasa.value}`;
+        window.location.href = path;
+    }
+
+</script>

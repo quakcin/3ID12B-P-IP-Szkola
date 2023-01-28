@@ -37,7 +37,4 @@ public class KlasyMapping
                 .fromList("klasy", KlasyController.getListaBezWychowawcow(jdbcTemplate));
     }
 
-
-
-
 }

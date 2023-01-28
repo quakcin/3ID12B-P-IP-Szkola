@@ -100,4 +100,10 @@ public class PrzedmiotyMapping
         return QuickJSONArray.fromList("przedmioty", PrzedmiotyController.getListaPrzedmiotowByUczenId(jdbcTemplate, s.getKlucz()));
     }
 
+    @GetMapping("/przedmioty/klasy/{sid}/{klasaId}")
+    public String mappingPrzedmiotKlasy (@PathVariable("sid") String sid, @PathVariable("klasaId") String klasaId)
+    {
+        return QuickJSONArray.fromList("przedmioty", PrzedmiotyController.getListaPrzedmiotowByKlasa(jdbcTemplate, klasaId));
+    }
+
 }

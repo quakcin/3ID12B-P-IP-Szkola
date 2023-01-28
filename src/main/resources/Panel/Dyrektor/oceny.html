@@ -1,0 +1,180 @@
+<style>
+    .ocena{
+        width:25px;
+        height: 25px;
+        float: left;
+        margin-right: 1vh;
+        padding:4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none!important;
+        color: black;
+    }
+</style>
+<div class="container-lg">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8"><h3><span id="przedmiot"></span> <span id="klasa"></span></h3></div>
+                </div>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th class="col-1">Nr</th>
+                    <th class="col-2">Nazwisko i imię</th>
+                    <th class="col-7">Oceny bieżące</th>
+                    <th class="col-1">Średnia</th>
+                </tr>
+                </thead>
+                <tbody id="lista_render">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    #podświetlenie {
+        position: fixed;
+        z-index: 9999;
+        /*width: 300px;*/
+        /*height: 180px;*/
+        background-color: white;
+        border: 2px solid black;
+        padding: 15px;
+        box-sizing: border-box;
+    }
+</style>
+
+<div id="podświetlenie" style="position: fixed; left: -9100px; top: -9100px; z-index: 9999;">
+    <!--
+        Nauczyciel
+        Waga
+        Kategoria
+        Komentarz
+        Data
+    -->
+</div>
+
+<script>
+
+    let _wargs = null;
+
+    const konwertujSymbolNaNumer = function (ocenaSymbol)
+    {
+        if (ocenaSymbol.at(-1) == '+')
+        {
+            return parseFloat(ocenaSymbol.at(0)) + 0.5;
+        }
+        else if (ocenaSymbol.at(-1) == '-')
+        {
+            return parseFloat(ocenaSymbol.at(0)) - 0.25;
+        }
+        return parseFloat(ocenaSymbol);
+    }
+
+    const __KATEGORIE = {
+        Sprawdzian: 'bg-danger',
+        Kartkówka: 'bg-warning',
+        PracaDomowa: 'bg-success',
+        PracaNaLekcji: 'bg-info',
+        Aktywność: 'bg-primary',
+        Inna: 'bg-light'
+    }
+
+    document.body.onload = function (e)
+    {
+        const toks = []
+        const wargs = window.location.href.replaceAll("#", "")
+            .split("?")
+            .at(-1)
+            .split("&")
+            .map((n) => n.split("="))
+
+        wargs.map((n) => {
+            toks[n[0]] = n[1];
+        })
+        _wargs = wargs;
+        console.log('wargs', _wargs);
+        przedmiot.innerHTML = `${unescape(toks['p'])}`;
+        klasa.innerHTML = `${toks['k']}`;
+
+        api.wykonaj((s) => {
+            let buff = "";
+            for (const [i, uczn] of s.lista.entries())
+            {
+                const uczen = uczn.uczn;
+                const oceny = uczn.oceny.oceny;
+                buff += "<tr>";
+                buff += `
+                    <td>${uczen.numer}</td>
+                    <td>${uczen.nazwisko} ${uczen.imie}</td>
+                `;
+                buff += "<td>";
+                let acum = 0;
+                let wagi = 0;
+                for (const [j, ocena] of oceny.entries())
+                {
+                    buff += `
+                        <a href="#" class="ocena ${__KATEGORIE[ocena.kategoria]}" data-info='${JSON.stringify(ocena)}'>${ocena.stopien}</a>
+                    `;
+                    if (ocena.stopien != '0')
+                    {
+                        acum += konwertujSymbolNaNumer(ocena.stopien) * parseInt(ocena.waga);
+                        wagi += parseInt(ocena.waga);
+                    }
+                }
+                acum = acum / wagi;
+                buff += "</td>";
+                /* średnia: */
+                buff += `
+                    <td>${wagi == 0 ? '' : acum.toFixed(2)}</td>
+                `;
+                buff += "</tr>";
+            }
+            lista_render.innerHTML = buff;
+
+            const renderedOceny = document.getElementsByClassName("ocena");
+            for (let de of renderedOceny)
+                de.onmouseover = ___podświetlacz;
+            console.log(s);
+        }).mozeSieZepsuc().dla("oceny/lista", [toks['k'], toks['i']])
+    }
+
+    /* turbo++ api x86 i386 h254 .jpg .cfg .rc /etc api */
+
+    const ___podświetlacz = function (e)
+    {
+        podświetlenie.style.left = (e.clientX - 25) + "px";
+        podświetlenie.style.top = (e.clientY - 25) + "px";
+        const info = JSON.parse(e.target.dataset['info']);
+        podświetlenie.innerHTML = `
+            <div>
+                <b>Ocena: ${info.stopien}</b>
+            </div>
+            <div>
+                Waga: ${info.waga}
+            </div>
+            <div>
+                <i>${info.kategoria}</i>
+            </div>
+            <div>
+                <p>${info.komentarz}</p>
+            </div>
+            <div>
+                <small>${info.data}</small>
+            </div>
+        `;
+    }
+
+    podświetlenie.onmouseleave = function (e)
+    {
+        podświetlenie.style.left = "-1000px";
+        podświetlenie.style.top = "-10000px";
+    }
+
+
+</script>

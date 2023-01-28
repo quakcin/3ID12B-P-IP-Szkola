@@ -30,7 +30,7 @@ public class SesjaMapping
         return (new QuickJSON())
                 .addRaw("ok", "true")
                 .add("act", s.getRodzajKonta().toString())
-                .add("kred", "")
+                .add("kred", SesjaController.getKredytywnoscBySesjaId(jdbcTemplate, sid))
                 .ret();
     }
 

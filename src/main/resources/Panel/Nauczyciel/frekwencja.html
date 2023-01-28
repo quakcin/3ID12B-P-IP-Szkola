@@ -1,0 +1,196 @@
+<div class="container">
+    <div class="row g-4">
+        <div class="col-md-7 col-lg-8">
+            <h4 class="mb-3">Dzienniki lekcji</h4>
+            <div class="row g-3">
+                <div class="col-sm-4">
+                    <label for="klasa" class="form-label">Wybierz klasę</label>
+                    <select class="form-select" id="klasa" required>
+                        <option value="" disabled selected>Wybierz</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-4">
+                    <label for="tydzien" class="form-label">Wybierz tydzien</label>
+                    <select class="form-select" id="tydzien" required>
+                        <option value="" disabled selected>Wybierz</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-4">
+                    <label for="dzien" class="form-label">Wybierz dzień</label>
+                    <select class="form-select" id="dzien" required>
+                        <option value="" disabled selected>Wybierz</option>
+                        <option value="0">Poniedziałek</option>
+                        <option value="1">Wtorek</option>
+                        <option value="2">Środa</option>
+                        <option value="3">Czwartek</option>
+                        <option value="4">Piątek</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-4 mt-4">
+                    <button class="w-20 btn btn-success btn-sm mr-3 mt-4" id="wybierz_button">Wybierz</button>
+                </div>
+                <hr class="mt-3">
+            </div>
+        </div>
+    </div>
+</div>
+<div id="tabelka" style="display: none;">
+    <div class="container mx-5 p-4">
+        <div class="table-responsive">
+            <div class="table-wrapper">
+                <div class="table-title mb-3">
+                    <div class="row">
+                        <div class="col-sm-8"><h3><span id="przedmiot">Język polski</span></h3></div>
+                    </div>
+                </div>
+                <table class="table table-striped">
+                    <thead id="head_render">
+                    </thead>
+                    <tbody id="lista_render">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-5 ml-5 pl-5">
+            <div class="col ml-5 pl-5">
+                <button class="w-20 btn btn-success btn-lg mr-3" id="save_btn">Zapisz</button>
+                <button class="w-20 btn btn-danger btn-lg" onclick="history.back()">Anuluj</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    /* https://www.epochconverter.com/weeknumbers */
+    Date.prototype.getWeek = function () {
+        var target  = new Date(this.valueOf());
+        var dayNr   = (this.getDay() + 6) % 7;
+        target.setDate(target.getDate() - dayNr + 3);
+        var firstThursday = target.valueOf();
+        target.setMonth(0, 1);
+        if (target.getDay() != 4) {
+            target.setMonth(0, 1 + ((4 - target.getDay()) + 7) % 7);
+        }
+        return 1 + Math.ceil((firstThursday - target) / 604800000);
+    }
+
+
+    document.body.onload = function (e)
+    { /* pobierz liste klas których uczy */
+
+        api.wykonaj((s) => {
+            tabelka.style = "display: block";
+
+            /* mogą się powtarzać, więc collapse */
+            const klasy = [];
+            for (const [i, lekcja] of s.lekcje.entries())
+            {
+                console.log(lekcja);
+                if (klasy.includes(lekcja.klasa) == false)
+                    klasy.push(lekcja.klasa);
+            }
+            console.log(klasy);
+            for (let k of klasy)
+            {
+                console.log(k);
+                klasa.innerHTML += `<option value="${k}">${k}</option>`;
+            }
+
+        }).mozeSieZepsuc().dla("nauczyciel/lekcje", []);
+
+        /* wypełnij puste dni tygodnia */
+        const countDni = parseInt(360 / 7);
+        for (let i = 0; i < countDni; i++)
+            tydzien.innerHTML += `<option>${i + 1}</option>`;
+
+        /* zaznacz dzisiejszy */
+        var d = new Date();
+        tydzien.value = d.getWeek();
+        const day = d.getDay() - 1;
+        dzien.value = day > 4 ? 4 : d;
+    }
+
+    wybierz_button.onclick = function (e)
+    {
+        api.wykonaj((frek) => {
+            api.wykonaj((klas) => {
+
+                /* renderuj max godzin */
+                let buff = `
+                    <tr>
+                        <th class="col-1">Nr</th>
+                        <th class="col-2">Nazwisko i imię</th>
+                `;
+                for (let i = 0; i < 12; i++)
+                {
+                    buff += `<th>${i+1}</th>`
+                }
+                buff += `
+                    </tr>
+                `;
+                head_render.innerHTML = buff;
+                buff = "";
+
+                /* zestaw uczniów z ich obecnościami */
+                const uczniowie = klas.lista;
+                for (let uczen of uczniowie)
+                {
+                    uczen['frekwencja'] = [];
+                    for (let j = 0; j < 12; j++)
+                        uczen.frekwencja.push(0);
+                }
+
+                for (const [i, fr] of frek.frekwencja.entries())
+                {
+                    /* dopasuj do konkretnego ucznia */
+                    for (let uczen of uczniowie)
+                        if (uczen.uid == fr.uczenId)
+                            uczen.frekwencja[fr.godzina] = fr.rodzaj;
+                }
+
+                /* renderuj */
+                for (const [i, uczen] of uczniowie.entries())
+                {
+                    buff += "<tr>";
+                    buff += `
+                        <td>${uczen.numer}</td>
+                        <td>${uczen.nazwisko} ${uczen.imie}</td>
+                    `;
+
+                    for (let f of uczen.frekwencja)
+                    {
+                        buff += `
+                            <td>
+                                <select data-info='${JSON.stringify(uczen)}' class="form-select frek-entry" value="${f}" style="width: 80px !important;">
+                            `;
+                        const __toks = ["", "Ob", "Nb", "Sp", "Zw", "U"];
+                        for (let j = 0; j < 6; j++)
+                        {
+                            buff += `<option value="${j}" ${j == f ? 'selected' : ''}>${__toks[j]}</option>`;
+                        }
+                        buff += `
+                                </select>
+                            </td>
+                        `;
+                    }
+                    buff += "</tr>";
+                }
+                lista_render.innerHTML = buff;
+                /* miaght need to stall for 1 tick */
+                const boxes = document.getElementsByClassName("frek-entry");
+                for (let box of boxes)
+                    box.onchange = __dynamic_update;
+                console.log(uczniowie);
+            }).mozeSieZepsuc().dla("klasy/uczniowie", [klasa.value]);
+        }).mozeSieZepsuc().dla('frekwencja/lista/dzien/klasa', [tydzien.value, dzien.value, klasa.value]);
+    }
+
+    const __dynamic_update = function (e)
+    {
+        const info = JSON.parse(e.target.dataset['info']);
+        console.log(info);
+    }
+</script>
