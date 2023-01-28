@@ -7,7 +7,6 @@ import pl.hefajstos.hefajstos.QuickJSON;
 @Data
 public class Frekwencja implements Jsonable
 {
-  Integer id;
   Integer rodzaj;
   String uczenId;
   String nauczycielId;
@@ -23,7 +22,6 @@ public class Frekwencja implements Jsonable
         .add("uczenId", getUczenId())
         .add("nauczycielId", getNauczycielId())
         .add("klasa", getKlasa())
-        .addRaw("id", getId().toString())
         .addRaw("rodzaj", getRodzaj().toString())
         .addRaw("tydzien", getTydzien().toString())
         .addRaw("dzien", getDzienTygodnia().toString())

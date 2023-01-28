@@ -56,5 +56,46 @@ public class FrekwencjaController
     return true;
   }
 
+  public static boolean setFrekwencjaByUczenIdAsSesjaId (JdbcTemplate jdbcTemplate, String sid, String uid, Integer rodzaj, Integer dzien, Integer tydzien, Integer godzina)
+  {
+    String sql = "SELECT * FROM FREKWENCJA WHERE DZIENTYGODNIA = ? AND TYDZIEN = ? AND GODZINA = ? AND UCZENID = ?";
+    List<Frekwencja> frek = jdbcTemplate.query
+    (
+      sql,
+      BeanPropertyRowMapper.newInstance(Frekwencja.class),
+      dzien, tydzien, godzina, uid
+    );
+
+
+    if (frek.size() == 0) {
+      sql = "INSERT INTO FREKWENCJA VALUES (?, ?, ?, ?, ?, ?, ?)";
+      Sesja s = SesjaController.getSesjaByToken(jdbcTemplate, sid);
+      Uczen u = UczenController.getUczenById(jdbcTemplate, uid);
+      try {
+        jdbcTemplate.update(
+                sql,
+                rodzaj, uid, u.getKlasa(), s.getKlucz(), tydzien, dzien, godzina
+        );
+      } catch (DataAccessException e) {
+        System.out.println("[FrekwencjaController::setFrekwencjaByUczenIdAsSesjaId(INSERT)]: " + e.toString());
+        return false;
+      }
+    }
+    else {
+      sql = "UPDATE FREKWENCJA SET RODZAJ = ? WHERE DZIENTYGODNIA = ? AND TYDZIEN = ? AND GODZINA = ?";
+      try {
+        jdbcTemplate.update(
+                sql,
+                rodzaj, dzien, tydzien, godzina
+        );
+      } catch (DataAccessException e) {
+        System.out.println("[FrekwencjaController::setFrekwencjaByUczenIdAsSesjaId(INSERT)]: " + e.toString());
+        return false;
+      }
+    }
+
+    return true;
+  }
+
 
 }

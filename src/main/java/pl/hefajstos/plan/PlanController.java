@@ -113,4 +113,57 @@ public class PlanController
         }
         return rep.ret();
     }
+
+    public static List<GodzinaLekcyjna> getGodziny (JdbcTemplate jdbcTemplate)
+    {
+        String sql = "SELECT * FROM GODZINYLEKCYJNE";
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(GodzinaLekcyjna.class));
+    }
+
+    public static boolean zapiszGodzinyWBazie (JdbcTemplate jdbcTemplate, String lista_godzin )
+    {
+
+        String[] okna = lista_godzin.split("-");
+
+        int i = 1;
+        for (String okno : okna)
+        {
+            String[] tokeny = okno.split("_");
+            String sql = "UPDATE GodzinyLekcyjne SET GODZROZP = ?, GODZZAK = ? WHERE ID = ?";
+
+            try
+            {
+                jdbcTemplate.update
+                (
+                        sql,
+                        tokeny[0], tokeny[1], i++
+                );
+            }
+            catch (DataAccessException e)
+            {
+                System.out.println("[PlanController::zapiszGodzinyWBazie()]: " + e.toString());
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static Integer[] getGodzinyByKlasa (JdbcTemplate jdbcTemplate, String klasa, String dzien)
+    {
+        String sql = "SELECT * FROM PLANlEKCJI WHERE DZIEN = ? AND KLASA=?";
+        List<Okno> okna = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Okno.class), dzien, klasa);
+
+        Integer[] minMax = new Integer[2];
+        minMax[0] = okna.get(0).getGodzina();
+        minMax[1] = okna.get(okna.size() - 1).getGodzina() + 1;
+        return minMax;
+    }
+
+    public static List<Okno> getGodzinyKlasyByDzien (JdbcTemplate jdbcTemplate, String dzien, String klasa)
+    {
+        String sql = "SELECT * FROM PLANlEKCJI WHERE DZIEN = ? AND KLASA=?";
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Okno.class), dzien, klasa);
+    }
+
 }

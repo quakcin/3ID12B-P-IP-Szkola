@@ -9,6 +9,10 @@
                         <option value="" disabled selected>Wybierz</option>
                     </select>
                 </div>
+
+                <div class="col-sm-4 mt-4">
+                    <button class="w-20 btn btn-success btn-sm ml-3 mt-4" id="frekwencja_button" disabled>Wyświetl frekwencję</button>
+                </div>
                 <div class="col-sm-8">
                     <label for="przedm" class="form-label">Wybierz przedmiot</label>
                     <select class="form-select" id="przedm" disabled>
@@ -17,7 +21,7 @@
                 </div>
 
                 <div class="col-sm-4 mt-4">
-                    <button class="w-20 btn btn-success btn-sm ml-3 mt-4" id="wybierz_button" disabled>Wybierz</button>
+                    <button class="w-20 btn btn-success btn-sm ml-3 mt-4" id="oceny_button" disabled>Wyświetl oceny</button>
                 </div>
                 <hr class="mt-3">
             </div>
@@ -64,7 +68,7 @@
         }).mozeSieZepsuc().dla("klasy/lista", []);
     }
 
-    wybierz_button.onclick = function (e)
+    oceny_button.onclick = function (e)
     {
         const path = `/panel/Dyrektor/oceny?p=${przedm.options[przedm.selectedIndex].text}&i=${przedm.value}&k=${klasa.value}`;
         window.location.href = path;

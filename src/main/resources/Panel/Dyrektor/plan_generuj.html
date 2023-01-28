@@ -11,10 +11,31 @@
                         <label class="form-check-label" for="perm">Potwierdź operacje</label>
                     </div>
                 </div>
-
                 <div class="col-sm-6">
                     <button class="w-20 btn btn-success btn-sm mr-3" onclick="generuj()">Generuj plan lekcji</button>
                 </div>
+                <hr class="mt-5">
+                <div class="col-md-7 col-lg-8 my-5" id="godz">
+                    <div class="table-responsive">
+                        <div class="table-wrapper">
+                            <table class="table table-striped" >
+                                <thead>
+                                <tr>
+                                    <th class="col-1">#</th>
+                                    <th class="col-2">Godzina rozpoczęcia</th>
+                                    <th class="col-2">Godzina zakończenia</th>
+                                </tr>
+                                </thead>
+                                <tbody id="godziny_render">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 mt-4">
+                        <button class="w-20 btn btn-success btn-sm ml-3 mt-4" id="zapisz">Zapisz</button>
+                    </div>
+                </div>
+                <hr class="mt-5">
                 <div id="raportPlan" style="display: none;">
                     <hr class="mt-5 mb-5">
                     <div class="col-sm-12">
