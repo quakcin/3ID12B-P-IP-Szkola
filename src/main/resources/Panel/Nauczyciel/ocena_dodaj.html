@@ -79,7 +79,7 @@
 
         <div class="col-12">
           <label for="comment" class="form-label">Komentarz</label>
-          <input type="text" maxlength="64" class="form-control" id="comment" value="   ">
+          <input type="text" maxlength="64" class="form-control" id="comment" value="">
         </div>
 
         <hr class="mt-5">
@@ -126,6 +126,6 @@
   {
     api.wykonaj((s) => {
       window.location.href = `/panel/Nauczyciel/dziennik?k=${__TOKENS['klasa']}&i=${__TOKENS['przedmiotId']}&p=${__TOKENS['nazwa']}`;
-    }).mozeSieZepsuc().dla("oceny/dodaj", [__TOKENS['przedmiotId'], __TOKENS['uczenId'], grade.value, wage.value, comment.value, category.value]);
+    }).mozeSieZepsuc().dla("oceny/dodaj", [__TOKENS['przedmiotId'], __TOKENS['uczenId'], grade.value, wage.value, comment.value=='' ? ' ' : comment.value, category.value]);
   }
 </script>

@@ -134,7 +134,7 @@
     {
         api.wykonaj((s) => {
            window.location.href = `/panel/Nauczyciel/dziennik?k=${__TOKENS['klasa']}&i=${__TOKENS['przedmiotId']}&p=${__TOKENS['nazwa']}`;
-        }).mozeSieZepsuc().dla("oceny/edytuj", [__TOKENS['przedmiotId'], __TOKENS['uczenId'], grade.value, wage.value, comment.value, category.value, __TOKENS['ocenaId'], rate_day.value]);
+        }).mozeSieZepsuc().dla("oceny/edytuj", [__TOKENS['przedmiotId'], __TOKENS['uczenId'], grade.value, wage.value, comment.value=='' ? ' ' : comment.value, category.value, __TOKENS['ocenaId'], rate_day.value]);
     }
 
     const usunOcene = function ()

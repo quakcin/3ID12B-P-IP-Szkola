@@ -12,38 +12,76 @@
         <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js'></script>
         <script type='text/javascript' src='https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js'></script>
     </head>
-    <body style="overflow: hidden; padding: 0px; margin: 0px;">
-        <div style="width: 100vw; height: 8vh; border-bottom: 3px solid black">
-            <div style="padding: 15px; box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; align-content: center">
-                <div>
-                    Zdjecie
+    <body>
+    <style>
+        footer {
+            background-color: #007bff;
+            color: #fff;
+            position: fixed;
+            height: 6%;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+        .vertical-center {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+        }
+
+        .navbar .navbar-brand {
+            font-size: 30px;
+            font-weight: bold;
+            margin-left: 2vw;
+        }
+
+        .navbar {
+            flex-wrap: nowrap;
+            align-items: center;
+        }
+
+
+        .navbar-nav {
+            align-items: baseline !important;
+            justify-content: space-between;
+            flex-direction: unset;
+        }
+
+
+    </style>
+    <header class="bg-light">
+        <div class="container-fluid ">
+            <nav class="navbar navbar-light">
+                <a class="navbar-brand" href="#">HEFAJSTOS</a>
+                <div class="navbar-nav">
+                    <div class="nav-item nav-link text-dark"><b>%RodzajKonta</b> - %Kredytywnosc</div>
+                    <button class="btn btn-info btn-sm mx-4" id="wyloginator">Wyloguj</button>
                 </div>
-                <div>
-                    %tytul
-                </div>
-                <div style="text-align: right">
-                    <div style="display: flex">
-                       <b>%RodzajKonta</b>
-                        <p id="kred" style="margin-left: 10px;">%Kredytywnosc</p>
-                    </div>
-                    <div>
-                        <a href="#" id="wyloginator"> Wyloguj </a>
-                    </div>
-                </div>
-            </div>
+            </nav>
         </div>
-        <div style="display: flex; justify-content: flex-start">
-            <div style="width: 15vw; border-right: 2px solid black; display: block">
-                <div style="padding: 15px; box-sizing: border-box; display: flex; flex-wrap: wrap; flex-direction: column">
+    </header>
+    <div class="container-fluid">
+        <div class="row" style="min-height: 86vh; height: 86%">
+            <nav class="col bg-light">
+                <ul class="nav flex-column">
                     %navbar
-                </div>
-            </div>
-            <div style="width: calc(100vw - 15vw); height: calc(100vh - 8vh);">
-                <div style="width: 100%; height: calc(100vh - 8vh); overflow: scroll">
-                    <div style="padding: 15px; box-sizing: border-box">%kontent</div>
-                </div>
-            </div>
+                </ul>
+            </nav>
+            <main class="col-10 h-100 px-1 py-5 mb-5">
+                <!--kontent-start -->
+                %kontent
+                <!--Kontent-end-->
+            </main>
         </div>
+    </div>
+    <footer>
+        <div class="footer-content vertical-center" style="display: flex; justify-content: space-between!Important">
+            <div class="mx-5">Inżynieria Programowania - Projekt</div>
+            <!-- <div class="text-center mx-5">Maciek Bandura  -  Marcin Ślusarczyk  -  3ID12B</div> -->
+        </div>
+    </footer>
     <script src="/api/api.js"></script>
     <script>
         const api = new HefajstosAPI();
