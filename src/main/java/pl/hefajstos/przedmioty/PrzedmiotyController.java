@@ -98,4 +98,10 @@ public class PrzedmiotyController
         String sql = "SELECT DISTINCT Przedmiot.Nazwa, Przedmiot.Id, Przedmiot.Obowiazkowy, Przedmiot.Ilosc, Przedmiot.Poziom FROM Lekcja INNER JOIN Przedmiot ON Przedmiot.Id = Lekcja.PrzedmiotId INNER JOIN Uczen ON Uczen.Klasa = Lekcja.KlasaId WHERE Uczen.Id = ? ORDER BY Przedmiot.Nazwa";
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Przedmiot.class), uczenId);
     }
+
+    public static List<Przedmiot> getListaPrzedmiotowByKlasa (JdbcTemplate jdbcTemplate, String klasaId)
+    {
+        String sql = "SELECT DISTINCT Przedmiot.Nazwa, Przedmiot.Id, Przedmiot.Obowiazkowy, Przedmiot.Ilosc, Przedmiot.Poziom FROM Lekcja INNER JOIN Przedmiot ON Przedmiot.Id = Lekcja.PrzedmiotId WHERE Lekcja.klasaId = ? ORDER BY Przedmiot.Nazwa";
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Przedmiot.class), klasaId);
+    }
 }

@@ -89,7 +89,7 @@
                 buff += "<tr>";
                 buff += `
                     <td>${uczen.numer}</td>
-                    <td>${uczen.imie} ${uczen.nazwisko}</td>
+                    <td>${uczen.nazwisko} ${uczen.imie}</td>
                 `;
                 buff += `
                     <td><a href="/panel/Nauczyciel/ocena_dodaj?uczenId=${uczen.uid}&przedmiotId=${toks['i']}&nazwa=${toks['p']}&klasa=${toks['k']}" class="edit" title="Dodaj ocenę" data-toggle="tooltip" style="color:#004aac;"><i class="material-icons">add_circle_outline</i></a></td>
