@@ -7,8 +7,8 @@ Projekt z inżynierii programowania - System zarządzania placówką oświatową
 | Testy jednostkowe             | :white_check_mark: |
 | Interfejs graficzny           | :white_check_mark: |
 | Połączenie z bazą danych      | :white_check_mark: |
-| Wzorce projektowe             |                    |
-| Testy wzorców                 |                    |
+| Wzorce projektowe             | ½                  |
+| Testy wzorców                 | ½                  |
 | Architektura Klient-Serwer    | :white_check_mark: |
 
 3ID12B - Bandura - Ślusarczyk 🔥
