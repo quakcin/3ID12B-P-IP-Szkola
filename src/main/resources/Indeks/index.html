@@ -103,6 +103,7 @@
 
                 api.wykonaj((n) =>
                 {
+                    console.log(n);
                     localStorage.setItem("hefajstos.token", n.uid);
                     window.location.href = `/panel/${n.typ}/konto`
                 })

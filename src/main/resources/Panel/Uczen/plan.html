@@ -48,51 +48,54 @@
                 szkielet[i].push([]);
         }
 
-        api.wykonaj((s) => {
-            const _spacing = 50;
+        api.wykonaj((godziny_baza_info) => {
+            console.log(godziny_baza_info);
+            api.wykonaj((s) => {
+                const _spacing = 1;
 
-            let maxIndex = 0;
-            let minIndex = 24 * _spacing;
+                let maxIndex = 0;
+                let minIndex = 24 * _spacing;
 
-            for (const [i, e] of s.plan.entries())
-            {
-                // szkielet[e.dzien][e.godzina / 50]
-                const hrIndex = parseInt(e.godzina / _spacing);
-                maxIndex = Math.max(hrIndex, maxIndex);
-                minIndex=  Math.min(hrIndex, minIndex);
-                szkielet[e.dzien][hrIndex].push(e);
-            }
-
-            /* renderowanie od minIndex.. maxIndex */
-            let buff = "";
-            for (let j = minIndex; j <= maxIndex; j++)
-            { /* godzinami */
-                buff += "<tr>";
-                buff += `<td>${konwNaGodz(j * _spacing)} - ${konwNaGodz(j * _spacing + 45)}</td>`;
-
-                for (let i = 0; i < 5; i++)
-                { /* dniami */
-                    console.log(szkielet[i][j], i, j);
-                    buff += "<td><table class='table table-bordered'>";
-                    for (let o of szkielet[i][j])
-                    {
-                        buff += `
-                            <tr>
-                                <td>
-                                    <p class="h5">${o.przedmiot}</p>
-                                    <p class="h6">${o.nauczyciel}</p>
-                                </td>
-                            </tr>
-                        `;
-                    }
-                    buff += "</table></td>";
+                for (const [i, e] of s.plan.entries())
+                {
+                    // szkielet[e.dzien][e.godzina / 50]
+                    const hrIndex = parseInt(e.godzina / _spacing);
+                    maxIndex = Math.max(hrIndex, maxIndex);
+                    minIndex=  Math.min(hrIndex, minIndex);
+                    szkielet[e.dzien][hrIndex].push(e);
                 }
-                buff += "</tr>";
-            }
 
-            plan_render.innerHTML = buff;
+                /* renderowanie od minIndex.. maxIndex */
+                let buff = "";
+                for (let j = minIndex; j <= maxIndex; j++)
+                { /* godzinami */
+                    buff += "<tr>";
+                    buff += `<td>${godziny_baza_info.godziny[j].godzRozp} - ${godziny_baza_info.godziny[j].godzZak}</td>`;
 
-        }).mozeSieZepsuc().dla(`plan/klasa`, [klasa]);
+                    for (let i = 0; i < 5; i++)
+                    { /* dniami */
+                        console.log(szkielet[i][j], i, j);
+                        buff += "<td><table class='table table-bordered'>";
+                        for (let o of szkielet[i][j])
+                        {
+                            buff += `
+                                <tr>
+                                    <td>
+                                        <p class="h5">${o.przedmiot}</p>
+                                        <p class="h6">${o.nauczyciel}</p>
+                                    </td>
+                                </tr>
+                            `;
+                        }
+                        buff += "</table></td>";
+                    }
+                    buff += "</tr>";
+                }
+
+                plan_render.innerHTML = buff;
+
+            }).mozeSieZepsuc().dla(`plan/klasa`, [klasa]);
+        }).mozeSieZepsuc().dla('plan/godziny', []);
 
     }
 

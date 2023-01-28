@@ -75,7 +75,7 @@ public class PlanController
         {
             QuickJSONArray repKlasa = new QuickJSONArray("przedmioty");
             int dzienTygodnia = 0;
-            int minutyOdPulnocy = 60 * 9; // 1h ahead
+            int minutyOdPulnocy = 0;
 
             List<Przedmiot> przedmioty = PrzedmiotyController.getListaPrzedmiotowByPoziom(jdbcTemplate, k.getPoziom());
             /* shuffle */
@@ -103,7 +103,7 @@ public class PlanController
                     dzienTygodnia++;
                     if (dzienTygodnia >= 5)
                     {
-                        minutyOdPulnocy += 50;
+                        minutyOdPulnocy += 1;
                         dzienTygodnia = 0;
                     }
                 }

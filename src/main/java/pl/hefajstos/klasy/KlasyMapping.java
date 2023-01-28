@@ -7,6 +7,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import pl.hefajstos.hefajstos.QuickJSONArray;
 
+import java.awt.*;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+
 @RestController
 public class KlasyMapping
 {

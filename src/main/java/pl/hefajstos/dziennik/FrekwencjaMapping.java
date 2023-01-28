@@ -30,18 +30,19 @@ public class FrekwencjaMapping
         FrekwencjaController.getFrekwencjaByKlasaForDayAndWeek(jdbcTemplate, klasa, Integer.parseInt(dzien), Integer.parseInt(tydzien)));
   }
 
-  @GetMapping("/frekwencja/dodaj/uczen/{sid}/{tydzien}/{dzien}/{klasa}")
-  public String mappingFrekwencjaDodajUczen
-      (
-          @PathVariable("sid") String sid,
-          @PathVariable("uid") String uid,
-          @PathVariable("rodzaj") String rodzaj,
-          @PathVariable("dzien") String dzien,
-          @PathVariable("tydzien") String tydzien,
-          @PathVariable("godzina") String godzina
-      )
+
+  @GetMapping("/frekwencja/edytuj/uczen/{sid}/{godzina}/{tydzien}/{dzien}/{rodzaj}/{uid}")
+  public String mappingFrekwencjaEdytujUcznia
+  (
+      @PathVariable("sid") String sid,
+      @PathVariable("uid") String uid,
+      @PathVariable("rodzaj") String rodzaj,
+      @PathVariable("dzien") String dzien,
+      @PathVariable("tydzien") String tydzien,
+      @PathVariable("godzina") String godzina
+  )
   {
-    return FrekwencjaController.addFrekwencjaByUczenIdAsSesjaId(jdbcTemplate, sid, uid, Integer.valueOf(rodzaj), Integer.valueOf(dzien), Integer.valueOf(tydzien), Integer.valueOf(godzina))
-        ? QuickJSON.RESP_OK : QuickJSON.RESP_BAD;
+    return FrekwencjaController.setFrekwencjaByUczenIdAsSesjaId(jdbcTemplate, sid, uid, Integer.valueOf(rodzaj), Integer.valueOf(dzien), Integer.valueOf(tydzien), Integer.valueOf(godzina))
+            ? QuickJSON.RESP_OK : QuickJSON.RESP_BAD;
   }
 }

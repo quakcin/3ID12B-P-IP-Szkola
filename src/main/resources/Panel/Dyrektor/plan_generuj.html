@@ -98,4 +98,42 @@
             raportPlan.style = "display: block";
         }).mozeSieZepsuc().dla("plan/generuj", []);
     }
+    document.body.onload = function (e)
+    {
+        api.wykonaj((s) => {
+
+            let buff = "";
+            for (const [i, godz] of s.godziny.entries())
+            {
+                buff += `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td><input type="time" min="06:00" max="19:00" id="gr_${i}" value="${godz.godzRozp}"></td>
+                        <td><input type="time" min="08:00" max="19:00" id="gz_${i}" value="${godz.godzZak}"></td>
+                    </tr>
+                `;
+            }
+            godziny_render.innerHTML = buff;
+
+        }).mozeSieZepsuc().dla("plan/godziny", []);
+    }
+
+    /* knefel */
+
+    zapisz.onclick = function (e)
+    {
+        let lista_nowych_godz = "";
+        for (let i = 0; i < 10; i++)
+        {
+            const roz = document.getElementById('gr_' + i).value;
+            const zak = document.getElementById('gz_' + i).value;
+
+            lista_nowych_godz += `${roz}_${zak}-`;
+        }
+        lista_nowych_godz = lista_nowych_godz.substr(0, lista_nowych_godz.length - 1);
+        api.wykonaj((s) => {
+           console.log(s);
+        }).mozeSieZepsuc().dla("plan/godziny/edytuj", [lista_nowych_godz]);
+    }
+
 </script>

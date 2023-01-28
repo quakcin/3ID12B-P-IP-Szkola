@@ -69,7 +69,6 @@
 
     document.body.onload = function (e)
     { /* pobierz liste klas których uczy */
-
         api.wykonaj((s) => {
             tabelka.style = "display: block";
 
@@ -104,82 +103,108 @@
 
     wybierz_button.onclick = function (e)
     {
-        api.wykonaj((frek) => {
-            api.wykonaj((klas) => {
+        api.wykonaj((lekcje) => {
 
-                /* renderuj max godzin */
-                let buff = `
-                    <tr>
-                        <th class="col-1">Nr</th>
-                        <th class="col-2">Nazwisko i imię</th>
-                `;
-                for (let i = 0; i < 12; i++)
-                {
-                    buff += `<th>${i+1}</th>`
-                }
-                buff += `
-                    </tr>
-                `;
-                head_render.innerHTML = buff;
-                buff = "";
+            const ramkiczasowe = {
+                min: lekcje.plan.at(0).godzina,
+                max: lekcje.plan.at(-1).godzina
+            }
+            api.wykonaj((frek) => {
+                api.wykonaj((klas) => {
 
-                /* zestaw uczniów z ich obecnościami */
-                const uczniowie = klas.lista;
-                for (let uczen of uczniowie)
-                {
-                    uczen['frekwencja'] = [];
-                    for (let j = 0; j < 12; j++)
-                        uczen.frekwencja.push(0);
-                }
-
-                for (const [i, fr] of frek.frekwencja.entries())
-                {
-                    /* dopasuj do konkretnego ucznia */
-                    for (let uczen of uczniowie)
-                        if (uczen.uid == fr.uczenId)
-                            uczen.frekwencja[fr.godzina] = fr.rodzaj;
-                }
-
-                /* renderuj */
-                for (const [i, uczen] of uczniowie.entries())
-                {
-                    buff += "<tr>";
-                    buff += `
-                        <td>${uczen.numer}</td>
-                        <td>${uczen.nazwisko} ${uczen.imie}</td>
+                    /* renderuj max godzin */
+                    let buff = `
+                        <tr>
+                            <th class="col-1">Nr</th>
+                            <th class="col-2">Nazwisko i imię</th>
                     `;
-
-                    for (let f of uczen.frekwencja)
+                    for (let i = 0; i < ramkiczasowe.max; i++)
                     {
-                        buff += `
-                            <td>
-                                <select data-info='${JSON.stringify(uczen)}' class="form-select frek-entry" value="${f}" style="width: 80px !important;">
-                            `;
-                        const __toks = ["", "Ob", "Nb", "Sp", "Zw", "U"];
-                        for (let j = 0; j < 6; j++)
-                        {
-                            buff += `<option value="${j}" ${j == f ? 'selected' : ''}>${__toks[j]}</option>`;
-                        }
-                        buff += `
-                                </select>
-                            </td>
-                        `;
+                        buff += `<th>${lekcje.plan[i].przedmiot} - <br> <small>${lekcje.plan[i].nauczyciel}</small></th>`
                     }
-                    buff += "</tr>";
-                }
-                lista_render.innerHTML = buff;
-                /* miaght need to stall for 1 tick */
-                const boxes = document.getElementsByClassName("frek-entry");
-                for (let box of boxes)
-                    box.onchange = __dynamic_update;
-                console.log(uczniowie);
-            }).mozeSieZepsuc().dla("klasy/uczniowie", [klasa.value]);
-        }).mozeSieZepsuc().dla('frekwencja/lista/dzien/klasa', [tydzien.value, dzien.value, klasa.value]);
+                    buff += `
+                        </tr>
+                    `;
+                    head_render.innerHTML = buff;
+                    buff = "";
+
+                    /* zestaw uczniów z ich obecnościami */
+                    const uczniowie = klas.lista;
+                    for (let uczen of uczniowie)
+                    {
+                        uczen['frekwencja'] = [];
+                        for (let j = 0; j < ramkiczasowe.max; j++)
+                            uczen.frekwencja.push(0);
+                    }
+
+                    for (const [i, fr] of frek.frekwencja.entries())
+                    {
+                        /* dopasuj do konkretnego ucznia */
+                        for (let uczen of uczniowie)
+                            if (uczen.uid == fr.uczenId)
+                                uczen.frekwencja[fr.godzina] = fr;
+                    }
+
+                    /* renderuj */
+                    for (const [i, uczen] of uczniowie.entries())
+                    {
+                        buff += "<tr>";
+                        buff += `
+                            <td>${uczen.numer}</td>
+                            <td>${uczen.nazwisko} ${uczen.imie}</td>
+                        `;
+
+                        for (const [k, f] of uczen.frekwencja.entries())
+                        {
+                            /* spakuj do obiektu w celu przetwarzania */
+                            const rodzaj = f == null ? 0 : f.rodzaj;
+                            const okno = {
+                                klasa: klasa.value,
+                                tydzien: tydzien.value,
+                                dzien: dzien.value,
+                                godzina: k,
+                                uczen: uczen.uid
+                            }
+                            /* rendering */
+                            buff += `
+                                <td>
+                                    <select ${lekcje.plan[k].nauczyciel != kred.innerHTML ? 'disabled' : ''} data-info='${JSON.stringify(okno)}' class="form-select frek-entry" style="width: 80px !important;">
+                                `;
+                            const __toks = ["", "Ob", "Nb", "Sp", "Zw", "U"];
+                            for (let j = 0; j < 6; j++)
+                            {
+                                buff += `<option value="${j}" ${j == rodzaj ? 'selected' : ''}>${__toks[j]}</option>`;
+                            }
+                            buff += `
+                                    </select>
+                                </td>
+                            `;
+                        }
+                        buff += "</tr>";
+                    }
+                    lista_render.innerHTML = buff;
+                    /* miaght need to stall for 1 tick */
+                    const boxes = document.getElementsByClassName("frek-entry");
+                    for (let box of boxes)
+                        box.onchange = __dynamic_update;
+                    console.log(uczniowie);
+                }).mozeSieZepsuc().dla("klasy/uczniowie", [klasa.value]);
+            }).mozeSieZepsuc().dla('frekwencja/lista/dzien/klasa', [tydzien.value, dzien.value, klasa.value]);
+        }).mozeSieZepsuc().dla("plan/klasa/godziny", [klasa.value, dzien.value]);
     }
 
     const __dynamic_update = function (e)
     {
         const info = JSON.parse(e.target.dataset['info']);
+        api.wykonaj((s) => {
+            // window.location.href = window.location.href;
+        }).mozeSieZepsuc().dla("frekwencja/edytuj/uczen", [
+            info.godzina,
+            info.tydzien,
+            info.dzien,
+            e.target.value,
+            info.uczen
+        ]);
         console.log(info);
     }
 </script>

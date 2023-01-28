@@ -48,6 +48,7 @@
 
         klasa.onchange = function (e)
         {
+            frekwencja_button.disabled = false;
             api.wykonaj((s) => {
                 console.log(s);
                 przedm.innerHTML = "";
@@ -56,7 +57,8 @@
                     przedm.innerHTML += `<option value="${p.id}">${p.nazwa}</option>`;
                 }
                 przedm.disabled = false;
-                wybierz_button.disabled = false;
+                // wybierz_button.disabled = false;
+                oceny_button.disabled = false;
             }).mozeSieZepsuc().dla("przedmioty/klasy", [klasa.value]);
         }
 
@@ -73,5 +75,12 @@
         const path = `/panel/Dyrektor/oceny?p=${przedm.options[przedm.selectedIndex].text}&i=${przedm.value}&k=${klasa.value}`;
         window.location.href = path;
     }
+
+    frekwencja_button.onclick = function (e)
+    {
+        const path = `/panel/Dyrektor/frekwencja?klasa=${klasa.value}`;
+        window.location.href = path;
+    }
+
 
 </script>

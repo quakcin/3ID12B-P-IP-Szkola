@@ -3,6 +3,7 @@ package pl.hefajstos.autoryzacja;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
@@ -32,8 +33,16 @@ public class Sesja implements Jsonable
          */
         setExpr(new Timestamp(System.currentTimeMillis()));
         String sql = "SELECT * FROM KONTO WHERE NICKNAME = ? AND HASLO = ?";
-        KontoBaza konto = jdbcTemplate.queryForObject(
-                sql, BeanPropertyRowMapper.newInstance(KontoBaza.class), nazwaUzytkownika, haslo);
+        KontoBaza konto = null;
+        try
+        {
+             konto = jdbcTemplate.queryForObject(
+                    sql, BeanPropertyRowMapper.newInstance(KontoBaza.class), nazwaUzytkownika, haslo);
+        }
+        catch (DataAccessException dae)
+        {
+            // pass
+        }
 
         if (konto == null)
         { /* nie udało się zalogować */
