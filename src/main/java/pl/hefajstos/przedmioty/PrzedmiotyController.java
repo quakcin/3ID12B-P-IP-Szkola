@@ -95,7 +95,7 @@ public class PrzedmiotyController
 
     public static List<Przedmiot> getListaPrzedmiotowByUczenId (JdbcTemplate jdbcTemplate, String uczenId)
     {
-        String sql = "SELECT DISTINCT Przedmiot.Nazwa, Przedmiot.Id, Przedmiot.Obowiazkowy, Przedmiot.Ilosc, Przedmiot.Poziom FROM Lekcja INNER JOIN Przedmiot ON Przedmiot.Id = Lekcja.PrzedmiotId INNER JOIN Uczen ON Uczen.Klasa = Lekcja.KlasaId WHERE Uczen.Id = ?";
+        String sql = "SELECT DISTINCT Przedmiot.Nazwa, Przedmiot.Id, Przedmiot.Obowiazkowy, Przedmiot.Ilosc, Przedmiot.Poziom FROM Lekcja INNER JOIN Przedmiot ON Przedmiot.Id = Lekcja.PrzedmiotId INNER JOIN Uczen ON Uczen.Klasa = Lekcja.KlasaId WHERE Uczen.Id = ? ORDER BY Przedmiot.Nazwa";
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Przedmiot.class), uczenId);
     }
 }
