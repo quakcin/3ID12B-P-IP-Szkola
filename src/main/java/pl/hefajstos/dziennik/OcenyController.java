@@ -115,6 +115,7 @@ public class OcenyController
             return false;
         }
         return true;
+
     }
 
     public static Ocena getOcenaById (JdbcTemplate jdbcTemplate, String ocenaId)
