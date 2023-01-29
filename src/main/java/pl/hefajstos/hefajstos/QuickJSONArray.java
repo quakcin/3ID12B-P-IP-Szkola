@@ -27,6 +27,6 @@ public class QuickJSONArray
     }
 
     public String ret () {
-        return "{\"" + fieldName + "\": [" + str + "]}";
+        return "{\"ok\": true, \"" + fieldName + "\": [" + str + "]}";
     }
 }

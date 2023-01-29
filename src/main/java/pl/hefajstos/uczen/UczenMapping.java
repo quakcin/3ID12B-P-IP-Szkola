@@ -31,13 +31,13 @@ public class UczenMapping
     @GetMapping("/uczen/lista/{sid}")
     public String mappingUczenLista (@PathVariable("sid") String sid)
     {
-        List<Uczen> uczniowie = UczenController.getListaUczniow(jdbcTemplate);
-        QuickJSONArray rets = new QuickJSONArray("listaUczniow");
-
-        for (Uczen u : uczniowie)
-            rets.add(u.toJson());
-
-        return rets.ret();
+        // listaUczniow
+        KolekcjaUczniow kolekcjaUczniow = new KolekcjaUczniow(jdbcTemplate);
+        UczniowieIterator uczniowieIterator = kolekcjaUczniow.getIterator();
+        QuickJSONArray qja = new QuickJSONArray("listaUczniow");
+        while (uczniowieIterator.czyNastepny())
+            qja.add(uczniowieIterator.nastepny().toJson());
+        return qja.ret();
     }
 
 

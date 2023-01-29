@@ -77,4 +77,15 @@ public class Uczniowie
 
         });
     }
+
+    @Test
+    public void testIteratoraWUczniowieLista () throws Exception
+    {
+        mockMvc.perform(get("/uczen/lista/1")).andDo((a) ->
+        {
+            JSONObject jsresp = new JSONObject(a.getResponse().getContentAsString());
+            Boolean status = jsresp.getBoolean("ok");
+            assert(status == true);
+        });
+    }
 }

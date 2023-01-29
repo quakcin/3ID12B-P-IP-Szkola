@@ -2,6 +2,9 @@ package pl.hefajstos.klasy.generator;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
+/**
+ * Wzorzec projektowy nr.1 (Strategia)
+ */
 public abstract class Generator
 {
 

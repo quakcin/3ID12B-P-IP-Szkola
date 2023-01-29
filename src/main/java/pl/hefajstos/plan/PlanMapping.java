@@ -74,13 +74,12 @@ public class PlanMapping
     @GetMapping("/plan/uczen/godziny/{sid}")
     public String mappingPlanGodzinyUczen (@PathVariable("sid") String sid)
     {
-        List<List<Okno>> okna = PlanController.getGodzinyUcznia(jdbcTemplate, sid);
-
+        LekcjeUczniaKolekcjaIterator okna = PlanController.getGodzinyUcznia(jdbcTemplate, sid);
         QuickJSONArray qja = new QuickJSONArray("dni");
 
-        for (List<Okno> dzien : okna)
+        while (okna.czyNastepny())
         {
-            qja.add(QuickJSONArray.fromList("lekcje", dzien));
+            qja.add(QuickJSONArray.fromList("lekcje", okna.nastepny()));
         }
 
         return qja.ret();

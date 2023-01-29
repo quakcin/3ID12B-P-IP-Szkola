@@ -16,7 +16,6 @@ import pl.hefajstos.przedmioty.PrzedmiotyController;
 import pl.hefajstos.uczen.Uczen;
 import pl.hefajstos.uczen.UczenController;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -169,16 +168,34 @@ public class PlanController
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Okno.class), dzien, klasa);
     }
 
-    public static List<List<Okno>> getGodzinyUcznia (JdbcTemplate jdbcTemplate, String sid)
+    public static LekcjeUczniaKolekcjaIterator getGodzinyUcznia (JdbcTemplate jdbcTemplate, String sid)
     {
         Sesja s = SesjaController.getSesjaByToken(jdbcTemplate, sid);
-        Uczen u = UczenController.getUczenById(jdbcTemplate, s.getKlucz());
-        ArrayList<List<Okno>> dni = new ArrayList<>();
+//        Uczen u = UczenController.getUczenById(jdbcTemplate, s.getKlucz());
+//        ArrayList<List<Okno>> dni = new ArrayList<>();
+//
+//        for (int i = 0; i < 5; i++)
+//        {
+//            dni.add(getGodzinyKlasyByDzien(jdbcTemplate, "" + i, u.getKlasa()));
+//        }
+//        return dni;
 
-        for (int i = 0; i < 5; i++)
-        {
-            dni.add(getGodzinyKlasyByDzien(jdbcTemplate, "" + i, u.getKlasa()));
-        }
-        return dni;
+        LekcjeUczniaKolekcja lekcjeUczniaKolekcja
+            = new LekcjeUczniaKolekcja(jdbcTemplate,
+                UczenController.getUczenById(jdbcTemplate, s.getKlucz()));
+
+        return lekcjeUczniaKolekcja.getIterator();
     }
+//    public static List<List<Okno>> getGodzinyUcznia (JdbcTemplate jdbcTemplate, String sid)
+//    {
+//        Sesja s = SesjaController.getSesjaByToken(jdbcTemplate, sid);
+//        Uczen u = UczenController.getUczenById(jdbcTemplate, s.getKlucz());
+//        ArrayList<List<Okno>> dni = new ArrayList<>();
+//
+//        for (int i = 0; i < 5; i++)
+//        {
+//            dni.add(getGodzinyKlasyByDzien(jdbcTemplate, "" + i, u.getKlasa()));
+//        }
+//        return dni;
+//    }
 }

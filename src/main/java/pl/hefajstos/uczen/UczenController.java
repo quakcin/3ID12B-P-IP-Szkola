@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,8 +38,17 @@ public class UczenController
 
     public static List<Uczen> getListaUczniow (JdbcTemplate jdbcTemplate)
     {
-        String sql = "SELECT * FROM Uczen ORDER BY Klasa, Numer, Nazwisko, Imie";
-        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Uczen.class));
+//        String sql = "SELECT * FROM Uczen ORDER BY Klasa, Numer, Nazwisko, Imie";
+//        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Uczen.class));
+        KolekcjaUczniow kolekcjaUczniow = new KolekcjaUczniow(jdbcTemplate);
+        UczniowieIterator uczniowieIterator = kolekcjaUczniow.getIterator();
+        ArrayList<Uczen> nowaFormaKolekcji = new ArrayList<>();
+
+        while (uczniowieIterator.czyNastepny())
+        {
+            nowaFormaKolekcji.add(uczniowieIterator.nastepny());
+        }
+        return nowaFormaKolekcji; // :)
     }
 
     public static UUID dodajUczniaDoBazy (JdbcTemplate jdbcTemplate, Uczen nowyUczen)
