@@ -16,7 +16,6 @@ import java.util.List;
 
 public class OcenyController
 {
-
     public static List<Ocena> getOcenyByUczenIdForPrzedmiotId (JdbcTemplate jdbcTemplate, String uczenId, String przedmiotId)
     {
         return jdbcTemplate.query

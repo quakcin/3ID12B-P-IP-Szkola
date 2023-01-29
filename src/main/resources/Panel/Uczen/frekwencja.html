@@ -1,0 +1,197 @@
+<div class="container">
+    <div class="row g-4">
+        <div class="col-md-7 col-lg-8 m-auto">
+            <h4 class="mb-3">Dziennik frekwencji</h4>
+            <div class="row g-3">
+                <div class="col-sm-3">
+                    <label for="tydzien" class="form-label">Wybierz tydzien</label>
+                    <select class="form-select" id="tydzien" required>
+                        <option value="" disabled selected>Wybierz</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-2 mt-4">
+                    <button class="w-20 btn btn-success btn-sm mr-3 mt-4" id="wybierz_button">Wybierz</button>
+                </div>
+                <hr class="mb-2">
+            </div>
+        </div>
+    </div>
+    <div id="tabelka">
+
+    </div>
+    <!---start
+    <div class="container mt-5">
+        <div class="table-responsive w-50">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-8"><h2>Podsumowanie</h2></div>
+                    </div>
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                        <th class="col">Typ</th>
+                        <th class="col">Ilość</th>
+                        <th class="col">Procent</th>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    -->
+</div>
+
+<script>
+    wybierz_button.onclick = function (e)
+    { /* sieve into categories */
+        const dni = [];
+        for (let i = 0; i < 5; i++)
+            dni.push([]);
+
+        const __nazwy_dni = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"];
+        const __nazwy_rodzajow = ["", "Ob", "Nb", "Sp", "Zw", "U"];
+
+        api.wykonaj((lekcje) => {
+            console.log(lekcje);
+            api.wykonaj((s) => {
+
+                const sumator = [];
+                for (let i = 0; i < __nazwy_rodzajow.length; i++)
+                    sumator[i] = 0;
+
+                for (const [i, f] of s.frekwencja.entries())
+                {
+                    dni[f.dzien].push(f);
+                }
+
+                let buff = "";
+
+                for (const [i, dzien] of dni.entries())
+                { /* generuj osobną tabelkę dla podanego dnia */
+                    buff += `
+        <!-- Gen -->
+        <div class="container mt-5">
+            <div class="table-responsive">
+                <div class="table-wrapper">
+                    <div class="table-title">
+                        <div class="row">
+                            <div class="col-sm-8"><h2>${__nazwy_dni[i]}</h2></div>
+                        </div>
+                    </div>
+                    <table class="table table-striped">
+                        <thead id="head_render">
+                        <th class="col-1">Nr</th>
+                        <th class="col-2">Przedmiot</th>
+                        <th class="col-2">Nauczyciel</th>
+                        <th class="col-2">Status frekwencji</th>
+                        </thead>
+                        <tbody>
+                    `;
+
+                    const baza_dzien = lekcje.dni[i];
+
+                    /* wylistowanie obecności w każdej godzinie lekcyjnej */
+
+                    const początek = baza_dzien.lekcje.at(0).godzina;
+                    const koniec = baza_dzien.lekcje.at(-1).godzina;
+
+                    for (let i = początek; i <= koniec; i++)
+                    { /* dla każdej godziny lekcyjnej */
+                        const okno = baza_dzien.lekcje.at(i);
+                        const rodzaj_obecnosci = (i < dzien.length)
+                            ? dzien[i].rodzaj
+                            : 0;
+
+                        sumator[rodzaj_obecnosci] += 1;
+
+                        // console.log(dzien, i);
+                        buff += `
+                            <tr>
+                                <td>${i + 1}</td>
+                                <td>${okno.przedmiot}</td>
+                                <td>${okno.nauczyciel}</td>
+                                <td>${__nazwy_rodzajow[rodzaj_obecnosci]}</td>
+                            </tr>
+                        `;
+                    }
+
+                    /* obwiednia tabelki */
+                    buff += `
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- / Gen -->
+                    `;
+
+                }
+                /* generuj podsumowanie */
+
+                buff += `
+    <div class="container mt-5">
+        <div class="table-responsive w-50">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-8"><h2>Podsumowanie</h2></div>
+                    </div>
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                        <th class="col">Nie Wystawiono</th>
+                        `;
+
+                        for (let i = 1; i < __nazwy_rodzajow.length; i++)
+                            buff += `<th class="col-2">${__nazwy_rodzajow[i]}</th>`;
+
+                        buff += `
+                    </thead>
+                    <tbody>
+                        <tr>
+                    `;
+
+                    let sumka = 0;
+                    for (let i = 0; i < __nazwy_rodzajow.length; i++)
+                    {
+                        buff += `<td>${sumator[i]}</td>`;
+                        sumka += sumator[i];
+                    }
+
+                    buff += `</tr><tr>`;
+
+                    for (let i = 0; i < __nazwy_rodzajow.length; i++)
+                    {
+                        buff += `<td>${parseInt(Math.round(sumator[i] * 100 / sumka))}%</td>`;
+                    }
+
+                    buff += `
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+                `;
+
+                tabelka.innerHTML = buff;
+
+                console.log(s);
+            }).mozeSieZepsuc().dla("frekwencja/lista/uczen", [tydzien.value]);
+        }).mozeSieZepsuc().dla("plan/uczen/godziny", []);
+
+    }
+
+    document.body.onload = function (e)
+    {
+        const dni = 36;
+        let i = 0;
+        for (i = 0; i < dni; i++)
+        {
+            tydzien.innerHTML += `<option value="${i}">${i + 1}</option>`
+        }
+    }
+</script>

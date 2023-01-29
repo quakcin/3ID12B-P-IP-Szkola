@@ -19,7 +19,6 @@ public class Ocena implements Jsonable
     public String nauczycielId;
     public Date data;
 
-
     public String toJson ()
     {
         return (new QuickJSON())
@@ -30,7 +29,6 @@ public class Ocena implements Jsonable
                 .addRaw("przedmiot", getPrzedmiotId().toString())
                 .add("nauczyciel", getNauczycielId())
                 .add("data", getData().toString())
-                .add("kategoria", getKategoria())
                 .add("komentarz", getKomentarz())
                 .ret();
     }

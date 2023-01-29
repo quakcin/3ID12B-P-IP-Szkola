@@ -36,6 +36,14 @@ public class FrekwencjaController
         .collect(Collectors.toList());
   }
 
+  public static List<Frekwencja> getFrekwencjaByUczenIdForWeek (JdbcTemplate jdbcTemplate, String week, String uczenId)
+  {
+    return getFrekwencja(jdbcTemplate)
+        .stream()
+        .filter(f -> f.getTydzien().equals(Integer.valueOf(week)) && f.getUczenId().equals(uczenId))
+        .collect(Collectors.toList());
+  }
+
   public static boolean addFrekwencjaByUczenIdAsSesjaId (JdbcTemplate jdbcTemplate, String sid, String uid, Integer rodzaj, Integer dzien, Integer tydzien, Integer godzina)
   {
     Sesja s = SesjaController.getSesjaByToken(jdbcTemplate, sid);
