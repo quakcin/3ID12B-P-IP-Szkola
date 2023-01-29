@@ -1,16 +1,16 @@
 <div class="container">
     <div class="row g-4">
-        <div class="col-md-7 col-lg-8">
+        <div class="col-md-7 col-lg-8 m-auto">
             <h4 class="mb-3">Dzienniki lekcji</h4>
             <div class="row g-3">
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <label for="klasa" class="form-label">Wybierz klasę</label>
                     <select class="form-select" id="klasa" required>
                         <option value="" disabled selected>Wybierz</option>
                     </select>
                 </div>
 
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <label for="tydzien" class="form-label">Wybierz tydzien</label>
                     <select class="form-select" id="tydzien" required>
                         <option value="" disabled selected>Wybierz</option>
@@ -29,24 +29,24 @@
                     </select>
                 </div>
 
-                <div class="col-sm-4 mt-4">
+                <div class="col-sm-2 mt-4">
                     <button class="w-20 btn btn-success btn-sm mr-3 mt-4" id="wybierz_button">Wybierz</button>
                 </div>
-                <hr class="mt-3">
+                <hr class="mt-4">
             </div>
         </div>
     </div>
-</div>
-<div id="tabelka" style="display: none;">
-    <div class="container mx-5 p-4">
-        <div class="table-responsive">
-            <div class="table-wrapper">
-                <table class="table table-striped">
-                    <thead id="head_render">
-                    </thead>
-                    <tbody id="lista_render">
-                    </tbody>
-                </table>
+    <div id="tabelka" style="display: none;">
+        <div class="container">
+            <div class="table-responsive">
+                <div class="table-wrapper">
+                    <table class="table table-striped">
+                        <thead id="head_render">
+                        </thead>
+                        <tbody id="lista_render">
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -118,9 +118,9 @@
                             <th class="col-1">Nr</th>
                             <th class="col-2">Nazwisko i imię</th>
                     `;
-                    for (let i = 0; i < ramkiczasowe.max; i++)
+                    for (let i = 0; i <= ramkiczasowe.max; i++)
                     {
-                        buff += `<th>${lekcje.plan[i].przedmiot} - <br> <small>${lekcje.plan[i].nauczyciel}</small></th>`
+                        buff += `<th class="text-center">${lekcje.plan[i].przedmiot} <br> <small style="font-weight: normal">${lekcje.plan[i].nauczyciel}</small></th>`
                     }
                     buff += `
                         </tr>
@@ -133,7 +133,7 @@
                     for (let uczen of uczniowie)
                     {
                         uczen['frekwencja'] = [];
-                        for (let j = 0; j < ramkiczasowe.max; j++)
+                        for (let j = 0; j <= ramkiczasowe.max; j++)
                             uczen.frekwencja.push(0);
                     }
 
@@ -150,8 +150,8 @@
                     {
                         buff += "<tr>";
                         buff += `
-                            <td>${uczen.numer}</td>
-                            <td>${uczen.nazwisko} ${uczen.imie}</td>
+                            <td class="align-middle">${uczen.numer}</td>
+                            <td class="align-middle">${uczen.nazwisko} ${uczen.imie}</td>
                         `;
 
                         for (const [k, f] of uczen.frekwencja.entries())
@@ -168,7 +168,7 @@
                             /* rendering */
                             buff += `
                                 <td>
-                                    <select ${lekcje.plan[k].nauczyciel != kred.innerHTML ? 'disabled' : ''} data-info='${JSON.stringify(okno)}' class="form-select frek-entry" style="width: 80px !important;">
+                                    <select ${lekcje.plan[k].nauczyciel != kred.innerHTML ? 'disabled' : ''} data-info='${JSON.stringify(okno)}' class="form-select frek-entry" style="width: 80px !important; margin: auto;">
                                 `;
                             const __toks = ["", "Ob", "Nb", "Sp", "Zw", "U"];
                             for (let j = 0; j < 6; j++)
