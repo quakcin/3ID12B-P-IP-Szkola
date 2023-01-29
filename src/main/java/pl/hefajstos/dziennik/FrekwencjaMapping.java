@@ -47,4 +47,17 @@ public class FrekwencjaMapping
     return FrekwencjaController.setFrekwencjaByUczenIdAsSesjaId(jdbcTemplate, sid, uid, Integer.valueOf(rodzaj), Integer.valueOf(dzien), Integer.valueOf(tydzien), Integer.valueOf(godzina))
             ? QuickJSON.RESP_OK : QuickJSON.RESP_BAD;
   }
+
+  @GetMapping("/frekwencja/lista/uczen/{sid}/{tydzien}")
+  public String mappingFrekwencjaListaUczen
+      (
+          @PathVariable("sid") String sid,
+          @PathVariable("tydzien") String tydzien
+      )
+  {
+    Sesja s = SesjaController.getSesjaByToken(jdbcTemplate, sid);
+    return QuickJSONArray.fromList(
+        "frekwencja",
+        FrekwencjaController.getFrekwencjaByUczenIdForWeek(jdbcTemplate, tydzien, s.getKlucz()));
+  }
 }

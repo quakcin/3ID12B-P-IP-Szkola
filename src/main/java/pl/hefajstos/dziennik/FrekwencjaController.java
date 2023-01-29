@@ -90,11 +90,11 @@ public class FrekwencjaController
       }
     }
     else {
-      sql = "UPDATE FREKWENCJA SET RODZAJ = ? WHERE DZIENTYGODNIA = ? AND TYDZIEN = ? AND GODZINA = ?";
+      sql = "UPDATE FREKWENCJA SET RODZAJ = ? WHERE DZIENTYGODNIA = ? AND TYDZIEN = ? AND GODZINA = ? AND UCZENID = ?";
       try {
         jdbcTemplate.update(
                 sql,
-                rodzaj, dzien, tydzien, godzina
+                rodzaj, dzien, tydzien, godzina, uid
         );
       } catch (DataAccessException e) {
         System.out.println("[FrekwencjaController::setFrekwencjaByUczenIdAsSesjaId(INSERT)]: " + e.toString());

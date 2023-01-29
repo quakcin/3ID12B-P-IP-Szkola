@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.hefajstos.hefajstos.QuickJSON;
 import pl.hefajstos.hefajstos.QuickJSONArray;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 @RestController
 public class PlanMapping
 {
@@ -65,5 +69,20 @@ public class PlanMapping
     public String mappingPlanKlasa (@PathVariable("sid") String sid,  @PathVariable("klas") String klasa, @PathVariable("dzien") String dzien)
     {
         return QuickJSONArray.fromList("plan", PlanController.getGodzinyKlasyByDzien(jdbcTemplate, dzien, klasa));
+    }
+
+    @GetMapping("/plan/uczen/godziny/{sid}")
+    public String mappingPlanGodzinyUczen (@PathVariable("sid") String sid)
+    {
+        List<List<Okno>> okna = PlanController.getGodzinyUcznia(jdbcTemplate, sid);
+
+        QuickJSONArray qja = new QuickJSONArray("dni");
+
+        for (List<Okno> dzien : okna)
+        {
+            qja.add(QuickJSONArray.fromList("lekcje", dzien));
+        }
+
+        return qja.ret();
     }
 }

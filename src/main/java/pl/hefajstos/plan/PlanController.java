@@ -3,6 +3,8 @@ package pl.hefajstos.plan;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import pl.hefajstos.autoryzacja.Sesja;
+import pl.hefajstos.autoryzacja.SesjaController;
 import pl.hefajstos.hefajstos.QuickJSON;
 import pl.hefajstos.hefajstos.QuickJSONArray;
 import pl.hefajstos.klasy.KlasyController;
@@ -167,4 +169,16 @@ public class PlanController
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Okno.class), dzien, klasa);
     }
 
+    public static List<List<Okno>> getGodzinyUcznia (JdbcTemplate jdbcTemplate, String sid)
+    {
+        Sesja s = SesjaController.getSesjaByToken(jdbcTemplate, sid);
+        Uczen u = UczenController.getUczenById(jdbcTemplate, s.getKlucz());
+        ArrayList<List<Okno>> dni = new ArrayList<>();
+
+        for (int i = 0; i < 5; i++)
+        {
+            dni.add(getGodzinyKlasyByDzien(jdbcTemplate, "" + i, u.getKlasa()));
+        }
+        return dni;
+    }
 }
