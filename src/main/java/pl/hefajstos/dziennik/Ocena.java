@@ -26,6 +26,7 @@ public class Ocena implements Jsonable
                 .add("stopien", getStopien())
                 .addRaw("waga", getWaga().toString())
                 .add("uczen", getUczenId())
+                .add("kategoria", getKategoria())
                 .addRaw("przedmiot", getPrzedmiotId().toString())
                 .add("nauczyciel", getNauczycielId())
                 .add("data", getData().toString())

@@ -26,35 +26,35 @@ DROP TABLE GodzinyLekcyjne;
 
 
 CREATE TABLE Konto (
-                       Nickname NVARCHAR2(32) NOT NULL,
-                       Haslo NVARCHAR2(256) NOT NULL,
-                       Typ NUMBER NOT NULL,
-                       Id NVARCHAR2(36) NOT NULL
+    Nickname NVARCHAR2(32) NOT NULL,
+    Haslo NVARCHAR2(256) NOT NULL,
+    Typ NUMBER NOT NULL,
+    Id NVARCHAR2(36) NOT NULL
 );
 
 
 CREATE TABLE Nauczyciel (
-                            Id NVARCHAR2(36),
-                            Imie NVARCHAR2(32) NOT NULL,
-                            Nazwisko NVARCHAR2(32) NOT NULL,
-                            DataZatrudnienia DATE DEFAULT sysdate,
-                            StopienZawodowy NVARCHAR2(16),
-                            KlasaId NVARCHAR2(3) DEFAULT 'Bez',
-                            CONSTRAINT Nauczyciel_pk PRIMARY KEY (Id)
+    Id NVARCHAR2(36),
+    Imie NVARCHAR2(32) NOT NULL,
+    Nazwisko NVARCHAR2(32) NOT NULL,
+    DataZatrudnienia DATE DEFAULT sysdate,
+    StopienZawodowy NVARCHAR2(16),
+    KlasaId NVARCHAR2(3) DEFAULT 'Bez',
+    CONSTRAINT Nauczyciel_pk PRIMARY KEY (Id)
 );
 
 CREATE TABLE Sekretarka (
-                            Id NVARCHAR2(36),
-                            Imie NVARCHAR2(32) NOT NULL,
-                            Nazwisko NVARCHAR2(32) NOT NULL,
-                            CONSTRAINT Sekretarka_pk PRIMARY KEY (Id)
+    Id NVARCHAR2(36),
+    Imie NVARCHAR2(32) NOT NULL,
+    Nazwisko NVARCHAR2(32) NOT NULL,
+    CONSTRAINT Sekretarka_pk PRIMARY KEY (Id)
 );
 
 CREATE TABLE Sesja (
-                       Token NVARCHAR2(64) NOT NULL,
-                       Expr TIMESTAMP NOT NULL,
-                       Id NVARCHAR2(36) NOT NULL,
-                       Typ NUMBER NOT NULL
+    Token NVARCHAR2(64) NOT NULL,
+    Expr TIMESTAMP NOT NULL,
+    Id NVARCHAR2(36) NOT NULL,
+    Typ NUMBER NOT NULL
 );
 
 CREATE TABLE Klasa (
