@@ -102,6 +102,7 @@
         przedmiot.innerHTML = `${decodeURIComponent(toks['p'])}`;
         klasa.innerHTML = `${toks['k']}`;
 
+
         api.wykonaj((s) => {
             let buff = "";
             for (const [i, uczn] of s.lista.entries())
