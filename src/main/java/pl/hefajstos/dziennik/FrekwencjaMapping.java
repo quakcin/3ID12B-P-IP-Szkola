@@ -10,6 +10,7 @@ import pl.hefajstos.autoryzacja.Sesja;
 import pl.hefajstos.autoryzacja.SesjaController;
 import pl.hefajstos.hefajstos.QuickJSON;
 import pl.hefajstos.hefajstos.QuickJSONArray;
+import pl.hefajstos.autoryzacja.RodzajKonta;
 
 @RestController
 public class FrekwencjaMapping
@@ -27,6 +28,10 @@ public class FrekwencjaMapping
       @PathVariable("klasa") String klasa
   )
   {
+    RodzajKonta konto = SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid);
+    if (konto.equals(RodzajKonta.Dyrektor) == false && konto.equals(RodzajKonta.Nauczyciel) == false)
+      return QuickJSON.RESP_BAD;
+
     return QuickJSONArray.fromList(
         "frekwencja",
         FrekwencjaController.getFrekwencjaByKlasaForDayAndWeek(jdbcTemplate, klasa, Integer.parseInt(dzien), Integer.parseInt(tydzien)));
@@ -44,6 +49,9 @@ public class FrekwencjaMapping
       @PathVariable("godzina") String godzina
   )
   {
+    if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Nauczyciel) == false)
+      return QuickJSON.RESP_BAD;
+
     return FrekwencjaController.setFrekwencjaByUczenIdAsSesjaId(jdbcTemplate, sid, uid, Integer.valueOf(rodzaj), Integer.valueOf(dzien), Integer.valueOf(tydzien), Integer.valueOf(godzina))
             ? QuickJSON.RESP_OK : QuickJSON.RESP_BAD;
   }
@@ -55,6 +63,9 @@ public class FrekwencjaMapping
           @PathVariable("tydzien") String tydzien
       )
   {
+    if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Uczen) == false)
+      return QuickJSON.RESP_BAD;
+
     Sesja s = SesjaController.getSesjaByToken(jdbcTemplate, sid);
     return QuickJSONArray.fromList(
         "frekwencja",

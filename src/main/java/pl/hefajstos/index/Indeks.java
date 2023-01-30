@@ -23,7 +23,7 @@ public class Indeks
     {
         String page = "<h2>error 500</h2>";
         try {
-            page = String.join("", Files.readAllLines(
+            page = String.join("\n", Files.readAllLines(
                 Paths.get((getClass().getClassLoader()).getResource(
                         "Indeks/index.html").toURI())));
 

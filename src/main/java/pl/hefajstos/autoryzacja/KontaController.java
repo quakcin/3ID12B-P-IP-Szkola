@@ -39,4 +39,26 @@ public class KontaController
     Sesja s = SesjaController.getSesjaByToken(jdbcTemplate, sid);
     return s.getKlucz();
   }
+
+  public static boolean setHasloBySesjionId (JdbcTemplate jdbcTemplate, String sesjaId, String stareHaslo, String noweHaslo)
+  {
+    Sesja s = SesjaController.getSesjaByToken(jdbcTemplate, sesjaId);
+
+    if (jdbcTemplate.query("SELECT * FROM Konto WHERE ID = ? AND HASLO = ?",
+            BeanPropertyRowMapper.newInstance(KontoBaza.class),
+            s.getKlucz(), stareHaslo ).size() == 0 || stareHaslo.equals(noweHaslo))
+      return false;
+
+    try
+    {
+        jdbcTemplate.update("UPDATE KONTO SET HASLO = ? WHERE ID = ?", noweHaslo, s.getKlucz());
+    }
+    catch (DataAccessException e)
+    {
+      System.out.println("[KontaController]: (zmienHaslo) " + e.toString());
+      return false;
+    }
+
+    return true;
+  }
 }

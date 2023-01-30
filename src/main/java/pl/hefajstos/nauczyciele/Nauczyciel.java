@@ -1,5 +1,6 @@
 package pl.hefajstos.nauczyciele;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import pl.hefajstos.hefajstos.Jsonable;
 import pl.hefajstos.hefajstos.QuickJSON;
@@ -7,6 +8,7 @@ import pl.hefajstos.hefajstos.QuickJSON;
 import java.sql.Date;
 
 @Data
+@AllArgsConstructor
 public class Nauczyciel implements Jsonable
 {
     String nauczycielId;

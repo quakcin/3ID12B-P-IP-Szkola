@@ -133,6 +133,7 @@
         lista_nowych_godz = lista_nowych_godz.substr(0, lista_nowych_godz.length - 1);
         api.wykonaj((s) => {
            console.log(s);
+           window.location.href = '/panel/Dyrektor/plan';
         }).mozeSieZepsuc().dla("plan/godziny/edytuj", [lista_nowych_godz]);
     }
 

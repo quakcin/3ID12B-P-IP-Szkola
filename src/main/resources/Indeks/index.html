@@ -96,14 +96,13 @@
 
             const api = new HefajstosAPI();
 
-            zaloguj.onclick = (e) =>
+            const logowanie = function ()
             {
-               const usr = login.value;
-               const pwd = haslo.value;
+                const usr = login.value;
+                const pwd = haslo.value;
 
                 api.wykonaj((n) =>
                 {
-                    console.log(n);
                     localStorage.setItem("hefajstos.token", n.uid);
                     window.location.href = `/panel/${n.typ}/konto`
                 })
@@ -112,7 +111,21 @@
                     alert("Logowanie nie powiodło się!");
                 })
                 .dla('zaloguj', [usr, pwd]);
+            }
+
+            zaloguj.onclick = (e) =>
+            {
+                logowanie();
             };
+
+            const keyDownEvent = function ( e )
+            {
+                if (e.key == 'Enter')
+                    logowanie();
+            }
+
+            login.onkeydown = keyDownEvent;
+            haslo.onkeydown = keyDownEvent;
 
 
             /*

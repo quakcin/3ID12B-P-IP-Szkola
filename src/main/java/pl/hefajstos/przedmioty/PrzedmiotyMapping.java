@@ -26,6 +26,9 @@ public class PrzedmiotyMapping
     @GetMapping("/przedmioty/info/{sid}/{id}")
     public String infoPrzedmioty ( @PathVariable("sid") String sid, @PathVariable("id") Integer id )
     {
+        if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Dyrektor) == false)
+            return QuickJSON.RESP_BAD;
+
         Przedmiot p = PrzedmiotyController.getPrzedmiotById(jdbcTemplate, id);
         return p == null
             ? (new QuickJSON()).addRaw("ok", "false").ret()
@@ -52,6 +55,9 @@ public class PrzedmiotyMapping
             @PathVariable("obw") String obw
     )
     {
+        if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Dyrektor) == false)
+            return QuickJSON.RESP_BAD;
+
         Przedmiot nowyPrzedmiot = new Przedmiot();
         nowyPrzedmiot.setId(null);
         nowyPrzedmiot.setNazwa(nazwa);
@@ -67,6 +73,9 @@ public class PrzedmiotyMapping
     @GetMapping("/przedmioty/usun/{sid}/{id}")
     public String mappingPrzedmiotUsun (@PathVariable("sid") String sid, @PathVariable("id") Integer id)
     {
+        if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Dyrektor) == false)
+            return QuickJSON.RESP_BAD;
+
         return PrzedmiotyController.usunPrzedmiotById(jdbcTemplate, id) ? QuickJSON.RESP_OK : QuickJSON.RESP_BAD;
     }
 
@@ -81,6 +90,9 @@ public class PrzedmiotyMapping
             @PathVariable("obw") String obw
     )
     {
+        if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Dyrektor) == false)
+            return QuickJSON.RESP_BAD;
+
         Przedmiot nowyPrzedmiot = new Przedmiot();
         nowyPrzedmiot.setId(id);
         nowyPrzedmiot.setNazwa(nazwa);
@@ -98,6 +110,8 @@ public class PrzedmiotyMapping
     @GetMapping("/przedmioty/ucznia/{sid}")
     public String mappingPrzedmiotUcznia (@PathVariable("sid") String sid)
     {
+        if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Uczen) == false)
+            return QuickJSON.RESP_BAD;
         Sesja s = SesjaController.getSesjaByToken(jdbcTemplate, sid);
         return QuickJSONArray.fromList("przedmioty", PrzedmiotyController.getListaPrzedmiotowByUczenId(jdbcTemplate, s.getKlucz()));
     }

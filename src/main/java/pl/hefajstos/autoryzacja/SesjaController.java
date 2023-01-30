@@ -70,4 +70,10 @@ public class SesjaController
 
         return nowaSesja;
     }
+
+    public static RodzajKonta getRodzajKontaBySesjaId (JdbcTemplate jdbcTemplate, String sesjaId)
+    {
+       Sesja s = getSesjaByToken(jdbcTemplate, sesjaId);
+       return s.getRodzajKonta();
+    }
 }

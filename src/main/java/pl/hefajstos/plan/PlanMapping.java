@@ -24,6 +24,9 @@ public class PlanMapping
     @GetMapping("/plan/generuj/{sid}")
     public String mappingPlanGeneruj (@PathVariable("sid") String sid)
     {
+        if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Dyrektor) == false)
+            return QuickJSON.RESP_BAD;
+
         return PlanController.generujPlanLekcji(jdbcTemplate);
     }
 
@@ -36,6 +39,10 @@ public class PlanMapping
     @GetMapping("/plan/nauczyciel/{sid}/{id}")
     public String mappingPlanNauczyciel (@PathVariable("sid") String sid, @PathVariable("id") String nauczycielId)
     {
+        RodzajKonta konto = SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid);
+        if (konto.equals(RodzajKonta.Dyrektor) == false && konto.equals(RodzajKonta.Nauczyciel) == false)
+            return QuickJSON.RESP_BAD;
+
         return QuickJSONArray.fromList("plan", PlanController.getPlanByNauczycielId(jdbcTemplate, nauczycielId));
     }
 
@@ -54,6 +61,9 @@ public class PlanMapping
     @GetMapping("/plan/godziny/edytuj/{sid}/{lista}")
     public String mappingGodzinyEdycja (@PathVariable("sid") String sid, @PathVariable("lista") String lista)
     {
+        if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Dyrektor) == false)
+            return QuickJSON.RESP_BAD;
+
         return PlanController.zapiszGodzinyWBazie(jdbcTemplate, lista)
                 ? QuickJSON.RESP_OK : QuickJSON.RESP_BAD;
     }
@@ -77,6 +87,9 @@ public class PlanMapping
     @GetMapping("/plan/uczen/godziny/{sid}")
     public String mappingPlanGodzinyUczen (@PathVariable("sid") String sid)
     {
+        if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Uczen) == false)
+            return QuickJSON.RESP_BAD;
+
         LekcjeUczniaKolekcjaIterator okna = PlanController.getGodzinyUcznia(jdbcTemplate, sid);
         QuickJSONArray qja = new QuickJSONArray("dni");
 

@@ -32,6 +32,9 @@ public class UczenMapping
     @GetMapping("/uczen/lista/{sid}")
     public String mappingUczenLista (@PathVariable("sid") String sid)
     {
+        RodzajKonta konto = SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid);
+        if (konto.equals(RodzajKonta.Dyrektor) == false && konto.equals(RodzajKonta.Nauczyciel) == false)
+            return QuickJSON.RESP_BAD;
         // listaUczniow
         KolekcjaUczniow kolekcjaUczniow = new KolekcjaUczniow(jdbcTemplate);
         UczniowieIterator uczniowieIterator = kolekcjaUczniow.getIterator();
@@ -53,7 +56,10 @@ public class UczenMapping
         @PathVariable("miej") String miej
     )
     {
-        Uczen nowyUczen = new Uczen();
+        if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Dyrektor) == false)
+            return QuickJSON.RESP_BAD;
+
+        AbstrakcyjnyUczen nowyUczen = new Uczen();
         nowyUczen.setId(null);
         nowyUczen.setImie(imie);
         nowyUczen.setNazwisko(nazw);
@@ -82,7 +88,10 @@ public class UczenMapping
         @PathVariable("uid") String uid
     )
     {
-        Uczen nowyUczen = new Uczen();
+        if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Dyrektor) == false)
+            return QuickJSON.RESP_BAD;
+
+        AbstrakcyjnyUczen nowyUczen = new Uczen();
         nowyUczen.setId(uid);
         nowyUczen.setImie(imie);
         nowyUczen.setNazwisko(nazw);
@@ -99,6 +108,10 @@ public class UczenMapping
     @GetMapping("/uczen/usun/{sid}/{uid}")
     public String mappingUczenUsun (@PathVariable("sid") String sid, @PathVariable("uid") String uid)
     {
+        RodzajKonta konto = SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid);
+        if (konto.equals(RodzajKonta.Dyrektor) == false && konto.equals(RodzajKonta.Nauczyciel) == false)
+            return QuickJSON.RESP_BAD;
+
         return UczenController.usunUcznia(jdbcTemplate, uid)
                 ? QuickJSON.RESP_OK : QuickJSON.RESP_BAD;
     }

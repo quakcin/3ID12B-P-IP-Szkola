@@ -12,6 +12,8 @@ import pl.hefajstos.hefajstos.QuickJSON;
 import pl.hefajstos.hefajstos.QuickJSONArray;
 import pl.hefajstos.klasy.KlasyController;
 import pl.hefajstos.nauczyciele.NauczycieleController;
+import pl.hefajstos.autoryzacja.RodzajKonta;
+
 
 import java.sql.Date;
 
@@ -32,11 +34,19 @@ public class OcenyMapping {
         @PathVariable("kat") String kategoria
     )
     {
+        if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Nauczyciel) == false)
+            return QuickJSON.RESP_BAD;
+
         return OcenyController.addOcenaByUczenIdInPrzedmiotId(jdbcTemplate, sid, uczen, przedmiot, ocena, waga, komentarz, kategoria)
             ? QuickJSON.RESP_OK : QuickJSON.RESP_BAD;
     }
     @GetMapping("/oceny/lista/{sid}/{klasa}/{prz}")
-    public String mappingKlasyUczniowyieByKlasa(@PathVariable("sid") String sid, @PathVariable("klasa") String klasa, @PathVariable("prz") String pid) {
+    public String mappingKlasyUczniowyieByKlasa(@PathVariable("sid") String sid, @PathVariable("klasa") String klasa, @PathVariable("prz") String pid)
+    {
+        RodzajKonta konto = SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid);
+        if (konto.equals(RodzajKonta.Dyrektor) == false && konto.equals(RodzajKonta.Nauczyciel) == false)
+            return QuickJSON.RESP_BAD;
+
         return QuickJSONArray.fromList
         (
     "lista",
@@ -51,6 +61,9 @@ public class OcenyMapping {
         @PathVariable("oid") String oid
     )
     {
+        if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Nauczyciel) == false)
+            return QuickJSON.RESP_BAD;
+
         return OcenyController.usunOcene(jdbcTemplate, oid)
             ? QuickJSON.RESP_OK
             : QuickJSON.RESP_BAD;
@@ -81,6 +94,8 @@ public class OcenyMapping {
         @PathVariable("dat") String data
     )
     {
+        if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Nauczyciel) == false)
+            return QuickJSON.RESP_BAD;
         Ocena nowaOcena = new Ocena();
         nowaOcena.setId(Integer.parseInt(oid));
         nowaOcena.setPrzedmiotId(Integer.parseInt(przedmiot));
@@ -97,6 +112,8 @@ public class OcenyMapping {
     @GetMapping("/oceny/ucznia/{sid}")
     public String mappingOcenyUcznia(@PathVariable("sid") String sid)
     {
+        if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Uczen) == false)
+            return QuickJSON.RESP_BAD;
         Sesja s = SesjaController.getSesjaByToken(jdbcTemplate, sid);
         return QuickJSONArray.fromList("oceny", OcenyController.getOcenyByUczenId(jdbcTemplate, s.getKlucz()));
     }

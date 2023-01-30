@@ -28,6 +28,10 @@ public class NauczycieleMapping
     @GetMapping("/nauczyciel/info/{sid}/{id}")
     public String mappingNauczycielInfo (@PathVariable("sid") String sid, @PathVariable("id") String id)
     {
+        RodzajKonta konto = SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid);
+        if (konto.equals(RodzajKonta.Dyrektor) == false && konto.equals(RodzajKonta.Nauczyciel) == false)
+            return QuickJSON.RESP_BAD;
+
         Nauczyciel n = NauczycieleController.getNauczycielById(jdbcTemplate, id);
         return n != null
             ? n.toJson()
@@ -37,6 +41,10 @@ public class NauczycieleMapping
     @GetMapping("/nauczyciel/lista/{sid}")
     public String mappingNauczycielLista (@PathVariable("sid") String sid)
     {
+        RodzajKonta konto = SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid);
+        if (konto.equals(RodzajKonta.Dyrektor) == false && konto.equals(RodzajKonta.Nauczyciel) == false)
+            return QuickJSON.RESP_BAD;
+
         return QuickJSONArray.fromList("nauczyciele",
                 NauczycieleController.getListaNauczycieli(jdbcTemplate));
     }
@@ -44,6 +52,9 @@ public class NauczycieleMapping
     @GetMapping("/nauczyciel/usun/{sid}/{id}")
     public String mappingNauczycielUsun (@PathVariable("sid") String sid, @PathVariable("id") String id)
     {
+        if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Dyrektor) == false)
+            return QuickJSON.RESP_BAD;
+
         return NauczycieleController.usunNauczyciela(jdbcTemplate, id)
             ? QuickJSON.RESP_OK
             : QuickJSON.RESP_BAD;
@@ -62,6 +73,9 @@ public class NauczycieleMapping
             @PathVariable("prz") String prz
     )
     {
+        if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Dyrektor) == false)
+            return QuickJSON.RESP_BAD;
+
         Nauczyciel nowyNauczyciel = new Nauczyciel();
         nowyNauczyciel.setNauczycielId(null);
         nowyNauczyciel.setImie(imie);
@@ -90,6 +104,9 @@ public class NauczycieleMapping
         @PathVariable("id") String id
     )
     {
+        if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Dyrektor) == false)
+            return QuickJSON.RESP_BAD;
+
         Nauczyciel nowyNauczyciel = new Nauczyciel();
         nowyNauczyciel.setImie(imie);
         nowyNauczyciel.setNazwisko(nazw);
@@ -105,6 +122,9 @@ public class NauczycieleMapping
     @GetMapping("/nauczyciel/lekcje/{sid}")
     public String mappingNauczycielLekcje (@PathVariable("sid") String sid)
     {
+        if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Nauczyciel) == false)
+            return QuickJSON.RESP_BAD;
+
         List<LekcjaNauczyciela> lekcjaNauczyciele = NauczycieleController.getLekcjeNauczycielaBySession(jdbcTemplate, sid);
         return QuickJSONArray.fromList("lekcje", lekcjaNauczyciele);
     }
