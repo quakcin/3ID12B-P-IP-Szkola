@@ -3,7 +3,7 @@ package pl.hefajstos.klasy.generator;
 import lombok.Data;
 import pl.hefajstos.hefajstos.QuickJSON;
 import pl.hefajstos.hefajstos.QuickJSONArray;
-import pl.hefajstos.uczen.Uczen;
+import pl.hefajstos.uczen.AbstrakcyjnyUczen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +12,8 @@ import java.util.List;
 @Data
 public class RaportPasywny extends Raport
 {
-    public List<Uczen> poprawnieDodaniUczniowie;
-    public List<Uczen> blednieDodaniUczniowie;
+    public List<AbstrakcyjnyUczen> poprawnieDodaniUczniowie;
+    public List<AbstrakcyjnyUczen> blednieDodaniUczniowie;
 
     public RaportPasywny ()
     {

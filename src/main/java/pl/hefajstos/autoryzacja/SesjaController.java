@@ -6,10 +6,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.RestController;
 import pl.hefajstos.nauczyciele.NauczycieleController;
 
-import static pl.hefajstos.autoryzacja.RodzajKonta.*;
 import pl.hefajstos.nauczyciele.Nauczyciel;
 import pl.hefajstos.uczen.UczenController;
-import pl.hefajstos.uczen.Uczen;
+import pl.hefajstos.uczen.AbstrakcyjnyUczen;
 
 @RestController
 public class SesjaController
@@ -41,7 +40,7 @@ public class SesjaController
                 return n.getImie() + " " + n.getNazwisko();
 
             case Uczen:
-                Uczen u = UczenController.getUczenById(jdbcTemplate, s.getKlucz());
+                AbstrakcyjnyUczen u = UczenController.getUczenById(jdbcTemplate, s.getKlucz());
                 return u.getImie() + " " + u.getNazwisko() + " " + u.getKlasa();
 
             default:

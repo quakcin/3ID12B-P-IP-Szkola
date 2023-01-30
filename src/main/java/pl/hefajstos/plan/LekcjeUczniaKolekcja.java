@@ -2,22 +2,17 @@ package pl.hefajstos.plan;
 
 import lombok.Data;
 import org.springframework.jdbc.core.JdbcTemplate;
-import pl.hefajstos.hefajstos.Iterowalne;
-import pl.hefajstos.uczen.Uczen;
-import pl.hefajstos.uczen.UczenController;
+import pl.hefajstos.uczen.AbstrakcyjnyUczen;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Spliterator;
-import java.util.function.Consumer;
 
 @Data
 public class LekcjeUczniaKolekcja
 {
   private ArrayList<List<Okno>> dni = new ArrayList<>();
 
-  public LekcjeUczniaKolekcja (JdbcTemplate jdbcTemplate, Uczen u)
+  public LekcjeUczniaKolekcja (JdbcTemplate jdbcTemplate, AbstrakcyjnyUczen u)
   {
     for (int i = 0; i < 5; i++)
     {

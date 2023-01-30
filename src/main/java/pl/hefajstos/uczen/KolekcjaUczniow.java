@@ -3,19 +3,18 @@ package pl.hefajstos.uczen;
 import lombok.Data;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import pl.hefajstos.hefajstos.Iterowalne;
 
 import java.util.List;
 
 @Data
 public class KolekcjaUczniow
 {
-  private List<Uczen> uczniowie;
+  private List<AbstrakcyjnyUczen> uczniowie;
 
   public KolekcjaUczniow (JdbcTemplate jdbcTemplate)
   {
     String sql = "SELECT * FROM Uczen ORDER BY Klasa, Numer, Nazwisko, Imie";
-    this.uczniowie = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Uczen.class));
+    this.uczniowie = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(AbstrakcyjnyUczen.class));
   }
 
   public UczniowieIterator getIterator ()

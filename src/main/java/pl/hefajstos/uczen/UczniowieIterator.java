@@ -2,12 +2,10 @@ package pl.hefajstos.uczen;
 
 import pl.hefajstos.hefajstos.Iterowalne;
 
-import java.util.List;
-
 /**
  * Kolejna implementacja Iteratora
  */
-public class UczniowieIterator implements Iterowalne<Uczen>
+public class UczniowieIterator implements Iterowalne<AbstrakcyjnyUczen>
 {
   private KolekcjaUczniow kolekcjaUczniow;
   int ptr = 0;
@@ -17,9 +15,9 @@ public class UczniowieIterator implements Iterowalne<Uczen>
   }
 
   @Override
-  public Uczen nastepny()
+  public AbstrakcyjnyUczen nastepny()
   {
-    Uczen u = kolekcjaUczniow.getUczniowie().get(ptr);
+    AbstrakcyjnyUczen u = kolekcjaUczniow.getUczniowie().get(ptr);
     ptr = ptr + 1;
     return u;
   }

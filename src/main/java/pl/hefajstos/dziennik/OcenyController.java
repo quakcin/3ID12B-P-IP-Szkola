@@ -3,13 +3,10 @@ package pl.hefajstos.dziennik;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import pl.hefajstos.autoryzacja.KontoBaza;
 import pl.hefajstos.autoryzacja.Sesja;
 import pl.hefajstos.autoryzacja.SesjaController;
 import pl.hefajstos.klasy.KlasyController;
-import pl.hefajstos.nauczyciele.Nauczyciel;
-import pl.hefajstos.przedmioty.Przedmiot;
-import pl.hefajstos.uczen.Uczen;
+import pl.hefajstos.uczen.AbstrakcyjnyUczen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,9 +40,9 @@ public class OcenyController
          */
         ArrayList<UczenWDzienniku> uczniowie = new ArrayList<>();
 
-        List<Uczen> uczniowieWKlasie = KlasyController.getListaUczniowByKlasa(jdbcTemplate, klasa);
+        List<AbstrakcyjnyUczen> uczniowieWKlasie = KlasyController.getListaUczniowByKlasa(jdbcTemplate, klasa);
         
-        for (Uczen u : uczniowieWKlasie)
+        for (AbstrakcyjnyUczen u : uczniowieWKlasie)
         {
             /* Dodaj do kontenera i pobierz
                 jego / jej liste ocen

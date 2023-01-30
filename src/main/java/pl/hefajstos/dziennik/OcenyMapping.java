@@ -95,10 +95,7 @@ public class OcenyMapping {
     }
 
     @GetMapping("/oceny/ucznia/{sid}")
-    public String mappingOcenyUcznia
-    (
-            @PathVariable("sid") String sid
-    )
+    public String mappingOcenyUcznia(@PathVariable("sid") String sid)
     {
         Sesja s = SesjaController.getSesjaByToken(jdbcTemplate, sid);
         return QuickJSONArray.fromList("oceny", OcenyController.getOcenyByUczenId(jdbcTemplate, s.getKlucz()));

@@ -13,7 +13,7 @@ import pl.hefajstos.nauczyciele.Nauczyciel;
 import pl.hefajstos.nauczyciele.NauczycieleController;
 import pl.hefajstos.przedmioty.Przedmiot;
 import pl.hefajstos.przedmioty.PrzedmiotyController;
-import pl.hefajstos.uczen.Uczen;
+import pl.hefajstos.uczen.AbstrakcyjnyUczen;
 import pl.hefajstos.uczen.UczenController;
 
 import java.util.Collections;
@@ -36,7 +36,7 @@ public class PlanController
 
     public static List<Okno> getPlanByUczenId (JdbcTemplate jdbcTemplate, String uczenId)
     {
-        Uczen u = UczenController.getUczenById(jdbcTemplate, uczenId);
+        AbstrakcyjnyUczen u = UczenController.getUczenById(jdbcTemplate, uczenId);
         return getPlanByKlasaId(jdbcTemplate, u.getKlasa());
     }
 

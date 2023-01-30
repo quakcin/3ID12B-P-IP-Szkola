@@ -3,10 +3,9 @@ package pl.hefajstos.dziennik;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import pl.hefajstos.autoryzacja.KontoBaza;
 import pl.hefajstos.autoryzacja.Sesja;
 import pl.hefajstos.autoryzacja.SesjaController;
-import pl.hefajstos.uczen.Uczen;
+import pl.hefajstos.uczen.AbstrakcyjnyUczen;
 import pl.hefajstos.uczen.UczenController;
 
 import java.util.List;
@@ -47,7 +46,7 @@ public class FrekwencjaController
   public static boolean addFrekwencjaByUczenIdAsSesjaId (JdbcTemplate jdbcTemplate, String sid, String uid, Integer rodzaj, Integer dzien, Integer tydzien, Integer godzina)
   {
     Sesja s = SesjaController.getSesjaByToken(jdbcTemplate, sid);
-    Uczen u = UczenController.getUczenById(jdbcTemplate, uid);
+    AbstrakcyjnyUczen u = UczenController.getUczenById(jdbcTemplate, uid);
     try
     {
       jdbcTemplate.update (
@@ -78,7 +77,7 @@ public class FrekwencjaController
     if (frek.size() == 0) {
       sql = "INSERT INTO FREKWENCJA VALUES (?, ?, ?, ?, ?, ?, ?)";
       Sesja s = SesjaController.getSesjaByToken(jdbcTemplate, sid);
-      Uczen u = UczenController.getUczenById(jdbcTemplate, uid);
+      AbstrakcyjnyUczen u = UczenController.getUczenById(jdbcTemplate, uid);
       try {
         jdbcTemplate.update(
                 sql,

@@ -4,14 +4,14 @@ import lombok.Data;
 import pl.hefajstos.hefajstos.Jsonable;
 import pl.hefajstos.hefajstos.QuickJSON;
 import pl.hefajstos.hefajstos.QuickJSONArray;
-import pl.hefajstos.uczen.Uczen;
+import pl.hefajstos.uczen.AbstrakcyjnyUczen;
 
 import java.util.List;
 
 @Data
 public class UczenWDzienniku implements Jsonable
 {
-  public Uczen uczen;
+  public AbstrakcyjnyUczen uczen;
   public List<Ocena> oceny;
 
   @Override

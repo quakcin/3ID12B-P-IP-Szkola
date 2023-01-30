@@ -17,6 +17,11 @@ public class Nauczyciel implements Jsonable
     String przedmioty;
     String klasaId;
     private final String bezPrzedmiotow = " - Klasa , ";
+
+    public Nauczyciel() {
+
+    }
+
     @Override
     public String toJson() {
         return (new QuickJSON())

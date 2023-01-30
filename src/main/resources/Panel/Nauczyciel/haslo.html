@@ -1,0 +1,58 @@
+<div class="container">
+    <div class="py-4 text-center">
+        <h2>Zarządzanie Kontem użytkownika</h2>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-7 col-lg-8">
+            <h4 class="mb-3">Zmień hasło</h4>
+            <div class="row g-3">
+
+                <div class="col-12">
+                    <label for="oldPass" class="form-label">Stare hasło</label>
+                    <input type="password" class="form-control" id="oldPass">
+                </div>
+
+                <div class="col-6">
+                    <label for="newPass" class="form-label">nowe hasło</label>
+                    <input type="password" class="form-control" id="newPass">
+                </div>
+
+                <div class="col-6">
+                    <label for="newPass2" class="form-label">Powtórz nowe hasło</label>
+                    <input type="password" class="form-control" id="newPass2">
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col text-center">
+                        <button class="w-20 btn btn-success btn-lg mr-3" id="save_btn">Zapisz</button>
+                        <button class="w-20 btn btn-danger btn-lg" onclick="window.location.href = '/panel/Dyrektor/przedmioty'">Anuluj</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    save_btn.onclick = function (e)
+    {
+        if (newPass.value != newPass2.value)
+        {
+            alert("Hasła muszą się zgadzać!");
+            return;
+        }
+
+        if (newPass.value.length < 4)
+        {
+            alert("Hasło musi posiadać cztery znaki!");
+            return;
+        }
+
+        api.wykonaj((s) => {
+            alert("Zmieniono hasło!");
+        }).ewentualnie((e) => {
+            alert("Nie udało się zmienić hasła!");
+        }).dla("konto/reset/haslo", [oldPass.value, newPass.value]);
+    }
+</script>

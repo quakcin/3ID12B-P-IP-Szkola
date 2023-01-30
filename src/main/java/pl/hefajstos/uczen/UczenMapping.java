@@ -1,6 +1,5 @@
 package pl.hefajstos.uczen;
 
-import com.sun.xml.bind.v2.model.annotation.Quick;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,9 +7,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import pl.hefajstos.hefajstos.QuickJSON;
 import pl.hefajstos.hefajstos.QuickJSONArray;
+import pl.hefajstos.autoryzacja.SesjaController;
+import pl.hefajstos.autoryzacja.RodzajKonta;
+
 
 import java.sql.Date;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -22,7 +23,7 @@ public class UczenMapping
     @GetMapping("/uczen/info/{sid}/{uid}")
     public String mappingUczenInfo (@PathVariable("sid") String sid, @PathVariable("uid") String uid)
     {
-        Uczen u = UczenController.getUczenById(jdbcTemplate, uid);
+        AbstrakcyjnyUczen u = UczenController.getUczenById(jdbcTemplate, uid);
         return u != null
                 ? u.toJson()
                 : QuickJSON.RESP_BAD;

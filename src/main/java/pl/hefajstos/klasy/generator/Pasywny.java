@@ -4,7 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import pl.hefajstos.klasy.KlasyController;
 import pl.hefajstos.klasy.Klasa;
 import pl.hefajstos.uczen.UczenController;
-import pl.hefajstos.uczen.Uczen;
+import pl.hefajstos.uczen.AbstrakcyjnyUczen;
 
 import java.time.Year;
 import java.util.List;
@@ -17,13 +17,13 @@ public class Pasywny extends Generator
 {
     public static RaportPasywny generuj (JdbcTemplate jdbcTemplate, Parametry parametry)
     {
-        List<Uczen> uczniowie = UczenController.getListaUczniow(jdbcTemplate);
+        List<AbstrakcyjnyUczen> uczniowie = UczenController.getListaUczniow(jdbcTemplate);
 
         /* Alogrytm: Znajdź uczniów bez klas -> Przypisz do najbaridziej optymalnej */
 
         RaportPasywny raport = new RaportPasywny();
 
-        for (Uczen u : uczniowie)
+        for (AbstrakcyjnyUczen u : uczniowie)
             if (u.getKlasa().equals("0"))
             { /* przypisz go gdzieś */
                 if (przypiszDoKlasy(jdbcTemplate, u))
@@ -35,7 +35,7 @@ public class Pasywny extends Generator
         return raport;
     }
 
-    public static boolean przypiszDoKlasy (JdbcTemplate jdbcTemplate, Uczen u)
+    public static boolean przypiszDoKlasy (JdbcTemplate jdbcTemplate, AbstrakcyjnyUczen u)
     {
         List<Klasa> klasy = KlasyController.getListaKlas(jdbcTemplate);
         Integer obecnyRok = Year.now().getValue();
