@@ -7,6 +7,7 @@ import pl.hefajstos.autoryzacja.Sesja;
 import pl.hefajstos.autoryzacja.SesjaController;
 import pl.hefajstos.klasy.KlasyController;
 import pl.hefajstos.uczen.AbstrakcyjnyUczen;
+import pl.hefajstos.uczen.Uczen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +41,9 @@ public class OcenyController
          */
         ArrayList<UczenWDzienniku> uczniowie = new ArrayList<>();
 
-        List<AbstrakcyjnyUczen> uczniowieWKlasie = KlasyController.getListaUczniowByKlasa(jdbcTemplate, klasa);
+        List<Uczen> uczniowieWKlasie = KlasyController.getListaUczniowByKlasa(jdbcTemplate, klasa);
         
-        for (AbstrakcyjnyUczen u : uczniowieWKlasie)
+        for (Uczen u : uczniowieWKlasie)
         {
             /* Dodaj do kontenera i pobierz
                 jego / jej liste ocen

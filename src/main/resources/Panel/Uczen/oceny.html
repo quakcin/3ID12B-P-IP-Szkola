@@ -34,6 +34,27 @@
         </div>
     </div>
 </div>
+<style>
+    #podświetlenie {
+        position: fixed;
+        z-index: 9999;
+        width: 300px;
+        /*height: 180px;*/
+        background-color: white;
+        border: 2px solid black;
+        padding: 15px;
+        box-sizing: border-box;
+    }
+</style>
+<div id="podświetlenie" style="position: fixed; left: -9100px; top: -9100px; z-index: 9999;">
+    <!--
+        Nauczyciel
+        Waga
+        Kategoria
+        Komentarz
+        Data
+    -->
+</div>
 <script>
 
     const konwertujSymbolNaNumer = function (ocenaSymbol)
@@ -80,7 +101,7 @@
                     {
                         if (ocena.przedmiot != przedmiot.id)
                             continue;
-                        buff += `<a href="#" class="ocena ${__KATEGORIE[ocena.kategoria]}">${ocena.stopien}</a>`;
+                        buff += `<a href="#" class="ocena ${__KATEGORIE[ocena.kategoria]}" data-info='${JSON.stringify(ocena)}'>${ocena.stopien}</a>`;
 
                         if (ocena.stopien != '0')
                         {
@@ -95,10 +116,45 @@
                         <td>${waga == 0 ? '' : srednia.toFixed(2)}</td>
                     `;
                     buff += "</tr>";
+                    setTimeout(() => {
+                        const renderedOceny = document.getElementsByClassName("ocena");
+                        for (let de of renderedOceny)
+                            de.onmouseover = ___podświetlacz;
+                    }, 100);
                 }
                 lista_render.innerHTML = buff;
 
             }).mozeSieZepsuc().dla("oceny/ucznia")
         }).mozeSieZepsuc().dla("przedmioty/ucznia");
+    }
+
+    const ___podświetlacz = function (e)
+    {
+        podświetlenie.style.left = (e.clientX + 1) + "px";
+        podświetlenie.style.top = (e.clientY + 1) + "px";
+        const info = JSON.parse(e.target.dataset['info']);
+        podświetlenie.innerHTML = `
+            <div>
+                <b>Ocena: ${info.stopien}</b>
+            </div>
+            <div>
+                Waga: ${info.waga}
+            </div>
+            <div>
+                <i>${info.kategoria}</i>
+            </div>
+            <div>
+                <p>${info.komentarz}</p>
+            </div>
+            <div>
+                <small>${info.data}</small>
+            </div>
+        `;
+    }
+
+    podświetlenie.onmouseleave = function (e)
+    {
+        podświetlenie.style.left = "-1000px";
+        podświetlenie.style.top = "-10000px";
     }
 </script>

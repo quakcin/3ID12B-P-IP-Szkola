@@ -59,7 +59,7 @@ public class UczenMapping
         if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Dyrektor) == false)
             return QuickJSON.RESP_BAD;
 
-        AbstrakcyjnyUczen nowyUczen = new Uczen();
+        Uczen nowyUczen = new Uczen();
         nowyUczen.setId(null);
         nowyUczen.setImie(imie);
         nowyUczen.setNazwisko(nazw);
@@ -91,7 +91,7 @@ public class UczenMapping
         if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Dyrektor) == false)
             return QuickJSON.RESP_BAD;
 
-        AbstrakcyjnyUczen nowyUczen = new Uczen();
+        Uczen nowyUczen = new Uczen();
         nowyUczen.setId(uid);
         nowyUczen.setImie(imie);
         nowyUczen.setNazwisko(nazw);

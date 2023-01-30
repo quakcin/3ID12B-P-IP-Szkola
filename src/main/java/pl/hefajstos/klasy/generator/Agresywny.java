@@ -3,7 +3,7 @@ package pl.hefajstos.klasy.generator;
 import org.springframework.jdbc.core.JdbcTemplate;
 import pl.hefajstos.nauczyciele.Nauczyciel;
 import pl.hefajstos.nauczyciele.NauczycieleController;
-import pl.hefajstos.uczen.AbstrakcyjnyUczen;
+import pl.hefajstos.uczen.Uczen;
 import pl.hefajstos.uczen.UczenController;
 
 import java.time.Year;
@@ -20,7 +20,7 @@ public class Agresywny extends Generator
     public static RaportAgresywny generuj (JdbcTemplate jdbcTemplate, Parametry parametry)
     {
         List<Nauczyciel> nauczyciele = NauczycieleController.getListaNauczycieli(jdbcTemplate);
-        List<AbstrakcyjnyUczen> uczniowie = UczenController.getListaUczniow(jdbcTemplate);
+        List<Uczen> uczniowie = UczenController.getListaUczniow(jdbcTemplate);
 
         Integer cMin = parametry.getMinUczniowWKlasie();
         Integer cMax = parametry.getMaxUczniowWKlasie();
@@ -38,13 +38,13 @@ public class Agresywny extends Generator
             1. Podział na roczniki
          */
 
-        ArrayList<AbstrakcyjnyUczen>[] rocznik = new ArrayList[8];
+        ArrayList<Uczen>[] rocznik = new ArrayList[8];
 
         for (int i = 0; i < 8; i++)
-            rocznik[i] = new ArrayList<AbstrakcyjnyUczen>();
+            rocznik[i] = new ArrayList<Uczen>();
 
         Integer obecnyRok = Year.now().getValue();
-        for (AbstrakcyjnyUczen u : uczniowie)
+        for (Uczen u : uczniowie)
         {
             Integer poziom = obecnyRok - u.getDataUrodzenia().toLocalDate().getYear() - 7;
             if (poziom < 0)
@@ -148,7 +148,7 @@ public class Agresywny extends Generator
                     if (uczen_idx >= rocznik[i].size())
                         break;
 
-                    AbstrakcyjnyUczen uczen = rocznik[i].get(uczen_idx);
+                    Uczen uczen = rocznik[i].get(uczen_idx);
                     jdbcTemplate.update(
                     "UPDATE Uczen SET Klasa = ?, Numer = ? WHERE Id = ?",
                     klasa, "" + (k + 1), uczen.getId()

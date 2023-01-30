@@ -9,12 +9,12 @@ import java.util.List;
 @Data
 public class KolekcjaUczniow
 {
-  private List<AbstrakcyjnyUczen> uczniowie;
+  private List<Uczen> uczniowie;
 
   public KolekcjaUczniow (JdbcTemplate jdbcTemplate)
   {
     String sql = "SELECT * FROM Uczen ORDER BY Klasa, Numer, Nazwisko, Imie";
-    this.uczniowie = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(AbstrakcyjnyUczen.class));
+    this.uczniowie = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Uczen.class));
   }
 
   public UczniowieIterator getIterator ()

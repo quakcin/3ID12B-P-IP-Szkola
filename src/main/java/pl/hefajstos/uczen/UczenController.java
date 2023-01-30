@@ -13,7 +13,7 @@ import java.util.UUID;
 public class UczenController
 {
 
-    public static AbstrakcyjnyUczen getUczenById (JdbcTemplate jdbcTemplate, String uid) /* FIXME: Nie działa i już */
+    public static Uczen getUczenById (JdbcTemplate jdbcTemplate, String uid) /* FIXME: Nie działa i już */
     {
 //        String sql = "SELECT * FROM UCZEN WHERE ID = ?";
 //        try
@@ -27,20 +27,20 @@ public class UczenController
 //            return null;
 //        }
         /* HOTFIX: Trzeba ulepszyc, narazie to wystarczy */
-        List<AbstrakcyjnyUczen> uczniowie = UczenController.getListaUczniow(jdbcTemplate);
-        for (AbstrakcyjnyUczen u : uczniowie)
+        List<Uczen> uczniowie = UczenController.getListaUczniow(jdbcTemplate);
+        for (Uczen u : uczniowie)
             if (u.getId().equals(uid)) /* TODO: Remove trim() */
                 return u;
         return null;
     }
 
-    public static List<AbstrakcyjnyUczen> getListaUczniow (JdbcTemplate jdbcTemplate)
+    public static List<Uczen> getListaUczniow (JdbcTemplate jdbcTemplate)
     {
 //        String sql = "SELECT * FROM Uczen ORDER BY Klasa, Numer, Nazwisko, Imie";
 //        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Uczen.class));
         KolekcjaUczniow kolekcjaUczniow = new KolekcjaUczniow(jdbcTemplate);
         UczniowieIterator uczniowieIterator = kolekcjaUczniow.getIterator();
-        ArrayList<AbstrakcyjnyUczen> nowaFormaKolekcji = new ArrayList<>();
+        ArrayList<Uczen> nowaFormaKolekcji = new ArrayList<>();
 
         while (uczniowieIterator.czyNastepny())
         {
@@ -49,7 +49,7 @@ public class UczenController
         return nowaFormaKolekcji; // :)
     }
 
-    public static UUID dodajUczniaDoBazy (JdbcTemplate jdbcTemplate, AbstrakcyjnyUczen nowyUczen)
+    public static UUID dodajUczniaDoBazy (JdbcTemplate jdbcTemplate, Uczen nowyUczen)
     {
         UUID noweId = UUID.randomUUID();
         assert(nowyUczen.getId() == null);
@@ -98,7 +98,7 @@ public class UczenController
         return noweId;
     }
 
-    public static void zapiszUczniaWBazie (JdbcTemplate jdbcTemplate, AbstrakcyjnyUczen nowyUczen)
+    public static void zapiszUczniaWBazie (JdbcTemplate jdbcTemplate, Uczen nowyUczen)
     {
         String sql = "UPDATE Uczen SET Imie = ?, Nazwisko = ?, Pesel = ?, DataUrodzenia = ?, MiejsceUrodzenia = ?, Klasa = ?, Numer = ? WHERE Id = ?";
 

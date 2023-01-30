@@ -99,7 +99,7 @@
         })
         _wargs = wargs;
         console.log('wargs', _wargs);
-        przedmiot.innerHTML = `${unescape(toks['p'])}`;
+        przedmiot.innerHTML = `${decodeURIComponent(toks['p'])}`;
         klasa.innerHTML = `${toks['k']}`;
 
         api.wykonaj((s) => {
@@ -118,6 +118,7 @@
                 let wagi = 0;
                 for (const [j, ocena] of oceny.entries())
                 {
+                    console.log(ocena);
                     buff += `
                         <a href="#" class="ocena ${__KATEGORIE[ocena.kategoria]}" data-info='${JSON.stringify(ocena)}'>${ocena.stopien}</a>
                     `;
@@ -148,8 +149,8 @@
 
     const ___podświetlacz = function (e)
     {
-        podświetlenie.style.left = (e.clientX - 25) + "px";
-        podświetlenie.style.top = (e.clientY - 25) + "px";
+        podświetlenie.style.left = (e.clientX + 1) + "px";
+        podświetlenie.style.top = (e.clientY + 1) + "px";
         const info = JSON.parse(e.target.dataset['info']);
         podświetlenie.innerHTML = `
             <div>

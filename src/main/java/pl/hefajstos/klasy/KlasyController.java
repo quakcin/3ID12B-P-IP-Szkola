@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.RestController;
 import pl.hefajstos.uczen.AbstrakcyjnyUczen;
+import pl.hefajstos.uczen.Uczen;
 import pl.hefajstos.uczen.UczenController;
 
 
@@ -17,12 +18,12 @@ public class KlasyController
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public static List<AbstrakcyjnyUczen> getListaUczniowByKlasa (JdbcTemplate jdbcTemplate, String klasa)
+    public static List<Uczen> getListaUczniowByKlasa (JdbcTemplate jdbcTemplate, String klasa)
     {
         return jdbcTemplate.query
         (
             "SELECT * FROM Uczen WHERE Klasa = ? ORDER BY Numer, Nazwisko, Imie",
-            BeanPropertyRowMapper.newInstance(AbstrakcyjnyUczen.class), klasa
+            BeanPropertyRowMapper.newInstance(Uczen.class), klasa
         );
     }
 
@@ -43,12 +44,12 @@ public class KlasyController
         );
     }
 
-    public static void przypiszUczniaDoKlasy (JdbcTemplate jdbcTemplate, Klasa klasa, AbstrakcyjnyUczen uczen)
+    public static void przypiszUczniaDoKlasy (JdbcTemplate jdbcTemplate, Klasa klasa, Uczen uczen)
     {
         /* znalezienie numeru dla ucznia */
         Integer maxNumerWDzienniku = 0;
-        List<AbstrakcyjnyUczen> uczniowieWKlasie = KlasyController.getListaUczniowByKlasa(jdbcTemplate, klasa.getNazwa());
-        for (AbstrakcyjnyUczen u : uczniowieWKlasie)
+        List<Uczen> uczniowieWKlasie = KlasyController.getListaUczniowByKlasa(jdbcTemplate, klasa.getNazwa());
+        for (Uczen u : uczniowieWKlasie)
             if (u.getNumer() > maxNumerWDzienniku)
                 maxNumerWDzienniku = u.getNumer();
 
