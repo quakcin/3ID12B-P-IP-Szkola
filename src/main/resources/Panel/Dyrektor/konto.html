@@ -1,1 +1,96 @@
-<h2> Konto Dyrektora </h2>
+<div class="container px-3">
+    <h1>HEFAJSTOS - System zarządzania placówką oświatową</h1>
+    <h6>Maciej Bandura, Marcin Ślusarczyk; 3ID12B; Inżynieria Programowania - projekt 2022/2023</h6>
+
+    <p class="mt-5" style="text-align: justify;">
+        System ma na celu zarządzanie placówką dydaktyczną. Zawiera funkcjonalności dla większości podmiotów znajdujących się w takiej placówce.
+        Od dyrektora szkoły, po ucznia. Celem systemu jest zautomatyzowanie pewnych operacji oraz pomoc użytkownikowi w podejmowaniu decyzji,
+        poprzez podpowiadanie oraz automatyczne generowanie pewnych komunikatów. W systemie znajdzie się moduł dziennika lekcyjnego, który będzie
+        odpowiadał za oceny uczniów oraz frekwencję. Kolejnym modułem będzie plan lekcji, który będzie generowany automatycznie .
+        System będzie posiadał możliwość pełnego zarządzania pracownikami oraz uczniami (dodanie, usunięcie, edycja) . Zgodnie z obowiązującymi
+        standardami system przystosowany został pod bieżące realia, tj. odpowiednia ilość godzin w klasach, realne rozłożenie przedmiotów oraz ilości ich godzin.
+        Ostatnim modułem będzie zarządzanie klasami. W tym module dyrektor będzie miał możliwość wygenerowania w sposób automatyczny klas.
+    </p>
+    <dl class="row">
+        <dt class="col-sm-3">Zastosowane technologie</dt>
+        <dd class="col-sm-9">
+            <p>Java jdk-17.0.2, Spring Boot 2.7.5, HTML5, JavaScript ES6, Bootstrap5, Oracle Database 21c</p>
+        </dd>
+
+        <dt class="col-sm-3">Wzorce projektowe</dt>
+        <dd class="col-sm-9">
+            <p>Strategia - generator klas, pasywny oraz agresywny</p>
+            <p>Dekorator - klasyfikacja uczniów "specjalnych"</p>
+            <p>Iterator - iterowanie po kolekcjach uczniów oraz klas.</p>
+        </dd>
+    </dl>
+    <p>
+        Aktualnie znajdujesz się na koncie <b>dyrektora</b>, na pasku nawigacyjnym, po lewej stronie masz kilka zakładek
+        prowadzących do poszczególnych funkcjonalności systemu. Poniżej została przedstawiona lista funkcjonalności.
+    </p>
+    <ul class="list-unstyled">
+        <li>Szkoła
+            <ul>
+                <li>Plan lekcji</li>
+                <ul>
+                    <li>Możliwość wyświetlenia planu lekcji wybranej klasy</li>
+                    <li>Możliwość wyświetlenia planu lekcji wybranego nauczyciela</li>
+                </ul>
+                <li>Dziennik</li>
+                <ul>
+                    <li>Możliwość wyświetlenia frekwencji wybranej klasy w poszczególnych tygodniach</li>
+                    <li>Możliwość wyświetlenia ocen wybranej klasy z poszczególnych przedmiotów</li>
+                </ul>
+            </ul>
+        </li>
+        <li>Zarządzanie
+            <ul>
+                <li>Zarządzanie uczniami</li>
+                <ul>
+                    <li>Możliwość wyświetlenia pełnej listy uczniów</li>
+                    <li>Możliwość wyświetlenia szczegółów każdego ucznia</li>
+                    <li>Możliwość dodania nowego ucznia</li>
+                    <li>Możliwość edycji ucznia</li>
+                    <li>Możliwość usunięcia ucznia</li>
+                    <li>Możliwość zmiany klasy ucznia</li>
+                    <li>Możliwość zmiany numeru w dzienniu ucznia</li>
+                </ul>
+                <li>Zarządzanie nauczycielami</li>
+                <ul>
+                    <li>Możliwość wyświetlenia pełnej listy nauczycieli</li>
+                    <li>Możliwość wyświetlenia szczegółowych informacji o wybranym nauczycielu</li>
+                    <li>Możliwość dodania nowego nauczyciela</li>
+                    <li>Możliwość edycji informacji o nauczycielu</li>
+                    <li>Możliwość usunięcia nauczyciela</li>
+                    <li>Możliwość przypisania wychowawstwa do klasy nauczycielowi</li>
+                    <li>Możliwość zmiany nauczanych przedmiotów przez nauczyciela</li>
+                </ul>
+                <li>Zarządzanie klasami</li>
+                <ul>
+                    <li>Możliwość wyświetlenia pełnej listy klas wraz z ich wychowawcami</li>
+                    <li>Możliwość wyświetlenia szczegółowych informacji o klasie (lista uczniów w klasie)</li>
+                    <li>Możliwość uruchomienia generatora klas, w dwóch trybach pasywnym oraz agresywnym</li>
+                </ul>
+                <li>Zarządzanie przedmiotami</li>
+                <ul>
+                    <li>Możliwość wyświetlenia listy przedmiotów</li>
+                    <li>Możliwość dodania nowego przedmiotu do systemu</li>
+                    <li>Możliwość edycji przedmiotu</li>
+                    <li>Możliwość usunięcia przedmiotu</li>
+                </ul>
+                <li>Generuj plan lekcji</li>
+                <ul>
+                    <li>Możliwość zmiany godzin pracy funkcjonowania szkoły (czas lekcyjny oraz czas przerw międzylekcyjnych)</li>
+                    <li>Możliwość automatycznego wygenerowania planu lekcji</li>
+                </ul>
+                <li>Zarządzanie kontami</li>
+                <ul>
+                    <li>Możliwość resetu hasła dla każdego użytkownika systemu</li>
+                </ul>
+                <li>Zmiana hasła</li>
+                <ul>
+                    <li>Możliwość zmiany hasła dla konta na którym jesteśmy obecnie zalogowani</li>
+                </ul>
+            </ul>
+    </ul>
+</div>

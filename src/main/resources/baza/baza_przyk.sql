@@ -1,13 +1,3 @@
-INSERT INTO GodzinyLekcyjne VALUES (1, '08:00', '08:45');
-INSERT INTO GodzinyLekcyjne VALUES (2, '08:50', '09:35');
-INSERT INTO GodzinyLekcyjne VALUES (3, '09:45', '10:30');
-INSERT INTO GodzinyLekcyjne VALUES (4, '10:40', '11:25');
-INSERT INTO GodzinyLekcyjne VALUES (5, '11:45', '12:30');
-INSERT INTO GodzinyLekcyjne VALUES (6, '12:40', '13:25');
-INSERT INTO GodzinyLekcyjne VALUES (7, '13:35', '14:20');
-INSERT INTO GodzinyLekcyjne VALUES (8, '15:05', '15:50');
-INSERT INTO GodzinyLekcyjne VALUES (9, '16:35', '17:20');
-INSERT INTO GodzinyLekcyjne VALUES (10, '17:30', '18:15');
 INSERT INTO Konto VALUES ('Maciek', '1234', 0, 'Ujeden');
 INSERT INTO Konto VALUES ('Pawel', '1234', 1, 'Njeden');
 INSERT INTO Uczen VALUES ('Ujeden', DEFAULT, 'Maciek', 'Bandura','12345678998', TO_DATE('2011/05/16', 'yyyy/mm/dd'),'Kielce', '0');

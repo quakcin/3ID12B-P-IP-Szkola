@@ -175,3 +175,14 @@ ORDER BY Lekcja.klasaId, Przedmiot.Nazwa;
 
 INSERT INTO Klasa VALUES ('0', 0);
 INSERT INTO Konto VALUES ('Dyrektor', '1234', 3, 'Djeden');
+
+INSERT INTO GodzinyLekcyjne VALUES (1, '08:00', '08:45');
+INSERT INTO GodzinyLekcyjne VALUES (2, '08:50', '09:35');
+INSERT INTO GodzinyLekcyjne VALUES (3, '09:45', '10:30');
+INSERT INTO GodzinyLekcyjne VALUES (4, '10:40', '11:25');
+INSERT INTO GodzinyLekcyjne VALUES (5, '11:45', '12:30');
+INSERT INTO GodzinyLekcyjne VALUES (6, '12:40', '13:25');
+INSERT INTO GodzinyLekcyjne VALUES (7, '13:35', '14:20');
+INSERT INTO GodzinyLekcyjne VALUES (8, '15:05', '15:50');
+INSERT INTO GodzinyLekcyjne VALUES (9, '16:35', '17:20');
+INSERT INTO GodzinyLekcyjne VALUES (10, '17:30', '18:15');
