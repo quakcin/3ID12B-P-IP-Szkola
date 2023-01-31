@@ -51,6 +51,12 @@ public class HefajstosController
           && wykonajPlikSQL(jdbcTemplate, cl, "baza_przyk.sql");
    }
 
+   public static boolean zaladujPrzykladowaBaze2 (JdbcTemplate jdbcTemplate, ClassLoader cl)
+   {
+      return resetujProgramDoStanuFabrycznego(jdbcTemplate, cl)
+          && wykonajPlikSQL(jdbcTemplate, cl, "baza_przyk2.sql");
+   }
+
    public static boolean resetujProgramDoStanuFabrycznego (JdbcTemplate jdbcTemplate, ClassLoader cl)
    {
       return wykonajPlikSQL(jdbcTemplate, cl, "baza_start.sql");

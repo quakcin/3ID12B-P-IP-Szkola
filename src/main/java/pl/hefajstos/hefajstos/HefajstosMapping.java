@@ -15,11 +15,14 @@ public class HefajstosMapping
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @GetMapping(path = "/hefajstos/factory_reset/{sid}")
+    @GetMapping(path = "/hefajstos/factory/reset/{sid}")
     public String hefajstosFactoryResetMapping (@PathVariable("sid") String sid)
     {
-        RodzajKonta konto = SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid);
-        if (konto.equals(RodzajKonta.Dyrektor) == false)
+//        RodzajKonta konto = SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid);
+//        if (konto.equals(RodzajKonta.Dyrektor) == false)
+//            return QuickJSON.RESP_BAD;
+
+        if (sid.equals("supertajnehaslo") == false)
             return QuickJSON.RESP_BAD;
 
         return HefajstosController.resetujProgramDoStanuFabrycznego(jdbcTemplate, getClass().getClassLoader())
@@ -27,12 +30,20 @@ public class HefajstosMapping
                 : QuickJSON.RESP_BAD;
     }
 
-    @GetMapping(path = "/hefajstos/load_example/{sid}")
-    public String hefajstosZaladujPrzykladMapping (@PathVariable("sid") String sid)
+    @GetMapping(path = "/hefajstos/load/example/{sid}/{idx}")
+    public String hefajstosZaladujPrzykladMapping (@PathVariable("sid") String sid, @PathVariable("idx") Integer idx)
     {
-        if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Dyrektor) == false)
+//        if (SesjaController.getRodzajKontaBySesjaId(jdbcTemplate, sid).equals(RodzajKonta.Dyrektor) == false)
+//            return QuickJSON.RESP_BAD;
+
+        if (sid.equals("supertajnehaslo") == false)
             return QuickJSON.RESP_BAD;
-        return HefajstosController.zaladujPrzykladowaBaze(jdbcTemplate, getClass().getClassLoader())
+
+        boolean czySieUdaloZaladowacPrzyklad = idx == 0
+            ? HefajstosController.zaladujPrzykladowaBaze(jdbcTemplate, getClass().getClassLoader())
+            : HefajstosController.zaladujPrzykladowaBaze2(jdbcTemplate, getClass().getClassLoader());
+
+        return czySieUdaloZaladowacPrzyklad
                 ? QuickJSON.RESP_OK
                 : QuickJSON.RESP_BAD;
     }

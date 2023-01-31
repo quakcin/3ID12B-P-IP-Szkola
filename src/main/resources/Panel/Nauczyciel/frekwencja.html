@@ -196,6 +196,13 @@
     const __dynamic_update = function (e)
     {
         const info = JSON.parse(e.target.dataset['info']);
+        console.log(
+            info.godzina,
+            info.tydzien,
+            info.dzien,
+            e.target.value,
+            info.uczen
+        )
         api.wykonaj((s) => {
             // window.location.href = window.location.href;
         }).mozeSieZepsuc().dla("frekwencja/edytuj/uczen", [

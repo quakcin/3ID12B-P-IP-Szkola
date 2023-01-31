@@ -35,12 +35,20 @@ class HefajstosAPI
         return this;
     }
 
-    dla (cmd, args)
+    dla (cmd, args = [])
     {
         /*
         server side rest api:
         cmd/TOKEN/arg0/arg1/arg2
          */
+
+        for (let i = 0; i < args.length; i++)
+            if (args[i] === '')
+            {
+                alert("Wprowadzono nieprawidłowe dane!");
+                return;
+            }
+
         const rest_request = ["", cmd, this.token, args].flat().join("/");
         console.log(rest_request);
 
